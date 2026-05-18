@@ -19,7 +19,7 @@ from config_loader import (
     write_json_atomic,
 )
 
-REQUIRED_KEYS = {"priority_topics", "practice_questions", "key_definitions", "study_schedule"}
+REQUIRED_KEYS = {"topic_weights", "recurring_patterns", "key_definitions", "mock_exams"}
 
 
 def build_section_summaries(cfg: dict) -> str:
@@ -73,6 +73,19 @@ def main() -> None:
     missing = REQUIRED_KEYS - set(data.keys())
     if missing:
         print(f"  WARN: exam prep missing keys: {sorted(missing)}", file=sys.stderr)
+
+    # Sanity-check the mock_exams index — we expect 4 entries with the
+    # canonical IDs. Warn (not fatal) if the LLM strayed.
+    mocks = data.get("mock_exams") or []
+    expected_ids = {"mock_01", "mock_02", "mock_03", "mock_04"}
+    if len(mocks) != 4:
+        print(f"  WARN: expected 4 mock exams, got {len(mocks)}", file=sys.stderr)
+    ids = {m.get("id") for m in mocks if isinstance(m, dict)}
+    if ids and ids != expected_ids:
+        print(
+            f"  WARN: mock_exams ids = {sorted(ids)}, expected {sorted(expected_ids)}",
+            file=sys.stderr,
+        )
 
     out = REPO_ROOT / "generated" / "exam" / "exam_prep.json"
     write_json_atomic(out, data)

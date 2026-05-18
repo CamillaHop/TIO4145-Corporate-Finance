@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mock exam</title>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/style.css" />
+<script defer src="assets/main.js"></script>
+<script defer src="assets/theme.js?v=2"></script>
+<script defer src="assets/nav-search.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand" data-course-code>—</a>
+    <div class="nav-search-wrapper">
+      <svg class="nav-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="nav-search" placeholder="Loading search…" autocomplete="off" spellcheck="false" disabled />
+      <span class="nav-search-kbd" aria-hidden="true">/</span>
+      <div id="nav-search-results" role="listbox"></div>
+    </div>
+    <div class="nav-links">
+      <a href="flashcards.html">Flashcards</a>
+      <a href="exam.html" aria-current="page">Exam prep</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero section-hero">
+  <div class="container">
+    <p class="eyebrow"><a href="mock_exams.html" id="back-link">← Mock exams</a></p>
+    <h1 id="mock-title">Loading…</h1>
+    <p class="lede" id="mock-summary"></p>
+    <div class="mock-meta" id="mock-meta"></div>
+  </div>
+</header>
+
+<main class="container section-content" id="main">
+  <div id="mock-root">
+    <p class="empty-state"><span>Loading mock exam…</span></p>
+  </div>
+
+  <div class="mock-bottom" id="mock-bottom" hidden>
+    <button type="button" class="mock-btn mock-btn-primary" id="reveal-btn">Reveal solutions</button>
+    <button type="button" class="mock-btn" id="download-btn" disabled>Download my answers (.md)</button>
+    <a class="mock-btn" id="tex-btn" href="#" download title="LaTeX project zip — upload to Overleaf">Overleaf zip</a>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <a class="footer-btn" href="curriculum.html">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 10h16"/></svg>
+      Curriculum
+    </a>
+    <a class="footer-btn" href="mailto:hop.camilla@gmail.com?subject=TI%C3%984145%20study%20site%20%E2%80%94%20found%20an%20error">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+      Spot a mistake? Email Camilla
+    </a>
+    <span class="footer-tag">NTNU · TIØ4145</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ─── State ───────────────────────────────────────────────────────────
+  var examData = null;
+  var answers  = {};     // { qid: { type, value } }
+  var revealed = false;
+
+  function init() {
+    var id = StudySite.getParam('id') || 'mock_01';
+    StudySite.loadConfig().then(function (cfg) {
+      StudySite.applyCourseChrome(cfg);
+      StudySite.maybeLoadChat(cfg);
+      document.getElementById('tex-btn').href = '../generated/exam/tex/' + encodeURIComponent(id) + '.zip';
+      return Promise.all([
+        StudySite.ensureMarkdown(),
+        fetch('../generated/exam/' + encodeURIComponent(id) + '.json', { cache: 'no-store' })
+          .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+        StudySite.ensureKatex(),
+      ]).then(function (vals) {
+        examData = vals[1];
+        renderHero(examData);
+        renderBody(examData);
+        StudySite.renderMath(document.body);
+      });
+    }).catch(function (err) {
+      var mid = StudySite.getParam('id') || '(missing id)';
+      document.getElementById('mock-root').innerHTML =
+        '<div class="empty-state"><p>No JSON for <code>' + StudySite.escapeHtml(mid) + '</code> yet. Run <code>python scripts/generate_mock_exams.py</code>.<br><br><em>' +
+        StudySite.escapeHtml(err && err.message ? err.message : err) + '</em></p></div>';
+    });
+  }
+
+  function renderHero(data) {
+    document.getElementById('mock-title').innerHTML = StudySite.renderInline(data.title || '');
+    if (data.summary) {
+      document.getElementById('mock-summary').innerHTML = StudySite.renderInline(data.summary);
+    }
+    var meta = [];
+    if (data.duration_minutes) meta.push('<span class="meta-chip">⏱ ' + StudySite.escapeHtml(data.duration_minutes) + ' min</span>');
+    var totalMarks = 0, mcqCount = 0, shortCount = 0;
+    (data.sections || []).forEach(function (sec) {
+      (sec.questions || []).forEach(function (q) {
+        if (typeof q.marks === 'number') totalMarks += q.marks;
+        if (q.type === 'mcq')   mcqCount++;
+        if (q.type === 'short') shortCount++;
+      });
+    });
+    if (totalMarks)  meta.push('<span class="meta-chip">' + totalMarks + ' marks</span>');
+    if (mcqCount)    meta.push('<span class="meta-chip">' + mcqCount + ' MCQ</span>');
+    if (shortCount)  meta.push('<span class="meta-chip">' + shortCount + ' written</span>');
+    document.getElementById('mock-meta').innerHTML = meta.join('');
+  }
+
+  function renderBody(data) {
+    var html = [];
+    (data.sections || []).forEach(function (sec, si) {
+      html.push('<section class="mock-section">');
+      html.push('<header class="mock-section-head">');
+      html.push('<div class="mock-section-title">' + StudySite.renderInline(sec.title || '') + '</div>');
+      if (typeof sec.weight_pct === 'number') {
+        html.push('<div class="mock-section-weight">' + sec.weight_pct + '%</div>');
+      }
+      html.push('</header>');
+      if (sec.instructions) {
+        html.push('<p class="mock-section-instructions">' + StudySite.renderInline(sec.instructions) + '</p>');
+      }
+      (sec.questions || []).forEach(function (q) {
+        html.push(renderQuestion(q));
+      });
+      html.push('</section>');
+    });
+    document.getElementById('mock-root').innerHTML = html.join('');
+    document.getElementById('mock-bottom').hidden = false;
+    wireInputs();
+    wireBottom();
+  }
+
+  function renderQuestion(q) {
+    var qid = q.id || '';
+    var marks = (typeof q.marks === 'number') ? ' · ' + q.marks + ' mark' + (q.marks === 1 ? '' : 's') : '';
+    var head = (
+      '<div class="q-head">' +
+        '<span class="q-id">' + StudySite.escapeHtml(qid) + '</span>' +
+        '<span class="q-marks">' + StudySite.escapeHtml(marks) + '</span>' +
+      '</div>'
+    );
+    var stem = '<div class="q-stem">' + StudySite.renderMarkdown(q.stem || '') + '</div>';
+
+    if (q.type === 'mcq') {
+      var opts = (q.options || []).map(function (opt, i) {
+        var letter = String.fromCharCode(65 + i);
+        return (
+          '<label class="mcq-opt" data-qid="' + StudySite.escapeHtml(qid) + '" data-idx="' + i + '">' +
+            '<input type="radio" name="' + StudySite.escapeHtml(qid) + '" value="' + i + '" />' +
+            '<span class="mcq-letter">' + letter + '</span>' +
+            '<span class="mcq-label">' + StudySite.renderInline(opt) + '</span>' +
+          '</label>'
+        );
+      }).join('');
+      return (
+        '<article class="q" data-qid="' + StudySite.escapeHtml(qid) + '" data-type="mcq">' +
+          head + stem +
+          '<div class="mcq-opts">' + opts + '</div>' +
+          (q.explanation
+            ? '<div class="q-solution" hidden><span class="q-solution-label">Why</span>' +
+                StudySite.renderMarkdown(q.explanation) +
+              '</div>'
+            : '') +
+        '</article>'
+      );
+    }
+
+    // short answer
+    return (
+      '<article class="q" data-qid="' + StudySite.escapeHtml(qid) + '" data-type="short">' +
+        head + stem +
+        '<textarea class="short-answer" data-qid="' + StudySite.escapeHtml(qid) + '" rows="4" placeholder="Type your answer here…"></textarea>' +
+        (q.model_answer
+          ? '<div class="q-solution" hidden>' +
+              '<span class="q-solution-label">Model answer</span>' +
+              StudySite.renderMarkdown(q.model_answer) +
+              (q.rubric ? '<div class="q-rubric"><em>Rubric:</em> ' + StudySite.renderInline(q.rubric) + '</div>' : '') +
+            '</div>'
+          : '') +
+      '</article>'
+    );
+  }
+
+  function updateDownloadBtn() {
+    var any = Object.keys(answers).some(function (k) {
+      var a = answers[k];
+      if (!a) return false;
+      if (a.type === 'mcq')   return a.value !== undefined && a.value !== null;
+      if (a.type === 'short') return typeof a.value === 'string' && a.value.trim().length > 0;
+      return false;
+    });
+    document.getElementById('download-btn').disabled = !any;
+  }
+
+  function wireInputs() {
+    document.querySelectorAll('.mcq-opts').forEach(function (group) {
+      group.addEventListener('change', function (e) {
+        var input = e.target;
+        if (!input || input.type !== 'radio') return;
+        var qid = input.name;
+        answers[qid] = { type: 'mcq', value: Number(input.value) };
+        // visual highlight
+        group.querySelectorAll('.mcq-opt').forEach(function (lbl) { lbl.classList.remove('is-checked'); });
+        var checked = group.querySelector('.mcq-opt input:checked');
+        if (checked) checked.closest('.mcq-opt').classList.add('is-checked');
+        updateDownloadBtn();
+      });
+    });
+    document.querySelectorAll('.short-answer').forEach(function (ta) {
+      ta.addEventListener('input', function () {
+        var qid = ta.dataset.qid;
+        answers[qid] = { type: 'short', value: ta.value };
+        // autosize
+        ta.style.height = 'auto';
+        ta.style.height = Math.min(360, ta.scrollHeight + 2) + 'px';
+        updateDownloadBtn();
+      });
+    });
+  }
+
+  function wireBottom() {
+    document.getElementById('reveal-btn').addEventListener('click', function () {
+      revealed = !revealed;
+      document.body.classList.toggle('mock-revealed', revealed);
+      this.textContent = revealed ? 'Hide solutions' : 'Reveal solutions';
+      // Mark MCQ correctness
+      document.querySelectorAll('.q[data-type="mcq"]').forEach(function (qEl) {
+        var qid = qEl.dataset.qid;
+        var sec = findSection(qid);
+        var q = sec ? sec.q : null;
+        if (!q) return;
+        var ans = q.answer_index;
+        qEl.querySelectorAll('.mcq-opt').forEach(function (lbl, i) {
+          lbl.classList.toggle('is-correct',   revealed && i === ans);
+          lbl.classList.toggle('is-incorrect', revealed && answers[qid] && answers[qid].value === i && i !== ans);
+        });
+        var sol = qEl.querySelector('.q-solution');
+        if (sol) sol.hidden = !revealed;
+      });
+      document.querySelectorAll('.q[data-type="short"] .q-solution').forEach(function (sol) {
+        sol.hidden = !revealed;
+      });
+      if (revealed) {
+        StudySite.renderMath(document.getElementById('mock-root'));
+      }
+    });
+
+    document.getElementById('download-btn').addEventListener('click', function () {
+      if (this.disabled) return;
+      var md = buildAnswersMarkdown();
+      var blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = (examData.id || 'mock_exam') + '_my_answers.md';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+  }
+
+  function findSection(qid) {
+    if (!examData) return null;
+    var secs = examData.sections || [];
+    for (var i = 0; i < secs.length; i++) {
+      var qs = secs[i].questions || [];
+      for (var j = 0; j < qs.length; j++) {
+        if (qs[j].id === qid) return { sec: secs[i], q: qs[j] };
+      }
+    }
+    return null;
+  }
+
+  // Build a clean Markdown export of the exam + the user's filled answers.
+  function buildAnswersMarkdown() {
+    var lines = [];
+    lines.push('# ' + (examData.title || examData.id));
+    if (examData.summary) lines.push('', '> ' + examData.summary);
+    lines.push('', '_Answered on ' + new Date().toLocaleString() + '_', '');
+
+    (examData.sections || []).forEach(function (sec) {
+      lines.push('', '## ' + (sec.title || ''));
+      if (sec.instructions) lines.push('', sec.instructions);
+      (sec.questions || []).forEach(function (q) {
+        lines.push('', '### ' + (q.id || '') + (q.marks ? '  _(' + q.marks + ' marks)_' : ''));
+        lines.push('', q.stem || '');
+        var a = answers[q.id];
+        if (q.type === 'mcq') {
+          (q.options || []).forEach(function (opt, i) {
+            var letter = String.fromCharCode(65 + i);
+            var picked = a && typeof a.value === 'number' && a.value === i ? ' ← my answer' : '';
+            lines.push('- **' + letter + '.** ' + opt + picked);
+          });
+          if (!a || typeof a.value !== 'number') {
+            lines.push('', '_My answer: (unanswered)_');
+          }
+        } else {
+          lines.push('', '**My answer:**', '');
+          var v = a && typeof a.value === 'string' ? a.value.trim() : '';
+          lines.push(v || '_(blank)_');
+        }
+      });
+    });
+    return lines.join('\n') + '\n';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+{
+  "topic_weights": [
+    {
+      "topic": "Bond Pricing, YTM, Duration, and Term Structure",
+      "weight_pct": 22,
+      "rationale": "Appears in almost every paper (6–7 of 8 years reviewed), typically as a multi-part written question in Section 2 or 3. Core sub-tasks include computing spot rates from zero-coupon bond prices, pricing coupon bonds via the zero-coupon yield curve, computing Macaulay/modified duration, and interpreting interest-rate sensitivity. The topic also feeds MCQ items on term-structure shape and credit spreads."
+    },
+    {
+      "topic": "Option Pricing: Binomial Trees, Risk-Neutral Valuation, Put–Call Parity, Black–Scholes",
+      "weight_pct": 28,
+      "rationale": "Consistently one of the two largest written sections (Sections 3 or 4, 30% weight each). Past papers feature two-period binomial trees, computing risk-neutral probabilities, American vs. European comparison, dividend adjustment, delta replication, and put–call parity. MCQ also tests option concepts (delta, intrinsic value). Highest single topic weight in recent format."
+    },
+    {
+      "topic": "Capital Structure with Taxes: MM Propositions, WACC, Tax Shield, Leverage",
+      "weight_pct": 27,
+      "rationale": "Appears every year, usually as the 'fill-in-the-table' written section (30% weight) requiring students to compute levered and unlevered firm values, cost of equity via MM Proposition II, after-tax WACC, and PV of the tax shield. MCQ has tested callable bonds and leverage concepts. Directly connects to APV and WACC valuation methods."
+    },
+    {
+      "topic": "Valuation Methods: DCF, APV, WACC Method, Flow-to-Equity",
+      "weight_pct": 25,
+      "rationale": "Core of the advanced valuation section (often Section 4, 30% weight). Questions ask students to compute free cash flows, apply WACC or APV to a multi-year project, use the FTE method with changing leverage, and derive equity value. Overlaps heavily with capital structure and CAPM sections."
+    },
+    {
+      "topic": "CAPM, Beta, Portfolio Theory, and Cost of Capital",
+      "weight_pct": 20,
+      "rationale": "Recurring written question (often Section 2 or 3, 20–30% weight) covering beta estimation, CAPM expected returns, tangency portfolio weights, unlevering/relevering beta, and the Security Market Line. Also tested in MCQ. Feeds directly into WACC and APV calculations."
+    },
+    {
+      "topic": "Real Options: Timing, Abandonment, Expansion, Decision Trees",
+      "weight_pct": 15,
+      "rationale": "Appears consistently since 2021, both as MCQ items and as written sub-questions within the options section. Tasks include mapping project parameters to Black–Scholes inputs, computing the value of waiting vs. investing immediately, and interpreting decision trees. Growing weight in the post-2021 Inspera format."
+    },
+    {
+      "topic": "Sustainable Finance: ESG, Double Materiality, IPV, Shadow Prices",
+      "weight_pct": 10,
+      "rationale": "Recurring MCQ topic since 2021; occasionally a short written sub-question. Typical items test the distinction between financial vs. impact materiality, EU Taxonomy alignment vs. eligibility, scope 1/2/3 emissions, and the Ramsey social discount rate. Conceptual rather than heavily numerical."
+    },
+    {
+      "topic": "Capital Budgeting: Free Cash Flow, Incremental Earnings, Sensitivity Analysis",
+      "weight_pct": 12,
+      "rationale": "Appears as standalone written questions (especially 2017–2019) and as the FCF computation step embedded in valuation questions. Sub-tasks include computing incremental FCF from pro forma statements, tax-loss carryforwards, depreciation tax shields, NWC recovery, and sensitivity/break-even analysis."
+    }
+  ],
+  "recurring_patterns": [
+    {
+      "pattern": "Two-Period Binomial Tree: Replicate, Price, Compare American vs. European",
+      "frequency": "Appears in 7 of 8 papers reviewed",
+      "example": "A stock trades at NOK 100. Each period it rises by 20% or falls by 20%. The risk-free rate is 5% per period. (a) Compute the risk-neutral probabilities. (b) Price a 2-period European put with strike NOK 105 using backward induction. (c) Would an American put be exercised early? Show your work. (d) How does your answer change if the stock pays a NOK 5 dividend at the end of period 1?",
+      "tip": "Always build the full stock-price tree first, then compute option payoffs at expiration and fold back using risk-neutral probabilities $p = ((1+r_f)S - S_d)/(S_u - S_d)$. For the American option, compare the hold value against the immediate exercise value at every node."
+    },
+    {
+      "pattern": "Capital Structure Table: MM with Taxes, Cost of Equity, WACC",
+      "frequency": "Appears in 6 of 8 papers reviewed",
+      "example": "An unlevered firm has asset value $V^U = \\text{NOK } 500\\text{m}$, unlevered cost of capital $r_U = 10\\%$, and corporate tax rate $\\tau_c = 25\\%$. The firm recapitalises by issuing NOK 200m of permanent debt at $r_D = 5\\%$. Fill in the table: (a) levered firm value $V^L$, (b) equity value $E$, (c) cost of levered equity $r_E$ under MM Proposition II with taxes, (d) after-tax WACC $r_{wacc}$.",
+      "tip": "Use $V^L = V^U + \\tau_c D$ for permanent debt, derive $E = V^L - D$, then apply $r_E = r_U + (D/E)(r_U - r_D)(1-\\tau_c)$ for the permanent-debt case, and verify $r_{wacc} = r_U(1 - \\tau_c D/V^L)$."
+    },
+    {
+      "pattern": "Zero-Coupon Spot Rates to Price a Coupon Bond and Compute Duration",
+      "frequency": "Appears in 6 of 8 papers reviewed",
+      "example": "The following zero-coupon bond prices are observed: $P_1 = 0.952$, $P_2 = 0.898$, $P_3 = 0.840$ (per NOK 1 face value). (a) Compute the 1-, 2-, and 3-year spot rates. (b) Price a 3-year annual-coupon bond with 6% coupon and NOK 1000 face value. (c) Compute the bond's Macaulay duration. (d) By approximately how much does the bond price change if all spot rates rise by 1 percentage point?",
+      "tip": "Extract spot rates via $YTM_n = (1/P_n)^{1/n} - 1$. Price the coupon bond by discounting each cash flow at the matching spot rate. Macaulay duration is the cash-flow-weighted average maturity; modified duration $= D_{Mac}/(1+y)$ gives the percentage price sensitivity."
+    },
+    {
+      "pattern": "APV vs. WACC Valuation of a Levered Project with Changing Debt",
+      "frequency": "Appears in 5 of 8 papers reviewed",
+      "example": "A project generates annual FCF of NOK 80m for 5 years. The unlevered cost of capital is $r_U = 9\\%$. The firm maintains a constant debt-to-value ratio of 40% and borrows at $r_D = 5\\%$, with $\\tau_c = 28\\%$. (a) Compute the unlevered project value $V^U$. (b) Compute the WACC. (c) Compute the levered project value $V^L$ using both the WACC and APV methods and confirm they agree.",
+      "tip": "With a constant D/V ratio, use $r_{wacc} = r_U - d\\tau_c r_D$ and discount FCF at $r_{wacc}$. For APV with a constant ratio, the tax shield is also discounted at $r_U$, so $PV(\\text{TS}) = V^L - V^U$ is solved simultaneously; verify agreement between methods."
+    },
+    {
+      "pattern": "CAPM: Compute Beta, Required Return, and Tangency Portfolio Weights",
+      "frequency": "Appears in 5 of 8 papers reviewed",
+      "example": "Stock A has expected return 14%, standard deviation 30%, and correlation 0.4 with the market. Stock B has expected return 10%, SD 20%, correlation 0.6 with the market. The market has expected return 10%, SD 20%. The risk-free rate is 4%. (a) Compute the beta of each stock. (b) According to the CAPM, is either stock mispriced? (c) Compute the weights in the minimum-variance portfolio of A and B. (d) Compute the Sharpe ratio of the tangency portfolio of A and B.",
+      "tip": "Beta is $\\beta_i = \\text{Corr}(R_i, R_M) \\times SD(R_i)/SD(R_M)$. Check CAPM pricing via $E[R_i] \\stackrel{?}{=} r_f + \\beta_i(E[R_M]-r_f)$. For tangency portfolio weights, set up the system that maximises the Sharpe ratio, or use the shortcut for two assets."
+    },
+    {
+      "pattern": "Flow-to-Equity Method: FCFE, Cost of Equity, Equity Value",
+      "frequency": "Appears in 4 of 8 papers reviewed",
+      "example": "A firm expects FCF of NOK 60m next year, growing at 3% per year forever. The firm has NOK 200m of debt at $r_D = 6\\%$, a tax rate of 25%, and maintains a constant D/E ratio of 0.5. (a) Compute the unlevered cost of capital $r_U = 10\\%$. (b) Compute the cost of levered equity $r_E$. (c) Compute FCFE. (d) Value the equity using the FTE method and confirm it equals $V^L - D$.",
+      "tip": "$FCFE = FCF - (1-\\tau_c)\\times\\text{Interest} + \\text{Net Borrowing}$. Under a constant leverage policy, discount FCFE at $r_E$ derived from MM Proposition II. The resulting equity value must equal $V^L - D$ — use this as a consistency check."
+    },
+    {
+      "pattern": "Real Option to Delay: Map Parameters to Black–Scholes and Compare with Static NPV",
+      "frequency": "Appears in 4 of 8 papers reviewed (all post-2021)",
+      "example": "A firm can invest NOK 150m to build a wind farm whose current value is NOK 130m ($NPV = -\\text{NOK } 20\\text{m}$). The investment can be deferred for up to 2 years. The volatility of the project's value is 25% per year, the risk-free rate is 4%, and no cash flows are foregone by waiting. (a) Map the project onto a financial call option. (b) Compute $d_1$, $d_2$, and the Black–Scholes call price. (c) Should the firm invest now or wait? (d) How does your answer change if waiting means foregoing NOK 10m in cash flows each year?",
+      "tip": "Map $S = V_0$, $K = I$, $T = $ deadline, $\\sigma = $ project volatility. Subtract $PV$(foregone FCFs) from $S$ to get the ex-dividend stock price before applying Black–Scholes. If $C_{wait} > NPV_{now}$, deferral is optimal."
+    },
+    {
+      "pattern": "MCQ Negative-Marking Strategy: Conceptual TRUE/FALSE on Core Models",
+      "frequency": "Section 1 of every paper since 2021 (10 MCQ items per paper)",
+      "example": "Which of the following statements about put–call parity is FALSE? (A) It holds for American options on dividend-paying stocks. (B) It implies that a European call can be replicated by a portfolio of the stock, a put, and a risk-free bond. (C) A violation implies an arbitrage opportunity. (D) It requires no assumption about the distribution of future stock prices.",
+      "tip": "Apply the $+2/-1/0$ rule: only answer if you can eliminate at least two options, making the expected value of guessing positive. For conceptual TRUE/FALSE MCQs, check whether the statement holds in the most general case the model covers — examiners exploit common over-generalisations."
+    }
+  ],
+  "key_definitions": [
+    {
+      "term": "Yield to Maturity ($YTM_n$)",
+      "definition": "The single discount rate that equates the present value of all promised cash flows of a bond to its current market price; equivalently, the IRR of buying the bond at market price and holding to maturity. For a zero-coupon bond: $YTM_n = (FV/P)^{1/n} - 1$. The $YTM$ is based on promised (not expected) cash flows, so it overstates the expected return for risky bonds."
+    },
+    {
+      "term": "Macaulay Duration",
+      "definition": "The cash-flow-weighted average time to receipt of a bond's cash flows: $D_{Mac} = \\sum_{t=1}^{N} t \\times \\frac{PV(C_t)}{P}$. It measures the effective maturity of the bond and, after dividing by $(1+y)$, gives the modified duration, which is the approximate percentage price change per 1 percentage-point rise in yield."
+    },
+    {
+      "term": "Interest Tax Shield",
+      "definition": "The reduction in corporate tax liability arising from the deductibility of interest expense: $\\text{Tax Shield}_t = \\tau_c \\times r_D \\times D_{t-1}$. Under MM with permanent debt discounted at $r_D$, its present value is $PV(\\text{TS}) = \\tau_c D$, raising levered firm value above the unlevered value."
+    },
+    {
+      "term": "MM Proposition I with Taxes",
+      "definition": "In a market with corporate taxes but no other frictions, the value of a levered firm exceeds that of the otherwise identical unlevered firm by the present value of the interest tax shield: $V^L = V^U + PV(\\text{Interest Tax Shield})$. For permanent debt at rate $r_D$ and tax rate $\\tau_c$: $V^L = V^U + \\tau_c D$."
+    },
+    {
+      "term": "MM Proposition II with Taxes (Target Leverage)",
+      "definition": "When the firm maintains a constant debt-to-value ratio, the cost of levered equity is: $r_E = r_U + (D/E)(r_U - r_D)$, where the pre-tax WACC $r_U$ is unchanged with leverage. This is the same functional form as the no-tax case because the tax shield is as risky as the unlevered firm."
+    },
+    {
+      "term": "After-Tax WACC ($r_{wacc}$)",
+      "definition": "The effective cost of capital for a levered firm that embeds the interest tax shield: $r_{wacc} = (E/(E+D))\\,r_E + (D/(E+D))\\,r_D(1-\\tau_c)$. It is always less than the unlevered cost of capital $r_U$ when $\\tau_c > 0$, and equals $r_U - d\\,\\tau_c r_D$ when the firm maintains a target debt-to-value ratio $d = D/(E+D)$."
+    },
+    {
+      "term": "Unlevered (Asset) Cost of Capital ($r_U$)",
+      "definition": "The required return on the firm's assets assuming all-equity financing; the pre-tax WACC under a constant leverage policy: $r_U = (E/(E+D))\\,r_E + (D/(E+D))\\,r_D$. It reflects only business (operating) risk and is independent of capital structure, making it the appropriate benchmark for comparing projects with different leverage."
+    },
+    {
+      "term": "Adjusted Present Value (APV)",
+      "definition": "A valuation method that separates levered firm value into the value of the unlevered firm plus the present value of financing side-effects: $V^L = V^U + PV(\\text{Interest Tax Shield})$. APV is preferred when leverage varies over time (e.g., LBO debt paydown) because it avoids recomputing WACC at each date."
+    },
+    {
+      "term": "Free Cash Flow to Equity (FCFE)",
+      "definition": "The cash flow available to equity holders after meeting all obligations to debt holders: $FCFE = FCF - (1-\\tau_c)\\times\\text{Interest} + \\text{Net Borrowing}$. Discounted at the cost of levered equity $r_E$ in the flow-to-equity method to obtain equity value directly."
+    },
+    {
+      "term": "Risk-Neutral Probabilities",
+      "definition": "Hypothetical probabilities $p$ and $1-p$ under which every asset earns the risk-free rate as its expected return. In a one-period binomial model: $p = ((1+r_f)S - S_d)/(S_u - S_d)$. Any derivative is priced by discounting its risk-neutral expected payoff at $r_f$; these probabilities capture risk adjustments implicitly and require no knowledge of the actual probability of an up move."
+    },
+    {
+      "term": "Put–Call Parity",
+      "definition": "For European options on the same non-dividend-paying stock with the same strike $K$ and expiration $T$: $C = P + S - PV(K)$. With dividends: $C = P + S - PV(\\text{Div}) - PV(K)$. It follows from the Law of One Price; any violation implies a riskless arbitrage. It holds for European options only — the American version gives only an inequality."
+    },
+    {
+      "term": "Option Delta ($\\Delta$)",
+      "definition": "The sensitivity of an option's price to a \\$1 change in the underlying asset price; equivalently, the number of shares of the underlying in the replicating portfolio: $\\Delta = (C_u - C_d)/(S_u - S_d)$ in the binomial model, and $\\Delta = N(d_1) \\in (0,1)$ for a Black–Scholes call. For a put, $\\Delta = N(d_1) - 1 \\in (-1,0)$."
+    },
+    {
+      "term": "Black–Scholes Formula",
+      "definition": "A closed-form price for a European call on a non-dividend-paying stock: $C = S\\,N(d_1) - PV(K)\\,N(d_2)$, where $d_1 = [\\ln(S/PV(K))/(\\sigma\\sqrt{T})] + \\sigma\\sqrt{T}/2$ and $d_2 = d_1 - \\sigma\\sqrt{T}$. The five inputs are current stock price $S$, strike $K$, time to expiration $T$, risk-free rate $r_f$, and volatility $\\sigma$. The stock's expected return is not an input."
+    },
+    {
+      "term": "Real Option",
+      "definition": "The right, but not the obligation, to make a future business decision — such as investing, expanding, deferring, or abandoning a project — at some cost (the exercise price) at or before a given date. The option to delay is a call: $\\max(V_T - I, 0)$. Real options add value equal to the financial option price when flexibility is present, so expanded $NPV = \\text{static } NPV + \\text{option value}$."
+    },
+    {
+      "term": "Beta ($\\beta_i$)",
+      "definition": "The sensitivity of security $i$'s excess return to the market's excess return, measuring systematic (undiversifiable) risk: $\\beta_i = \\text{Cov}(R_i, R_{Mkt})/\\text{Var}(R_{Mkt}) = \\text{Corr}(R_i, R_{Mkt}) \\times SD(R_i)/SD(R_{Mkt})$. The beta of a portfolio is the value-weighted average of constituent betas. Under the CAPM, beta is the only risk measure that commands a risk premium."
+    },
+    {
+      "term": "Security Market Line (SML) / CAPM Equation",
+      "definition": "The linear relationship between a security's expected return and its beta: $E[R_i] = r_f + \\beta_i(E[R_{Mkt}] - r_f)$. All correctly priced assets lie on the SML; assets above it have positive alpha (underpriced) and those below have negative alpha (overpriced). Unlike the CML, the SML applies to all individual securities and portfolios, not only efficient ones."
+    },
+    {
+      "term": "Sharpe Ratio",
+      "definition": "The expected excess return per unit of total volatility: $\\text{Sharpe Ratio} = (E[R_P] - r_f)/SD(R_P)$. The tangency (efficient) portfolio has the highest Sharpe ratio of any portfolio. Investors maximise risk-adjusted return by combining the risk-free asset with the portfolio of risky assets that has the highest Sharpe ratio."
+    },
+    {
+      "term": "Double Materiality",
+      "definition": "A concept in EU sustainable-finance regulation (CSRD) requiring firms to assess ESG issues in two directions simultaneously: (1) financial materiality — how ESG factors affect the firm's own cash flows and financial position (impact inwards); and (2) impact materiality — how the firm's activities affect people and the planet (impact outwards). Both directions must be assessed and reported under the European Sustainability Reporting Standards (ESRS)."
+    },
+    {
+      "term": "Integrated Present Value (IPV)",
+      "definition": "An extension of NPV combining financial, social, and environmental value flows: $IPV = FV + b\\cdot SV + c\\cdot EV$, where $FV$ is the standard financial NPV, $SV$ is the present value of social cash flows discounted at the social rate $\\rho_S$, $EV$ is the present value of environmental flows discounted at $\\rho_E$, and $b, c > 0$ are weights. Shadow prices are used to monetise non-market impacts."
+    },
+    {
+      "term": "Effective Tax Advantage of Debt ($\\tau^*$)",
+      "definition": "The net benefit of debt financing after accounting for both corporate and personal taxes: $\\tau^* = 1 - (1-\\tau_c)(1-\\tau_e)/(1-\\tau_i)$, where $\\tau_c$ is the corporate tax rate, $\\tau_e$ is the personal tax rate on equity income, and $\\tau_i$ is the personal tax rate on interest income. If $\\tau_i > \\tau_e$, then $\\tau^* < \\tau_c$, so personal taxes partially erode the corporate tax benefit."
+    },
+    {
+      "term": "Free Cash Flow (FCF)",
+      "definition": "The incremental cash generated by a project available to all capital providers, independent of financing: $FCF = (\\text{Rev} - \\text{Costs})(1-\\tau_c) - \\Delta NWC - CapEx + \\tau_c \\times \\text{Depreciation}$. Interest expense is excluded — it is captured instead in the discount rate ($r_{wacc}$) or in the tax shield (APV). FCF is the fundamental input to all DCF, WACC, and APV valuations."
+    },
+    {
+      "term": "Credit Spread (Default Spread)",
+      "definition": "The yield difference between a corporate bond and a risk-free Treasury of the same maturity: $\\text{Credit spread} = YTM_{\\text{corp}} - YTM_{\\text{Treasury}}$. It compensates investors for both expected default losses and for the systematic risk of those losses. Because YTM uses promised cash flows, the credit spread overstates the expected return premium — the true risk premium is credit spread minus the probability-weighted expected loss."
+    },
+    {
+      "term": "Depreciation Tax Shield",
+      "definition": "The annual reduction in corporate taxes arising from the deductibility of depreciation: $\\text{Dep Tax Shield} = \\tau_c \\times \\text{Depreciation}$. Unlike the interest tax shield, it does not depend on the firm's leverage choice. Firms should use the most accelerated allowable depreciation schedule to maximise the present value of this shield, since earlier deductions are worth more in present-value terms."
+    }
+  ],
+  "mock_exams": [
+    {
+      "id": "mock_01",
+      "title": "Foundations, Bonds, and CAPM",
+      "summary": "Covers the time value of money, bond pricing from the zero-coupon yield curve, duration and interest-rate sensitivity, and CAPM-based cost-of-capital estimation including beta calculation and the SML.",
+      "focus_topics": [
+        "Bond pricing, YTM, spot rates, term structure",
+        "Macaulay and modified duration, price sensitivity",
+        "Credit spreads and expected vs. promised returns",
+        "CAPM: beta, SML, market risk premium",
+        "Unlevering and relevering beta",
+        "Portfolio variance, Sharpe ratio, tangency portfolio"
+      ]
+    },
+    {
+      "id": "mock_02",
+      "title": "Capital Structure, Taxes, and Valuation Methods",
+      "summary": "Focuses on Modigliani–Miller with and without taxes, computing the interest tax shield and levered firm value, after-tax WACC, APV, and the flow-to-equity method applied to a multi-period project.",
+      "focus_topics": [
+        "MM Proposition I and II with corporate taxes",
+        "Levered vs. unlevered firm value tables",
+        "After-tax WACC and project-based WACC",
+        "Adjusted Present Value (APV) with changing leverage",
+        "Free Cash Flow to Equity (FCFE) and FTE method",
+        "Sustainable finance: double materiality, IPV, shadow prices"
+      ]
+    },
+    {
+      "id": "mock_03",
+      "title": "Equity Valuation, Payout Policy, and Capital Budgeting",
+      "summary": "Covers DCF and DDM equity valuation, the sustainable growth rate, payout policy irrelevance and signalling, and capital-budgeting mechanics including incremental FCF, NWC, depreciation tax shields, and sensitivity analysis.",
+      "focus_topics": [
+        "Dividend-Discount Model (DDM) and Gordon growth formula",
+        "Discounted FCF model and enterprise value",
+        "Sustainable growth rate and payout policy",
+        "MM dividend irrelevance and tax effects on payout",
+        "Incremental earnings and free cash flow computation",
+        "Break-even, sensitivity, and scenario analysis",
+        "Terminal (continuation) value estimation"
+      ]
+    },
+    {
+      "id": "mock_04",
+      "title": "Options and Real Options",
+      "summary": "Focuses on binomial option pricing (one- and two-period), risk-neutral valuation, put–call parity, Black–Scholes, American vs. European options with dividends, equity and debt as options, and real options including the option to delay mapped onto Black–Scholes.",
+      "focus_topics": [
+        "Binomial replicating portfolio and option pricing",
+        "Risk-neutral probabilities and backward induction",
+        "Put–call parity with and without dividends",
+        "Black–Scholes formula: inputs, $d_1$, $d_2$, delta",
+        "American vs. European: early exercise and dividends",
+        "Equity and risky debt as options on firm assets",
+        "Real option to delay: Black–Scholes parameter mapping",
+        "Abandonment and growth options; expanded NPV"
+      ]
+    }
+  ]
+}

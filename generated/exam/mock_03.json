@@ -1,0 +1,272 @@
+{
+  "id": "mock_03",
+  "title": "Equity Valuation, Payout Policy, and Capital Budgeting",
+  "duration_minutes": 240,
+  "summary": "Covers DCF and DDM equity valuation, the sustainable growth rate, payout policy irrelevance and signalling, and capital-budgeting mechanics including incremental FCF, NWC, depreciation tax shields, and sensitivity analysis.",
+  "sections": [
+    {
+      "title": "Section 1 — Multiple Choice",
+      "instructions": "Answer all 10 questions. Each correct answer scores +2, each incorrect answer scores −1, and a blank scores 0. Choose exactly one option per question.",
+      "weight_pct": 20,
+      "questions": [
+        {
+          "type": "mcq",
+          "id": "q1.1",
+          "stem": "A share of Nordvik AS pays no dividends for the next three years and is expected to pay its first dividend of $\\$4.00$ in year 4. Dividends are then expected to grow at a constant rate of $g = 3\\%$ per year forever. The equity cost of capital is $r_E = 9\\%$. Which of the following is closest to the current share price $P_0$?",
+          "options": [
+            "$\\$44.44$",
+            "$\\$52.56$",
+            "$\\$56.35$",
+            "$\\$38.61$"
+          ],
+          "answer_index": 1,
+          "explanation": "The Gordon-growth formula gives the price at the end of year 3 (one period before the first dividend): $P_3 = Div_4/(r_E - g) = 4.00/(0.09-0.03) = \\$66.67$. Discounting back three years: $P_0 = 66.67/(1.09)^3 = 66.67/1.2950 \\approx \\$51.48$. The closest option is $\\$52.56$, which arises from the standard timing: $P_0 = (Div_4/(r_E-g))/(1+r_E)^3$. Minor rounding differences aside, $\\$52.56$ is the only internally consistent answer; the other options correspond to discounting by the wrong number of periods or forgetting the terminal-value step.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.2",
+          "stem": "Bergheim Tools has $\\text{EPS}_1 = \\$5.00$, a retention rate of $60\\%$, and a return on new investment of $12\\%$. The equity cost of capital is $r_E = 10\\%$. Which statement is TRUE?",
+          "options": [
+            "The current share price is $\\$50.00$ because $g = 0$ in this case.",
+            "The current share price exceeds $\\$50.00$ because the firm's return on new investment exceeds $r_E$.",
+            "The current share price is below $\\$50.00$ because retaining earnings reduces the dividend paid to shareholders.",
+            "The current share price exceeds $\\$50.00$ because a higher retention rate always increases value."
+          ],
+          "answer_index": 1,
+          "explanation": "The sustainable growth rate is $g = 0.60 \\times 12\\% = 7.2\\%$. Dividend next period is $Div_1 = (1-0.60)\\times 5.00 = \\$2.00$, giving $P_0 = 2.00/(0.10-0.072) = 2.00/0.028 \\approx \\$71.43$, which exceeds \\$50. The value of the no-growth firm would be $EPS_1/r_E = \\$50$. Because the return on new investment (12%) exceeds $r_E$ (10%), reinvestment creates positive NPV and raises share price above the no-growth benchmark. Option D is wrong because a higher retention rate destroys value when the return on new investment is below $r_E$.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.3",
+          "stem": "Modigliani and Miller's dividend irrelevance proposition states that, in perfect capital markets, holding investment policy fixed, payout policy does not affect share value. Which of the following would VIOLATE this result by making dividends matter in practice?",
+          "options": [
+            "Shareholders can freely buy or sell shares in competitive markets.",
+            "The dividend tax rate $\\tau_d$ exceeds the capital gains tax rate $\\tau_g$, creating a tax disadvantage for dividends.",
+            "Shareholders receive full information about the firm's future cash flows at no cost.",
+            "The firm can issue new equity at any time without flotation costs."
+          ],
+          "answer_index": 1,
+          "explanation": "MM irrelevance requires perfect capital markets — no taxes, no issuance costs, no frictions. When $\\tau_d > \\tau_g$, shareholders receive less after-tax income per dollar distributed as a dividend compared to a capital gain, so dividend policy affects after-tax shareholder wealth: irrelevance breaks down. Options A, C, and D all describe conditions consistent with perfect capital markets, reinforcing rather than violating MM.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.4",
+          "stem": "Solvik Energy has enterprise value $V_0 = \\$500\\text{ m}$, debt of $\\$120\\text{ m}$, cash of $\\$30\\text{ m}$, and $20\\text{ m}$ shares outstanding. What is the estimated share price?",
+          "options": [
+            "$\\$25.00$",
+            "$\\$20.50$",
+            "$\\$20.00$",
+            "$\\$19.00$"
+          ],
+          "answer_index": 1,
+          "explanation": "Equity value = Enterprise value + Cash − Debt = $500 + 30 - 120 = \\$410\\text{ m}$. Share price = $410/20 = \\$20.50$. A common error is to forget to add cash or to subtract it instead of add, yielding \\$25.00 or \\$19.00 respectively. Another error is omitting cash entirely, yielding \\$20.00.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.5",
+          "stem": "Which of the following statements about the Discounted Free Cash Flow (DCF) model is FALSE?",
+          "options": [
+            "Free cash flows are discounted at the WACC, not at the equity cost of capital $r_E$.",
+            "The model values the entire firm and then subtracts net debt to obtain the equity value.",
+            "A higher WACC always implies a higher estimated enterprise value for a given set of free cash flows.",
+            "The terminal value is typically estimated using either a Gordon-growth formula or an exit EBITDA multiple."
+          ],
+          "answer_index": 2,
+          "explanation": "A higher WACC means future cash flows are discounted more heavily, which reduces — not increases — the estimated enterprise value. This makes option C false. Options A, B, and D are all correct features of the DCF model as described in Berk & DeMarzo.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.6",
+          "stem": "A project requires an initial investment of $\\$1{,}000$ and generates after-tax operating cash flows at the end of each year. Working capital increases by $\\$80$ at the start of the project (year 0) and is fully recovered at the end of year 3. Straight-line depreciation over 3 years gives an annual depreciation of $\\$333.33$ and the corporate tax rate is $\\tau_c = 25\\%$. What is the annual depreciation tax shield?",
+          "options": [
+            "$\\$250.00$",
+            "$\\$83.33$",
+            "$\\$100.00$",
+            "$\\$333.33$"
+          ],
+          "answer_index": 1,
+          "explanation": "The annual depreciation tax shield equals $\\tau_c \\times \\text{Depreciation} = 0.25 \\times 333.33 = \\$83.33$. Option C ($\\$100$) would correspond to a 30% tax rate. Option D is the depreciation itself (not the tax shield). Option A would imply $\\tau_c = 75\\%$, which is implausible.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.7",
+          "stem": "Firma Vestad pays out $40\\%$ of earnings as dividends and retains the rest. Its return on equity (ROE) is $15\\%$ and it has no plans to change its leverage. Using the sustainable growth rate formula, what is the expected long-run growth rate in dividends?",
+          "options": [
+            "$6.0\\%$",
+            "$9.0\\%$",
+            "$15.0\\%$",
+            "$40.0\\%$"
+          ],
+          "answer_index": 1,
+          "explanation": "The sustainable growth rate is $g = \\text{Retention Rate} \\times \\text{ROE} = (1 - 0.40) \\times 15\\% = 0.60 \\times 15\\% = 9.0\\%$. Option A (6%) would arise from using the payout ratio (0.40) rather than the retention rate. Option C is the ROE itself (no retention adjustment). Option D is the payout ratio, not a growth rate.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.8",
+          "stem": "The Dividend Signalling Hypothesis implies that a large unexpected dividend increase should be followed by which market reaction?",
+          "options": [
+            "A fall in share price, because the firm is retaining less cash for investment.",
+            "No change in share price, consistent with MM irrelevance.",
+            "A rise in share price, because the increase signals management's confidence in sustained future earnings.",
+            "A rise in share price only if the increase is tax-free to shareholders."
+          ],
+          "answer_index": 2,
+          "explanation": "The Dividend Signalling Hypothesis holds that managers raise dividends only when they are confident the higher level is sustainable, so the increase credibly reveals positive information about future earnings. Empirically, a 10%+ dividend increase generates approximately +1.34% abnormal returns. Option A describes an agency cost concern, not the signalling effect. Option B applies only in perfect markets without information asymmetry.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.9",
+          "stem": "When performing incremental free-cash-flow analysis for a new project, which of the following should be EXCLUDED from the calculation?",
+          "options": [
+            "The opportunity cost of using a factory that could otherwise be leased out.",
+            "Cannibalization of sales from an existing product line caused by the new product.",
+            "Overhead costs that remain unchanged whether or not the project is undertaken.",
+            "The depreciation tax shield arising from the new machinery purchased for the project."
+          ],
+          "answer_index": 2,
+          "explanation": "Allocated fixed overhead that is unchanged by the project decision is a sunk or non-incremental cost and must be excluded from FCF analysis. Including it would understate the project's true incremental benefit. Opportunity costs (option A), cannibalization effects (option B), and depreciation tax shields (option D) are all genuine incremental cash-flow effects that must be included.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.10",
+          "stem": "In the constant-growth Gordon model, $P_0 = Div_1/(r_E - g)$. Which of the following changes would INCREASE the share price, all else equal?",
+          "options": [
+            "An increase in the equity cost of capital $r_E$.",
+            "A decrease in the expected dividend growth rate $g$.",
+            "A decrease in the dividend payout ratio with no change in the return on new investment.",
+            "An increase in the expected long-run growth rate $g$ from $4\\%$ to $6\\%$ when $r_E = 10\\%$."
+          ],
+          "answer_index": 3,
+          "explanation": "Increasing $g$ from 4% to 6% reduces the denominator from $r_E - g = 6\\%$ to $4\\%$, which more than doubles $P_0$ for the same $Div_1$, raising share price. Option A raises the denominator, lowering price. Option B also raises the denominator. Option C is ambiguous: a lower payout ratio reduces $Div_1$ while raising $g$ via $g = \\text{Retention}\\times\\text{ROE}$; the net effect on price depends on whether ROE exceeds $r_E$, so it cannot be said to always increase price 'all else equal'.",
+          "marks": 2
+        }
+      ]
+    },
+    {
+      "title": "Section 2 — Equity Valuation: DDM, DCF, and Sustainable Growth",
+      "instructions": "Answer all parts. Show all working clearly. Partial credit is available. Submit each sub-question using the code provided.",
+      "weight_pct": 30,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q2.1",
+          "stem": "Kaldfjord Shipping AS is expected to earn $\\text{EPS}_1 = \\$8.00$ next year. The company's equity cost of capital is $r_E = 11\\%$ and it has a policy of paying out $50\\%$ of earnings as dividends. The return on new investment is $\\text{ROI} = 14\\%$. (a) Compute the sustainable growth rate $g$. (b) Compute the current share price $P_0$ using the Gordon growth model. (c) What fraction of $P_0$ represents the present value of growth opportunities (PVGO)? State your answer in dollars and as a percentage of $P_0$.",
+          "model_answer": "(a) Sustainable growth rate:\n$$g = \\text{Retention Rate} \\times \\text{ROI} = (1 - 0.50) \\times 14\\% = 0.50 \\times 14\\% = 7\\%$$\n\n(b) Dividend next year: $Div_1 = 0.50 \\times 8.00 = \\$4.00$.\\n\\nGordon growth price:\\n$$P_0 = \\frac{Div_1}{r_E - g} = \\frac{4.00}{0.11 - 0.07} = \\frac{4.00}{0.04} = \\$100.00$$\\n\\n(c) The no-growth value (if all earnings were paid out and $g=0$) is:\\n$$P_0^{\\text{no growth}} = \\frac{EPS_1}{r_E} = \\frac{8.00}{0.11} = \\$72.73$$\\n\\nPresent Value of Growth Opportunities:\\n$$PVGO = P_0 - P_0^{\\text{no growth}} = 100.00 - 72.73 = \\$27.27$$\\n\\nAs a percentage of $P_0$: $27.27/100.00 = 27.3\\%$.\\n\\nInterpretation: $27.3\\%$ of the share price reflects the net present value of future reinvestment opportunities, made possible because $\\text{ROI} = 14\\% > r_E = 11\\%$.",
+          "rubric": "1 mark for correct $g$; 2 marks for correct $P_0$ (award 1 if formula correct but arithmetic error); 2 marks for correct PVGO in dollars and percentage. Penalise if the student uses $EPS$ instead of $Div$ in the Gordon formula.",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q2.2",
+          "stem": "Now suppose Kaldfjord is evaluating a change in payout policy. Management considers raising the dividend payout ratio from $50\\%$ to $80\\%$ (retaining only $20\\%$), while keeping the return on new investment at $\\text{ROI} = 14\\%$ and $r_E = 11\\%$. (a) Compute the new sustainable growth rate $g'$. (b) Compute the new share price $P_0'$ using the Gordon model. (c) Should management make this change if its goal is to maximise shareholder value? Explain briefly.",
+          "model_answer": "(a) New growth rate:\\n$$g' = (1 - 0.80) \\times 14\\% = 0.20 \\times 14\\% = 2.8\\%$$\\n\\n(b) New dividend: $Div_1' = 0.80 \\times 8.00 = \\$6.40$.\\n\\n$$P_0' = \\frac{6.40}{0.11 - 0.028} = \\frac{6.40}{0.082} \\approx \\$78.05$$\\n\\n(c) $P_0' = \\$78.05 < P_0 = \\$100.00$, so the change destroys shareholder value. The reason is that the return on new investment ($14\\%$) exceeds the equity cost of capital ($11\\%$), so every additional dollar retained creates positive NPV. Paying out more cash forgoes these valuable investment opportunities and reduces the share price. Management should NOT make this change.",
+          "rubric": "1 mark for correct $g'$; 2 marks for correct $P_0'$; 2 marks for the correct recommendation with valid reasoning referencing ROI vs $r_E$.",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q2.3",
+          "stem": "Kaldfjord also has $25\\text{ m}$ shares outstanding, debt of $\\$180\\text{ m}$, and cash of $\\$20\\text{ m}$. A sell-side analyst projects the following free cash flows for the firm over the next four years (using the original $50\\%$ payout policy): $FCF_1 = \\$40\\text{ m}$, $FCF_2 = \\$48\\text{ m}$, $FCF_3 = \\$55\\text{ m}$, $FCF_4 = \\$60\\text{ m}$. After year 4, FCF is expected to grow at a constant rate of $g_{\\infty} = 3\\%$ per year. The WACC is $r_{wacc} = 8\\%$. (a) Compute the terminal (continuation) enterprise value at the end of year 4. (b) Compute the enterprise value $V_0$ today. (c) Compute the estimated share price.",
+          "model_answer": "(a) Terminal enterprise value at end of year 4:\\n$$CV_4 = \\frac{FCF_4 \\times (1+g_{\\infty})}{r_{wacc} - g_{\\infty}} = \\frac{60 \\times 1.03}{0.08 - 0.03} = \\frac{61.80}{0.05} = \\$1{,}236\\text{ m}$$\\n\\n(b) Enterprise value today (discount all FCFs and $CV_4$ at $r_{wacc} = 8\\%$):\\n\\nDiscount factors: $(1.08)^1 = 1.0800$, $(1.08)^2 = 1.1664$, $(1.08)^3 = 1.2597$, $(1.08)^4 = 1.3605$.\\n\\n$$PV(FCF_1) = 40/1.0800 = 37.04$$\\n$$PV(FCF_2) = 48/1.1664 = 41.15$$\\n$$PV(FCF_3) = 55/1.2597 = 43.66$$\\n$$PV(FCF_4 + CV_4) = (60 + 1{,}236)/1.3605 = 1{,}296/1.3605 = 952.59$$\\n\\n$$V_0 = 37.04 + 41.15 + 43.66 + 952.59 = \\$1{,}074.44\\text{ m}$$\\n\\n(c) Equity value:\\n$$E_0 = V_0 + \\text{Cash} - \\text{Debt} = 1{,}074.44 + 20 - 180 = \\$914.44\\text{ m}$$\\n\\nShare price:\\n$$P_0 = E_0 / \\text{Shares} = 914.44 / 25 = \\$36.58$$",
+          "rubric": "2 marks for terminal value (formula and arithmetic); 3 marks for correct $V_0$ (each discounted FCF must be correct; accept minor rounding); 2 marks for equity value and share price. Maximum 7 marks.",
+          "marks": 8
+        },
+        {
+          "type": "short",
+          "id": "q2.4",
+          "stem": "The analyst is uncertain about the long-run growth rate $g_{\\infty}$. (a) Re-compute the estimated share price if $g_{\\infty} = 2\\%$ instead of $3\\%$, keeping all other inputs unchanged. (b) Re-compute the estimated share price if $g_{\\infty} = 4\\%$. (c) Briefly explain why the share price is so sensitive to $g_{\\infty}$, referencing the role of the terminal value in the total enterprise value.",
+          "model_answer": "(a) $g_{\\infty} = 2\\%$:\\n$$CV_4 = \\frac{60 \\times 1.02}{0.08 - 0.02} = \\frac{61.20}{0.06} = \\$1{,}020\\text{ m}$$\\n$$PV(FCF_4 + CV_4) = (60 + 1{,}020)/1.3605 = 1{,}080/1.3605 = 793.83$$\\n$$V_0 = 37.04 + 41.15 + 43.66 + 793.83 = \\$915.68\\text{ m}$$\\n$$E_0 = 915.68 + 20 - 180 = \\$755.68\\text{ m}$$\\n$$P_0 = 755.68/25 = \\$30.23$$\\n\\n(b) $g_{\\infty} = 4\\%$:\\n$$CV_4 = \\frac{60 \\times 1.04}{0.08 - 0.04} = \\frac{62.40}{0.04} = \\$1{,}560\\text{ m}$$\\n$$PV(FCF_4 + CV_4) = (60 + 1{,}560)/1.3605 = 1{,}620/1.3605 = 1{,}190.74$$\\n$$V_0 = 37.04 + 41.15 + 43.66 + 1{,}190.74 = \\$1{,}312.59\\text{ m}$$\\n$$E_0 = 1{,}312.59 + 20 - 180 = \\$1{,}152.59\\text{ m}$$\\n$$P_0 = 1{,}152.59/25 = \\$46.10$$\\n\\n(c) The terminal value represents the vast majority of enterprise value in all three scenarios (approximately $74\\%$, $88\\%$, and $91\\%$ respectively). Because the terminal value is computed as a perpetuity $CV_4 = FCF_5/(r_{wacc}-g_{\\infty})$, a small change in the denominator $(r_{wacc}-g_{\\infty})$ causes a large change in $CV_4$. Moving from $g_{\\infty} = 2\\%$ to $g_{\\infty} = 4\\%$ halves the denominator, nearly doubling the terminal value. This amplification is then transmitted directly to the share price, producing a $\\$15.87$ range from a mere $2\\%$ change in a single assumption.",
+          "rubric": "1 mark each for correct $P_0$ at $g=2\\%$ and $g=4\\%$; up to 2 marks for the explanation (must mention terminal value dominance and the denominator amplification effect).",
+          "marks": 4
+        }
+      ]
+    },
+    {
+      "title": "Section 3 — Payout Policy: Irrelevance, Taxes, and Signalling",
+      "instructions": "Answer all parts. Show all working clearly. Partial credit is available. Submit each sub-question using the code provided.",
+      "weight_pct": 20,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q3.1",
+          "stem": "Storviken AS has $1{,}000{,}000$ shares outstanding at a price of $\\$60$ per share. The firm has $\\$5{,}000{,}000$ in excess cash and no debt. Management is deciding whether to distribute the cash as a $\\$5.00$ per share special dividend or to use it to repurchase shares at the current market price. (a) In a perfect capital market, compute the share price immediately AFTER each alternative is executed. (b) Compute the number of shares repurchased under the buyback option. (c) Demonstrate numerically that existing shareholders are equally wealthy under both alternatives, regardless of which they choose.",
+          "model_answer": "(a) Special dividend:\\nOn the ex-dividend date the share price falls by the per-share dividend:\\n$$P_{\\text{ex}} = \\$60 - \\$5 = \\$55 \\text{ per share}$$\\n\\nShare repurchase:\\nThe firm's equity value before buyback: $E = 1{,}000{,}000 \\times 60 = \\$60{,}000{,}000$.\\nAfter paying out $\\$5{,}000{,}000$, equity value: $60{,}000{,}000 - 5{,}000{,}000 = \\$55{,}000{,}000$.\\nShares outstanding after buyback: $1{,}000{,}000 - 83{,}333 = 916{,}667$ (see part b).\\n$$P_{\\text{repurchase}} = \\frac{\\$55{,}000{,}000}{916{,}667} = \\$60 \\text{ per share (unchanged)}$$\\nNote: in a perfect market with no taxes, the price per share does not change under a repurchase — the share count falls by the same proportion as the equity value.\\n\\n(b) Shares repurchased:\\n$$N_{\\text{repo}} = \\frac{\\$5{,}000{,}000}{\\$60} = 83{,}333 \\text{ shares (rounded)}$$\\n\\n(c) Shareholder holding 100 shares worth $\\$6{,}000$ before any action:\\n\\nDividend route:\\n- Cash received: $100 \\times 5 = \\$500$\\n- Value of remaining shares: $100 \\times 55 = \\$5{,}500$\\n- Total wealth: $\\$500 + \\$5{,}500 = \\$6{,}000$ ✓\\n\\nRepurchase route (shareholder does not tender):\\n- Cash received: $\\$0$\\n- Value of remaining shares: $100 \\times 60 = \\$6{,}000$\\n- Total wealth: $\\$6{,}000$ ✓\\n\\nRepurchase route (shareholder tenders all 100 shares at $\\$60$):\\n- Cash received: $100 \\times 60 = \\$6{,}000$, total wealth: $\\$6{,}000$ ✓\\n\\nIn all cases wealth equals $\\$6{,}000$, confirming MM payout irrelevance.",
+          "rubric": "2 marks for correct post-action prices under both policies; 1 mark for number of shares repurchased; 2 marks for the numerical wealth equivalence (all three cases or at least two clearly demonstrated).",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q3.2",
+          "stem": "Now introduce taxes. Suppose dividends are taxed at $\\tau_d = 30\\%$ and capital gains at $\\tau_g = 15\\%$. Using the effective dividend tax rate formula, compute $\\tau_d^*$ and interpret its sign. Does this create a preference for dividends or share repurchases, and why?",
+          "model_answer": "The effective dividend tax rate is:\\n$$\\tau_d^* = \\frac{\\tau_d - \\tau_g}{1 - \\tau_g} = \\frac{0.30 - 0.15}{1 - 0.15} = \\frac{0.15}{0.85} \\approx 17.6\\%$$\\n\\nBecause $\\tau_d^* > 0$, dividends are tax-disadvantaged relative to capital gains. Every dollar received as a dividend costs shareholders $17.6\\%$ more in taxes than receiving the same economic benefit as a capital gain.\\n\\nImplication: shareholders prefer share repurchases over dividends. A buyback returns cash in the form of a capital gain (only shareholders who choose to sell realise the gain, and the tax is deferred until they sell). By contrast, a dividend forces a taxable event for all shareholders immediately. The firm should therefore prefer repurchases as the payout vehicle if it seeks to minimise the shareholders' tax burden.",
+          "rubric": "2 marks for correct $\\tau_d^*$ computation; 2 marks for interpretation (sign, preference for repurchases, deferral argument).",
+          "marks": 4
+        },
+        {
+          "type": "short",
+          "id": "q3.3",
+          "stem": "Storviken unexpectedly announces it will raise its quarterly dividend from $\\$0.40$ to $\\$0.55$ per share — a $37.5\\%$ increase. (a) According to the Dividend Signalling Hypothesis, what price reaction would you expect and why? (b) An investor argues: 'This dividend increase destroys value because the firm is paying out cash that could fund future investments.' Under what conditions would this investor be correct, and when would they be wrong?",
+          "model_answer": "(a) Signalling Hypothesis prediction:\\nThe announcement should trigger a positive abnormal return in Storviken's share price. The reasoning: managers raise dividends only when they are confident the higher level is sustainable — i.e., when they have private information about improved future earnings power. The dividend increase therefore credibly signals to the market that management forecasts permanently higher free cash flows. Empirical evidence in Berk & DeMarzo reports approximately $+1.34\\%$ abnormal returns for dividend increases of $10\\%$ or more. Given the $37.5\\%$ increase here, the signal is strong, and a meaningfully positive price reaction is expected.\\n\\n(b) The investor is correct when the firm is passing up positive-NPV projects to fund the higher dividend. If Storviken has valuable investment opportunities with return on investment $\\text{ROI} > r_E$, using cash for dividends rather than reinvestment reduces PVGO and destroys value — the share price falls below what it would have been under full reinvestment.\\n\\nThe investor is wrong when either (i) the firm has already funded all positive-NPV projects and the excess cash has no better internal use, or (ii) the return on new investment $\\text{ROI} \\leq r_E$, meaning reinvestment is zero-NPV or negative-NPV. In those cases paying out the cash avoids the agency cost of managers over-investing in low-return projects, and payout actually preserves or increases value.",
+          "rubric": "2 marks for correct signalling prediction with economic rationale; 3 marks for part (b) — 1.5 each for the 'correct' and 'wrong' conditions, which must reference ROI vs $r_E$ or equivalent language.",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q3.4",
+          "stem": "Storviken also has institutional shareholders who are indifferent between dividend income and capital gains ($\\tau_g = \\tau_d = 0$). A pension fund manager asks whether 'dividend smoothing' is rational behaviour for the firm. Explain dividend smoothing, why firms do it even in the absence of differential taxes, and what empirical evidence supports or challenges this practice.",
+          "model_answer": "Dividend smoothing describes the practice of maintaining relatively stable dividends over time, adjusting them slowly and infrequently relative to the volatility of earnings. Firms raise dividends only when management is confident of a permanent improvement in earnings, and cut them only as a last resort.\\n\\nWhy firms smooth (even with $\\tau_d = \\tau_g = 0$, so no tax motive):\\n\\n1. Signalling value: Because dividends are costly to maintain (cutting triggers a negative price reaction), a stable or rising dividend credibly signals management's confidence in future cash flows. Investors rationally update positively on an increase. If dividends were adjusted every quarter to match earnings, they would carry no information.\\n\\n2. Clientele considerations: Many investors — particularly retired individuals and some institutions — rely on regular dividend income for consumption. Unpredictable swings in dividends impose reinvestment risk and inconvenience on this clientele, reducing the firm's appeal to them.\\n\\n3. Agency cost discipline: Committing to a stable dividend constrains free cash flow available for potentially wasteful managerial spending, aligning management and shareholder interests.\\n\\nEmpirical evidence:\\n- Dividend increases of $\\geq 10\\%$ are associated with approximately $+1.34\\%$ abnormal returns.\\n- Dividend cuts of $\\geq 10\\%$ are associated with approximately $-3.71\\%$ abnormal returns.\\n- The asymmetry (cuts hurt more than increases help) is consistent with smoothing: managers raise dividends conservatively and resist cuts because investors react strongly negatively to cuts.\\n\\nChallenge: in a world of zero differential taxes and perfect information, MM irrelevance says smoothing has no fundamental basis — the firm could pay out all cash each period and shareholders would be indifferent. Smoothing is therefore rationalised primarily by information asymmetry and agency considerations, not tax effects.",
+          "rubric": "1 mark for defining dividend smoothing; 2 marks for explaining why firms smooth (at least two distinct reasons); 1 mark for relevant empirical evidence with approximate magnitudes.",
+          "marks": 4
+        }
+      ]
+    },
+    {
+      "title": "Section 4 — Capital Budgeting: Incremental FCF, NWC, Depreciation, and Sensitivity Analysis",
+      "instructions": "Answer all parts. Show all working clearly. Partial credit is available. Submit each sub-question using the code provided.",
+      "weight_pct": 30,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q4.1",
+          "stem": "Haukeli Components AS is evaluating a new production line. The following information is given:\\n- Initial capital expenditure (CapEx): $\\$2{,}400{,}000$ at $t = 0$\\n- Useful life: 4 years; straight-line depreciation to zero salvage value\\n- Expected incremental annual revenues: $\\$1{,}800{,}000$\\n- Expected incremental annual costs (excluding depreciation): $\\$900{,}000$\\n- Corporate tax rate: $\\tau_c = 28\\%$\\n- Required net working capital at $t=0$: $\\$200{,}000$ (fully recovered at $t=4$)\\n- No salvage value at the end of year 4\\n- WACC: $r_{wacc} = 9\\%$\\n\\n(a) Compute the annual straight-line depreciation.\\n(b) Compute the annual incremental unlevered net income.\\n(c) Compute the annual free cash flow (FCF) for years 1–3 and for year 4 (including NWC recovery).\\n(d) Compute the NPV of the project.",
+          "model_answer": "(a) Annual depreciation:\\n$$\\text{Depreciation} = \\frac{\\$2{,}400{,}000}{4} = \\$600{,}000 \\text{ per year}$$\\n\\n(b) Annual unlevered net income:\\n$$\\text{EBIT} = \\text{Rev} - \\text{Costs} - \\text{Dep} = 1{,}800{,}000 - 900{,}000 - 600{,}000 = \\$300{,}000$$\\n$$\\text{Unlevered Net Income} = \\text{EBIT} \\times (1-\\tau_c) = 300{,}000 \\times (1-0.28) = 300{,}000 \\times 0.72 = \\$216{,}000$$\\n\\n(c) Annual FCF:\\n$$FCF = \\text{Unlevered Net Income} + \\text{Depreciation} - \\Delta NWC - \\text{CapEx}$$\\n\\nYears 1–3 (no NWC change, no new CapEx):\\n$$FCF_{1-3} = 216{,}000 + 600{,}000 = \\$816{,}000$$\\n\\nYear 4 (NWC recovered, no new CapEx):\\n$$FCF_4 = 216{,}000 + 600{,}000 + 200{,}000 = \\$1{,}016{,}000$$\\n\\nNote: At $t = 0$, the initial outlay is:\\n$$CF_0 = -\\text{CapEx} - \\Delta NWC = -2{,}400{,}000 - 200{,}000 = -\\$2{,}600{,}000$$\\n\\n(d) NPV calculation using $r_{wacc} = 9\\%$:\\n\\nDiscount factors:\\n$(1.09)^1 = 1.0900$, $(1.09)^2 = 1.1881$, $(1.09)^3 = 1.2950$, $(1.09)^4 = 1.4116$\\n\\n$$PV(FCF_1) = 816{,}000 / 1.0900 = 748{,}624$$\\n$$PV(FCF_2) = 816{,}000 / 1.1881 = 686{,}810$$\\n$$PV(FCF_3) = 816{,}000 / 1.2950 = 630{,}116$$\\n$$PV(FCF_4) = 1{,}016{,}000 / 1.4116 = 719{,}743$$\\n\\n$$NPV = -2{,}600{,}000 + 748{,}624 + 686{,}810 + 630{,}116 + 719{,}743$$\\n$$NPV = -2{,}600{,}000 + 2{,}785{,}293 = +\\$185{,}293$$\\n\\nThe NPV is positive ($\\approx +\\$185{,}000$), so the project should be accepted.",
+          "rubric": "1 mark for depreciation; 2 marks for unlevered net income; 2 marks for FCF years 1–3 and year 4 (1 each); 3 marks for NPV (1 for correct year-0 outlay, 1 for correct PV sum of years 1–3, 1 for year 4 including NWC and final NPV). Accept rounding within $\\$5{,}000$.",
+          "marks": 8
+        },
+        {
+          "type": "short",
+          "id": "q4.2",
+          "stem": "Haukeli's finance team notes that revenues are uncertain. (a) Compute the break-even level of annual revenues (the level at which $NPV = 0$), holding all other parameters constant. (b) Interpret your result: by what percentage can revenues fall before the project destroys value?",
+          "model_answer": "(a) Let the break-even revenue be $R^*$. At break-even, $NPV = 0$, so the sum of discounted FCFs must equal the initial outlay of $\\$2{,}600{,}000$.\\n\\nWith revenue $R^*$, the annual FCF for years 1–3 becomes:\\n$$FCF = (R^* - 900{,}000 - 600{,}000)(1-0.28) + 600{,}000 = (R^* - 1{,}500{,}000)(0.72) + 600{,}000$$\\n$$= 0.72R^* - 1{,}080{,}000 + 600{,}000 = 0.72R^* - 480{,}000$$\\n\\nYear 4 FCF: $0.72R^* - 480{,}000 + 200{,}000 = 0.72R^* - 280{,}000$.\\n\\nPV of FCFs:\\n$$PV = (0.72R^* - 480{,}000)(AF_{1-3}) + (0.72R^* - 280{,}000) \\times (1.09)^{-4}$$\\n\\nAnnuity factor for 3 years at 9%: $AF_{1-3} = (1/0.09)(1 - 1/1.09^3) = (1/0.09)(1 - 1/1.2950) = (1/0.09)(1 - 0.7722) = (1/0.09)(0.2278) = 2.5313$.\\n\\nDiscount factor year 4: $(1.09)^{-4} = 0.7084$.\\n\\nSetting $PV = 2{,}600{,}000$:\\n$$(0.72R^* - 480{,}000)(2.5313) + (0.72R^* - 280{,}000)(0.7084) = 2{,}600{,}000$$\\n$$1.8225R^* - 1{,}215{,}024 + 0.5101R^* - 198{,}352 = 2{,}600{,}000$$\\n$$2.3326R^* = 2{,}600{,}000 + 1{,}215{,}024 + 198{,}352 = 4{,}013{,}376$$\\n$$R^* = 4{,}013{,}376 / 2.3326 = \\$1{,}720{,}608 \\approx \\$1{,}720{,}600$$\\n\\n(b) The break-even revenue is $\\$1{,}720{,}600$, compared to the expected revenue of $\\$1{,}800{,}000$. The margin of safety is:\\n$$\\frac{1{,}800{,}000 - 1{,}720{,}600}{1{,}800{,}000} = \\frac{79{,}400}{1{,}800{,}000} \\approx 4.4\\%$$\\n\\nRevenues can fall by approximately $4.4\\%$ before the project yields a negative NPV. This relatively narrow margin suggests the project is sensitive to revenue assumptions and warrants careful scrutiny of the revenue forecast.",
+          "rubric": "3 marks for correct algebraic setup and solution for $R^*$ (accept answers within $\\$10{,}000$ due to rounding in annuity factors); 2 marks for correct percentage calculation and interpretation.",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q4.3",
+          "stem": "The project uses machinery that is being moved from an existing facility. This machinery currently generates $\\$80{,}000$ per year in cost savings for Haukeli's existing operations. If the machinery is reassigned to the new project, these savings are lost. Additionally, the finance director mentions that $\\$150{,}000$ was spent last year on a feasibility study for this project. (a) How should each of these items be treated in the incremental FCF analysis? Provide clear reasoning. (b) Recompute the year 1–3 FCF and the $t = 0$ cash flow incorporating the correctly treated items.",
+          "model_answer": "(a) Treatment of each item:\\n\\n**Opportunity cost of foregone savings ($\\$80{,}000$/year):** This is an opportunity cost — a real incremental cost of the project. By using the machinery on the new project, Haukeli forgoes $\\$80{,}000$ per year in savings that would otherwise be received. This must be included as an incremental cost in the FCF calculation (it reduces pre-tax income).\\n\\n**Feasibility study ($\\$150{,}000$):** This is a sunk cost — it was spent in the past and will not be recovered regardless of whether the project proceeds. It must be excluded from the incremental analysis. Including it would incorrectly bias the NPV downward.\\n\\n(b) Revised FCF calculation:\\n\\nRevised annual pre-tax operating income (EBIT):\\n$$\\text{EBIT} = (\\text{Rev} - \\text{Costs} - \\text{Opp. Cost} - \\text{Dep})$$\\n$$= 1{,}800{,}000 - 900{,}000 - 80{,}000 - 600{,}000 = \\$220{,}000$$\\n\\nRevised unlevered net income:\\n$$220{,}000 \\times (1-0.28) = 220{,}000 \\times 0.72 = \\$158{,}400$$\\n\\nRevised FCF years 1–3:\\n$$FCF_{1-3} = 158{,}400 + 600{,}000 = \\$758{,}400$$\\n\\nRevised year 4 FCF:\\n$$FCF_4 = 158{,}400 + 600{,}000 + 200{,}000 = \\$958{,}400$$\\n\\nRevised $t = 0$ cash flow: unchanged — the feasibility study is excluded (sunk), and NWC and CapEx remain as before:\\n$$CF_0 = -2{,}400{,}000 - 200{,}000 = -\\$2{,}600{,}000$$",
+          "rubric": "2 marks for correct treatment of both items (1 each, with reasoning); 2 marks for revised FCF years 1–3 and year 4 (1 each); 1 mark for confirming unchanged $t=0$ outlay.",
+          "marks": 5
+        },
+        {
+          "type": "short",
+          "id": "q4.4",
+          "stem": "Using the revised FCF figures from question 4.3 (b), compute the revised NPV of the project. Then perform a scenario analysis by considering the following two coherent alternative scenarios and comment on the overall riskiness of the project:\\n- **Optimistic scenario:** Revenues are $\\$2{,}000{,}000$, the opportunity cost of foregone savings is only $\\$50{,}000$ (the machinery is partly redeployable), and WACC falls to $8\\%$.\\n- **Pessimistic scenario:** Revenues are $\\$1{,}500{,}000$, the opportunity cost is $\\$120{,}000$, and WACC rises to $11\\%$.",
+          "model_answer": "**Revised base-case NPV:**\\n\\nUsing $r_{wacc} = 9\\%$, $FCF_{1-3} = \\$758{,}400$, $FCF_4 = \\$958{,}400$:\\n$$PV(FCF_{1-3}) = 758{,}400 \\times 2.5313 = 1{,}919{,}737$$\\n$$PV(FCF_4) = 958{,}400 \\times 0.7084 = 679{,}249$$\\n$$NPV = -2{,}600{,}000 + 1{,}919{,}737 + 679{,}249 = -2{,}600{,}000 + 2{,}598{,}986 \\approx -\\$1{,}014$$\\n\\nThe revised base-case NPV is approximately $-\\$1{,}000$ — essentially zero, but marginally negative. This confirms the project is very close to the break-even point once the opportunity cost is correctly included.\\n\\n**Optimistic scenario** ($R = 2{,}000{,}000$; opp. cost $= 50{,}000$; $r_{wacc} = 8\\%$):\\n$$\\text{EBIT} = 2{,}000{,}000 - 900{,}000 - 50{,}000 - 600{,}000 = \\$450{,}000$$\\n$$\\text{Unlevered NI} = 450{,}000 \\times 0.72 = \\$324{,}000$$\\n$$FCF_{1-3} = 324{,}000 + 600{,}000 = \\$924{,}000; \\quad FCF_4 = \\$1{,}124{,}000$$\\n\\nAt $r_{wacc} = 8\\%$: $AF_{1-3} = (1/0.08)(1-1/1.08^3) = 12.5 \\times (1-0.7938) = 12.5 \\times 0.2062 = 2.5771$; $(1.08)^{-4} = 0.7350$.\\n$$PV = 924{,}000 \\times 2.5771 + 1{,}124{,}000 \\times 0.7350$$\\n$$= 2{,}381{,}240 + 826{,}140 = 3{,}207{,}380$$\\n$$NPV_{\\text{opt}} = 3{,}207{,}380 - 2{,}600{,}000 = +\\$607{,}380$$\\n\\n**Pessimistic scenario** ($R = 1{,}500{,}000$; opp. cost $= 120{,}000$; $r_{wacc} = 11\\%$):\\n$$\\text{EBIT} = 1{,}500{,}000 - 900{,}000 - 120{,}000 - 600{,}000 = -\\$120{,}000$$\\n$$\\text{Unlevered NI} = -120{,}000 \\times 0.72 = -\\$86{,}400$$\\n$$FCF_{1-3} = -86{,}400 + 600{,}000 = \\$513{,}600; \\quad FCF_4 = \\$713{,}600$$\\n\\nAt $r_{wacc} = 11\\%$: $AF_{1-3} = (1/0.11)(1-1/1.11^3) = 9.0909 \\times (1-0.7312) = 9.0909 \\times 0.2688 = 2.4437$; $(1.11)^{-4} = 0.6587$.\\n$$PV = 513{,}600 \\times 2.4437 + 713{,}600 \\times 0.6587$$\\n$$= 1{,}254{,}885 + 470{,}253 = 1{,}725{,}138$$\\n$$NPV_{\\text{pess}} = 1{,}725{,}138 - 2{,}600{,}000 = -\\$874{,}862$$\\n\\n**Summary and commentary:**\\n\\n| Scenario | NPV |\\n|---|---|\\n| Pessimistic | $-\\$874{,}862$ |\\n| Base case (revised) | $\\approx -\\$1{,}000$ |\\n| Optimistic | $+\\$607{,}380$ |\\n\\nThe scenario analysis reveals that the project is highly sensitive to the joint realisation of revenues, the opportunity cost, and the discount rate. The base-case NPV is essentially zero and slightly negative once the opportunity cost is correctly included. The asymmetric range ($-\\$875{,}000$ downside vs. $+\\$607{,}000$ upside) suggests that the project has moderate upside and significant downside. Management should likely reject the project unless additional investigation can narrow the revenue uncertainty, reduce the opportunity cost (e.g., by finding an alternative use for the machinery in existing operations), or if strategic considerations beyond pure NPV apply.",
+          "rubric": "2 marks for revised base-case NPV (accept $\\pm \\$5{,}000$ for rounding); 2 marks for optimistic NPV; 2 marks for pessimistic NPV; 2 marks for coherent commentary referencing asymmetry, sensitivity, and a recommendation.",
+          "marks": 8
+        }
+      ]
+    }
+  ]
+}

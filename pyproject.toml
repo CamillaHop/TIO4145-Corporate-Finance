@@ -5,7 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "anthropic>=0.102.0",
     "openai>=2.37.0",
     "pdfplumber>=0.11.9",
+    "python-dotenv>=1.2.2",
     "reductoai>=0.22.0",
 ]

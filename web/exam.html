@@ -38,7 +38,7 @@
   <div class="container">
     <p class="eyebrow">Final-exam companion</p>
     <h1>Exam prep</h1>
-    <p class="lede">Priority topics, practice questions, key definitions, and a suggested study schedule.</p>
+    <p class="lede">What gets weighted, which patterns keep coming back. Drill into the four mock papers or the key-definitions glossary from the cards below.</p>
   </div>
 </header>
 
@@ -64,13 +64,129 @@
 
 <script>
 (function () {
+  // Build a phrase → section URL map from each section JSON's
+  // key_concepts and title. The map is consulted by `autolink()` to
+  // turn topic / pattern prose into hyperlinks pointing at the section
+  // page that defines the concept.
+  var conceptIndex = []; // [{ phrase, lower, url }]
+
+  function indexSection(s, json) {
+    var url = 'section.html?id=' + encodeURIComponent(s.id);
+    var seen = new Set();
+    function add(phrase) {
+      if (!phrase) return;
+      var p = String(phrase).trim();
+      // Strip markdown markers and trim trailing punctuation.
+      p = p.replace(/^[_*`]+|[_*`]+$/g, '')
+           .replace(/[.,;:!?]+$/, '')
+           .replace(/\s+/g, ' ');
+      if (p.length < 4) return;            // skip ultra-short terms
+      var key = p.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      conceptIndex.push({ phrase: p, lower: key, url: url });
+    }
+    add(json && json.title);
+    (json && json.key_concepts || []).forEach(function (kc) {
+      if (kc && typeof kc === 'object') add(kc.concept);
+    });
+  }
+
+  function buildConceptIndex(cfg) {
+    var secs = cfg.sections || [];
+    return Promise.all(secs.map(function (s) {
+      return fetch('../generated/sections/' + encodeURIComponent(s.id) + '.json',
+                   { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { if (j) indexSection(s, j); })
+        .catch(function () {});
+    })).then(function () {
+      // Longest phrases first so "Capital Asset Pricing Model" wins over
+      // "Capital" when both could match.
+      conceptIndex.sort(function (a, b) { return b.phrase.length - a.phrase.length; });
+    });
+  }
+
+  function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  // Replace concept phrases in already-rendered HTML with anchor tags.
+  // Skips math (`<span class="katex">…`), existing `<a>`s, and `<code>`.
+  function autolink(html) {
+    if (!conceptIndex.length || !html) return html;
+    var doc = new DOMParser().parseFromString(
+      '<!doctype html><div id="r">' + html + '</div>', 'text/html'
+    );
+    var root = doc.getElementById('r');
+    if (!root) return html;
+    var walker = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var nodes = [];
+    while (walker.nextNode()) {
+      var n = walker.currentNode;
+      var p = n.parentNode;
+      // Skip if inside an anchor, code, or KaTeX math.
+      var skip = false;
+      for (var el = p; el; el = el.parentNode) {
+        if (!el.tagName) break;
+        var t = el.tagName;
+        if (t === 'A' || t === 'CODE') { skip = true; break; }
+        if (el.classList && (el.classList.contains('katex') ||
+                             el.classList.contains('katex-display'))) {
+          skip = true; break;
+        }
+      }
+      if (!skip) nodes.push(n);
+    }
+    nodes.forEach(function (text) {
+      var t = text.nodeValue;
+      // Build a regex that matches any concept phrase as a whole word.
+      // Replace once per concept (the first occurrence), to avoid
+      // making every paragraph look like a link soup.
+      var used = new Set();
+      conceptIndex.some(function () { return false; }); // no-op to keep order
+      // We'll match the first concept that appears anywhere in this node.
+      var bestMatch = null;
+      conceptIndex.forEach(function (c) {
+        if (bestMatch) return;
+        if (used.has(c.lower)) return;
+        var re = new RegExp('\\b(' + escapeRe(c.phrase) + ')\\b', 'i');
+        var m = re.exec(t);
+        if (m) bestMatch = { c: c, idx: m.index, len: m[0].length, text: m[0] };
+      });
+      if (!bestMatch) return;
+      var before = t.slice(0, bestMatch.idx);
+      var after  = t.slice(bestMatch.idx + bestMatch.len);
+      var a = doc.createElement('a');
+      a.href = bestMatch.c.url;
+      a.className = 'concept-link';
+      a.textContent = bestMatch.text;
+      var parent = text.parentNode;
+      if (before) parent.insertBefore(doc.createTextNode(before), text);
+      parent.insertBefore(a, text);
+      if (after) parent.insertBefore(doc.createTextNode(after), text);
+      parent.removeChild(text);
+    });
+    return root.innerHTML;
+  }
+
   function init() {
     StudySite.loadConfig().then(function (cfg) {
       StudySite.applyCourseChrome(cfg);
       StudySite.maybeLoadChat(cfg);
-      return StudySite.loadExam();
-    }).then(function (data) {
-      render(data);
+      return Promise.all([
+        StudySite.ensureMarkdown(),
+        StudySite.loadExam(),
+        StudySite.ensureKatex(),
+        buildConceptIndex(cfg),
+      ]).then(function (vals) {
+        var data = vals[1];
+        render(data);
+        // Auto-link concept names AFTER markdown is rendered. Walk the
+        // rationale / pattern blocks only — leave headings alone.
+        document.querySelectorAll(
+          '.topic-weight-why, .pattern-example, .pattern-tip'
+        ).forEach(function (el) { el.innerHTML = autolink(el.innerHTML); });
+        StudySite.renderMath(document.getElementById('root'));
+      });
     }).catch(function (err) {
       document.getElementById('root').innerHTML =
         '<div class="empty-state"><p>No exam prep generated yet. Run <code>python scripts/generate_exam.py</code>.<br><br><em>' +
@@ -78,72 +194,117 @@
     });
   }
 
+  function pct(n) {
+    var v = Number(n);
+    if (!isFinite(v)) return '';
+    return (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)) + '%';
+  }
+
+  function renderInlineMd(s) { return StudySite.renderInline(s || ''); }
+  function renderBlockMd(s)  { return StudySite.renderMarkdown(s || ''); }
+
   function render(data) {
     var html = [];
 
-    var topics = Array.isArray(data.priority_topics) ? data.priority_topics : [];
-    if (topics.length) {
-      html.push('<section class="exam-block"><h2>Priority topics</h2>');
-      topics.forEach(function (t) {
-        if (typeof t === 'string') {
-          html.push('<details><summary>' + StudySite.escapeHtml(t) + '</summary></details>');
-          return;
-        }
+    // Two destination cards near the top, so the most-clicked things
+    // (mock papers + glossary) are reachable without scrolling past the
+    // topic / pattern detail.
+    var nMocks = Array.isArray(data.mock_exams) ? data.mock_exams.length : 0;
+    var nDefs  = Array.isArray(data.key_definitions) ? data.key_definitions.length : 0;
+    html.push('<section class="exam-block exam-portal">');
+    html.push('<div class="exam-portal-grid">');
+    html.push(
+      '<a class="exam-portal-card" href="mock_exams.html">' +
+        '<div class="exam-portal-icon" aria-hidden="true">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h8M9 16h6M9 8h5"/></svg>' +
+        '</div>' +
+        '<div class="exam-portal-body">' +
+          '<h3>Mock exams</h3>' +
+          '<p>Four full Inspera-format papers. Sit them interactively or grab the Overleaf zip.</p>' +
+          '<span class="exam-portal-meta">' + nMocks + ' papers · interactive + LaTeX</span>' +
+        '</div>' +
+        '<span class="exam-portal-cta">Open →</span>' +
+      '</a>'
+    );
+    html.push(
+      '<a class="exam-portal-card" href="definitions.html">' +
+        '<div class="exam-portal-icon" aria-hidden="true">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12a4 4 0 0 1 4 4v11H8a4 4 0 0 1-4-4z"/><path d="M4 16a4 4 0 0 1 4-4h12"/></svg>' +
+        '</div>' +
+        '<div class="exam-portal-body">' +
+          '<h3>Key definitions</h3>' +
+          '<p>The terms a grader would expect you to define precisely. Filterable glossary.</p>' +
+          '<span class="exam-portal-meta">' + nDefs + ' terms</span>' +
+        '</div>' +
+        '<span class="exam-portal-cta">Open →</span>' +
+      '</a>'
+    );
+    html.push('</div>');
+    html.push('</section>');
+
+    var weights = Array.isArray(data.topic_weights) ? data.topic_weights : [];
+    if (weights.length) {
+      // Max weight drives the bar widths so the heaviest topic fills the lane.
+      var max = weights.reduce(function (m, w) {
+        var n = Number(w && w.weight_pct);
+        return isFinite(n) && n > m ? n : m;
+      }, 0) || 1;
+      html.push('<section class="exam-block"><p class="block-eyebrow">By the numbers</p><h2>Priority topics</h2>');
+      html.push('<p class="block-sub">Estimated share of marks each area has historically carried — based on the 2017–2025 papers.</p>');
+      html.push('<ul class="topic-weights">');
+      weights.forEach(function (t) {
+        if (!t || typeof t !== 'object') return;
+        var w = Number(t.weight_pct);
+        var width = isFinite(w) ? Math.max(2, (w / max) * 100) : 0;
         html.push(
-          '<details><summary>' + StudySite.escapeHtml(t.topic || '') + '</summary>' +
-          '<div>' + StudySite.escapeHtml(t.why_important || '') + '</div></details>'
+          '<li class="topic-weight-row">' +
+            '<div class="topic-weight-head">' +
+              '<span class="topic-weight-name">' + renderInlineMd(t.topic) + '</span>' +
+              '<span class="topic-weight-num">' + StudySite.escapeHtml(pct(w)) + '</span>' +
+            '</div>' +
+            '<div class="topic-weight-bar" title="Relative weight: longer = bigger historical share of marks">' +
+              '<span style="width:' + width.toFixed(1) + '%"></span></div>' +
+            (t.rationale
+              ? '<div class="topic-weight-why">' + renderInlineMd(t.rationale) + '</div>'
+              : '') +
+          '</li>'
+        );
+      });
+      html.push('</ul></section>');
+    }
+
+    var patterns = Array.isArray(data.recurring_patterns) ? data.recurring_patterns : [];
+    if (patterns.length) {
+      html.push('<section class="exam-block"><p class="block-eyebrow">Question shapes</p><h2>Recurring patterns</h2>');
+      html.push('<p class="block-sub">Templates that show up across multiple papers. Tap to expand for an example and a tactic.</p>');
+      patterns.forEach(function (p) {
+        if (!p || typeof p !== 'object') return;
+        html.push(
+          '<details class="pattern">' +
+            '<summary>' +
+              '<span class="pattern-name">' + renderInlineMd(p.pattern) + '</span>' +
+              '<span class="pattern-freq">' + StudySite.escapeHtml(p.frequency || '') + '</span>' +
+            '</summary>' +
+            '<div class="pattern-body">' +
+              (p.example
+                ? '<div class="pattern-example"><span class="pattern-label">Example</span>' + renderBlockMd(p.example) + '</div>'
+                : '') +
+              (p.tip
+                ? '<div class="pattern-tip"><span class="pattern-label">Tactic</span>' + renderBlockMd(p.tip) + '</div>'
+                : '') +
+              '<div class="pattern-links">' +
+                '<a href="mock_exams.html">Try a mock paper →</a>' +
+                '<a href="flashcards.html">Drill flashcards</a>' +
+              '</div>' +
+            '</div>' +
+          '</details>'
         );
       });
       html.push('</section>');
     }
 
-    var questions = Array.isArray(data.practice_questions) ? data.practice_questions : [];
-    if (questions.length) {
-      html.push('<section class="exam-block"><h2>Practice questions</h2>');
-      questions.forEach(function (q) {
-        html.push(
-          '<details><summary>' + StudySite.escapeHtml(q.question || '') + '</summary>' +
-          '<div>' +
-            (q.section ? '<p style="font-family:var(--mono);font-size:0.8rem;color:var(--ink-faded);margin:0 0 0.4rem;">' + StudySite.escapeHtml(q.section) + '</p>' : '') +
-            '<p style="margin:0;">' + StudySite.escapeHtml(q.answer || '') + '</p>' +
-          '</div></details>'
-        );
-      });
-      html.push('</section>');
-    }
-
-    var defs = Array.isArray(data.key_definitions) ? data.key_definitions : [];
-    if (defs.length) {
-      html.push('<section class="exam-block"><h2>Key definitions</h2><dl>');
-      defs.forEach(function (d) {
-        html.push(
-          '<dt>' + StudySite.escapeHtml(d.term || '') + '</dt>' +
-          '<dd>' + StudySite.escapeHtml(d.definition || '') + '</dd>'
-        );
-      });
-      html.push('</dl></section>');
-    }
-
-    var schedule = Array.isArray(data.study_schedule) ? data.study_schedule : [];
-    if (schedule.length) {
-      html.push('<section class="exam-block"><h2>Study schedule</h2>');
-      html.push('<table><thead><tr><th>Day</th><th>Focus</th><th>Tasks</th></tr></thead><tbody>');
-      schedule.forEach(function (s) {
-        var tasks = Array.isArray(s.tasks) ? s.tasks : [];
-        html.push(
-          '<tr>' +
-            '<td>' + StudySite.escapeHtml(String(s.day || '')) + '</td>' +
-            '<td>' + StudySite.escapeHtml(s.focus || '') + '</td>' +
-            '<td><ul style="margin:0;">' +
-              tasks.map(function (t) { return '<li>' + StudySite.escapeHtml(t) + '</li>'; }).join('') +
-            '</ul></td>' +
-          '</tr>'
-        );
-      });
-      html.push('</tbody></table></section>');
-    }
-
-    document.getElementById('root').innerHTML = html.join('') || '<div class="empty-state"><p>Exam prep is empty.</p></div>';
+    var root = document.getElementById('root');
+    root.innerHTML = html.join('') || '<div class="empty-state"><p>Exam prep is empty.</p></div>';
   }
 
   if (document.readyState === 'loading') {

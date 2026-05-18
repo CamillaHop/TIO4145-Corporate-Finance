@@ -2178,15 +2178,660 @@ a.cov-item:hover {
 
 /* ─────────── Exam page ─────────── */
 
-.exam-block { margin: 2rem 0; }
+.exam-block { margin: 3rem 0 0; }
+.exam-block:last-of-type { margin-bottom: 2rem; }
 .exam-block h2 {
   font-family: var(--display);
   font-style: normal;
   font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.4rem;
   color: var(--ink);
+}
+.exam-block .block-eyebrow { margin-bottom: 0.4rem; }
+.exam-block .block-sub {
+  margin: 0 0 1.3rem;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+
+/* ── Exam portal cards (mock exams + key definitions) ── */
+.exam-portal { margin-top: 1.5rem; }
+.exam-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.exam-portal-card {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  row-gap: 0.6rem;
+  padding: 1.3rem 1.4rem 1.2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none !important;
+  transition: transform .2s cubic-bezier(.4,0,.2,1),
+              border-color .18s ease,
+              background .18s ease,
+              box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.exam-portal-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
+  background: var(--bg);
+  box-shadow: 0 14px 30px -18px rgba(9, 68, 89, 0.35);
+}
+.exam-portal-icon {
+  grid-row: 1;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--primary-mist);
+  color: var(--primary);
+}
+.exam-portal-icon svg { width: 22px; height: 22px; }
+.exam-portal-body {
+  grid-column: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.exam-portal-body h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.exam-portal-body p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.exam-portal-meta {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.exam-portal-cta {
+  grid-column: 1 / -1;
+  margin-top: 0.4rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border-soft);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* Filter toolbar on the definitions page */
+.defs-toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.1rem 0 0;
+  max-width: 32rem;
+}
+#defs-filter {
+  flex: 1;
+  font: inherit;
+  font-size: 0.94rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#defs-filter::placeholder { color: var(--ink-faded); }
+#defs-filter:hover { border-color: var(--border-strong); }
+#defs-filter:focus {
+  border-color: var(--primary-mid);
+  background: var(--bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-mid) 16%, transparent);
+}
+.defs-count {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  flex-shrink: 0;
+}
+.defs-empty { margin-top: 0.5rem; }
+
+/* Eyebrow links back to exam prep on subpages */
+.section-hero .eyebrow a {
+  color: inherit;
+  text-decoration: none !important;
+  border: none;
+}
+.section-hero .eyebrow a:hover { color: var(--primary); }
+
+/* ── Priority topics: bar-chart style list ── */
+.topic-weights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.topic-weight-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem 1rem;
+}
+.topic-weight-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.45rem;
+}
+.topic-weight-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.topic-weight-num {
+  font-family: var(--display-sans);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+.topic-weight-bar {
+  height: 6px;
+  background: var(--surface-alt);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.topic-weight-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-deep), var(--primary-mid));
+  border-radius: 999px;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+.topic-weight-why {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+/* Auto-linked concept names inside topic rationales / pattern bodies.
+   Subtle dotted underline so it reads as "annotated" rather than
+   competing with the proper navigation links. */
+.concept-link {
+  color: var(--primary) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted color-mix(in srgb, var(--primary-mid) 55%, transparent) !important;
+  transition: color .12s ease, border-color .12s ease;
+}
+.concept-link:hover {
+  color: var(--primary-deep) !important;
+  border-bottom-color: var(--primary) !important;
+}
+
+.pattern-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border-soft);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pattern-links a {
+  color: var(--primary);
+  text-decoration: none !important;
+  border: none;
+}
+.pattern-links a:hover { color: var(--primary-deep); }
+
+/* ── Recurring patterns: expandable rows ── */
+.pattern {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  transition: border-color .15s ease;
+}
+.pattern[open], .pattern:hover { border-color: var(--primary-light); }
+.pattern > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.9rem 1.1rem;
+  display: grid;
+  grid-template-columns: 1.3rem 1fr;
+  gap: 0.2rem 0.4rem;
+  color: var(--ink);
+}
+.pattern > summary::-webkit-details-marker { display: none; }
+.pattern > summary::before {
+  content: '+';
+  grid-row: 1 / span 2;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.pattern[open] > summary::before { content: '–'; }
+.pattern-name {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.pattern-freq {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 2px;
+}
+.pattern-body {
+  padding: 0 1.1rem 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+.pattern-example, .pattern-tip { margin: 0.9rem 0 0; }
+.pattern-label {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+}
+.pattern-example > :last-child,
+.pattern-tip > :last-child { margin-bottom: 0; }
+
+/* ── Key definitions ── */
+.defs-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) 1fr;
+  column-gap: 1.3rem;
+  row-gap: 0.7rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+.defs-dl dt {
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0.25rem 0;
+  border-top: 1px solid var(--border-soft);
+}
+.defs-dl dd {
+  margin: 0;
+  padding: 0.25rem 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  border-top: 1px solid var(--border-soft);
+}
+.defs-dl dt:first-of-type,
+.defs-dl dt:first-of-type + dd { border-top: none; }
+@media (max-width: 640px) {
+  .defs-dl { grid-template-columns: 1fr; gap: 0; padding: 0.8rem 1rem; }
+  .defs-dl dt { padding-top: 0.7rem; }
+  .defs-dl dd { padding-bottom: 0.7rem; border-top: none; }
+}
+
+/* ── Mock exam grid (4 cards) ── */
+.mock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* Each card sizes to its own content — no row-stretching, so a long
+     summary on the leftmost card doesn't leave a vertical gap on the
+     others. */
+  grid-auto-rows: min-content;
+  align-items: start;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+.mock-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.2rem 1.3rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none !important;
+  transition: transform .2s cubic-bezier(.4,0,.2,1),
+              border-color .18s ease,
+              box-shadow .22s cubic-bezier(.4,0,.2,1),
+              background .18s ease;
+}
+.mock-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
+  background: var(--bg);
+  box-shadow: 0 14px 30px -18px rgba(9, 68, 89, 0.35);
+}
+.mock-card-head {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+.mock-card-num {
+  font-family: var(--display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  flex-shrink: 0;
+}
+.mock-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.mock-card-summary {
+  margin: 0.3rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.mock-card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.mock-tag {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  background: var(--surface-alt);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.mock-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border-soft);
+}
+.mock-cta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  flex: 0 0 auto;
+}
+.mock-pdf-row { display: flex; gap: 0.35rem; }
+.mock-pdf-btn {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--bg);
+  color: var(--ink-soft);
+  border: 1px solid var(--border) !important;
+  border-radius: 4px;
+  text-decoration: none !important;
+  transition: color .12s ease, background .12s ease, border-color .12s ease;
+}
+.mock-pdf-btn:hover {
+  color: var(--primary);
+  background: var(--primary-mist);
+  border-color: var(--primary-light) !important;
+}
+
+/* ─────────── Interactive mock-exam page ─────────── */
+
+.mock-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1rem 0 0;
+}
+.meta-chip {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--ink-soft);
+}
+
+.mock-section { margin: 3rem 0 0; }
+.mock-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.mock-section-title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+.mock-section-weight {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.mock-section-instructions {
+  margin: -0.5rem 0 1.2rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.q {
+  margin: 0 0 1.6rem;
+  padding: 1.1rem 1.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.q-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.q-id {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.q-marks {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-faded);
+}
+.q-stem { color: var(--ink); line-height: 1.65; margin-bottom: 0.7rem; }
+.q-stem > :first-child { margin-top: 0; }
+.q-stem > :last-child  { margin-bottom: 0; }
+
+.mcq-opts { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.6rem; }
+.mcq-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0.8rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color .12s ease, background .12s ease;
+}
+.mcq-opt:hover { border-color: var(--primary-light); }
+.mcq-opt input { margin-top: 0.3rem; accent-color: var(--primary); }
+.mcq-opt.is-checked {
+  border-color: var(--primary-mid);
+  background: var(--primary-mist);
+}
+.mcq-letter {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  min-width: 1.4em;
+}
+.mcq-label { flex: 1; line-height: 1.5; }
+
+/* Revealed state: green for correct, rust for the wrong one the user picked */
+.mock-revealed .mcq-opt.is-correct {
+  border-color: var(--ok);
+  background: var(--ok-pale);
+}
+.mock-revealed .mcq-opt.is-correct .mcq-letter { color: var(--ok); }
+.mock-revealed .mcq-opt.is-incorrect {
+  border-color: var(--warm);
+  background: var(--warm-pale);
+}
+.mock-revealed .mcq-opt.is-incorrect .mcq-letter { color: var(--warm-deep); }
+
+.short-answer {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.7rem 0.85rem;
+  resize: vertical;
+  min-height: 90px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.short-answer:focus {
+  border-color: var(--primary-mid);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-mid) 16%, transparent);
+}
+
+.q-solution {
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.95rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--ok);
+  border-radius: 5px;
+}
+.q-solution-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ok);
+  margin-bottom: 0.35rem;
+}
+.q-solution > :nth-child(2) { margin-top: 0; }
+.q-solution > :last-child   { margin-bottom: 0; }
+.q-rubric {
+  margin-top: 0.45rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.mock-bottom {
+  margin: 2.5rem 0 1rem;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  align-items: center;
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+}
+.mock-btn {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  background: var(--bg);
+  color: var(--ink-soft);
+  border: 1px solid var(--border) !important;
+  border-radius: 5px;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: color .12s ease, background .12s ease, border-color .12s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.mock-btn:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: var(--primary-light) !important;
+  background: var(--primary-mist);
+  transform: translateY(-1px);
+}
+.mock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.mock-btn-primary {
+  background: var(--primary);
+  color: var(--bg);
+  border-color: var(--primary) !important;
+}
+.mock-btn-primary:hover:not(:disabled) {
+  background: var(--primary-deep);
+  color: var(--bg);
+  border-color: var(--primary-deep) !important;
 }
 .exam-block details {
   background: var(--surface);

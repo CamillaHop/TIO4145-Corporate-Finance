@@ -22,6 +22,14 @@ echo
 echo "▶ Generating exam prep…"
 python scripts/generate_exam.py
 
+echo
+echo "▶ Generating four mock exams…"
+python scripts/generate_mock_exams.py
+
+echo
+echo "▶ Building mock-exam LaTeX zips…"
+python scripts/build_mock_exam_tex.py
+
 # Optional embeddings build, only if chat is enabled in the config.
 chat_enabled=$(python -c "import json; print(json.load(open('course_config.json'))['features']['chat']['enabled'])" 2>/dev/null || echo "False")
 if [ "$chat_enabled" = "True" ]; then

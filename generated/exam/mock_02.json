@@ -1,0 +1,232 @@
+{
+  "id": "mock_02",
+  "title": "Capital Structure, Taxes, and Valuation Methods",
+  "duration_minutes": 240,
+  "summary": "Focuses on Modigliani–Miller with and without taxes, computing the interest tax shield and levered firm value, after-tax WACC, APV, and the flow-to-equity method applied to a multi-period project.",
+  "sections": [
+    {
+      "title": "Section 1 — Multiple Choice",
+      "instructions": "Answer all 10 questions. Each correct answer awards $+2$ marks, each incorrect answer deducts $-1$ mark, and a blank answer scores $0$. Choose the single best answer for each question.",
+      "weight_pct": 20,
+      "questions": [
+        {
+          "type": "mcq",
+          "id": "q1.1",
+          "stem": "Which of the following statements about Modigliani–Miller Proposition I (with perfect capital markets and **no** taxes) is **FALSE**?",
+          "options": [
+            "The total value of the firm is independent of its capital structure.",
+            "Investors can replicate any capital structure the firm adopts through homemade leverage.",
+            "The weighted average cost of capital $r_{wacc}$ is equal to the unlevered cost of capital $r_U$ when there are no taxes.",
+            "Issuing debt and using the proceeds to repurchase equity increases the firm's total value because debt is cheaper than equity."
+          ],
+          "answer_index": 3,
+          "explanation": "In perfect capital markets with no taxes, MM Proposition I states that firm value is independent of capital structure. Although debt has a lower promised return than equity, the cost of equity rises with leverage (MM Proposition II) so that the WACC remains constant at $r_U$. There is no net gain from substituting cheap debt for equity — statement D is false. Statements A, B, and C are all correct implications of MM in a frictionless world.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.2",
+          "stem": "A firm has permanent debt of $D = \\$200$ million and a corporate tax rate of $\\tau_c = 25\\%$. Using the Modigliani–Miller result with corporate taxes, what is the present value of the interest tax shield?",
+          "options": [
+            "$\\$200$ million",
+            "$\\$50$ million",
+            "$\\$150$ million",
+            "It cannot be determined without knowing the coupon rate on the debt."
+          ],
+          "answer_index": 1,
+          "explanation": "For permanent debt, the interest tax shield is discounted at the debt cost $r_D$, and the annual shield is $\\tau_c \\times r_D \\times D$. Discounting in perpetuity gives $PV(\\text{Tax Shield}) = \\tau_c \\times D = 0.25 \\times 200 = \\$50$ million. The coupon rate cancels out because both the shield and the discount rate are proportional to $r_D$.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.3",
+          "stem": "Under MM Proposition II **with** corporate taxes and a **target debt-to-equity ratio**, which of the following correctly describes the relationship between $r_E$, $r_U$, and $r_D$?",
+          "options": [
+            "$r_E = r_U + \\frac{D}{E}(r_U - r_D)(1 - \\tau_c)$",
+            "$r_E = r_U + \\frac{D}{E}(r_U - r_D)$",
+            "$r_E = r_U - \\frac{D}{E}(r_U - r_D)$",
+            "$r_E = r_U + \\frac{D}{E} \\cdot r_D \\cdot \\tau_c$"
+          ],
+          "answer_index": 1,
+          "explanation": "When the firm maintains a **target leverage ratio**, the tax shield is as risky as the unlevered firm, so $r_U$ is the correct discount rate for the shield and also equals $r_{wacc}$. The leverage formula in this case takes the same form as the no-tax case: $r_E = r_U + \\frac{D}{E}(r_U - r_D)$. The formula with the $(1-\\tau_c)$ multiplier applies only when debt is permanently fixed (Miles–Ezzell vs. Harris–Pringle distinction).",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.4",
+          "stem": "Which of the following best describes the **Adjusted Present Value (APV)** method?",
+          "options": [
+            "APV discounts free cash flows at the after-tax WACC to obtain levered firm value directly.",
+            "APV values the firm as the sum of the unlevered value (FCFs discounted at $r_U$) plus the present value of financing side-effects such as the interest tax shield.",
+            "APV discounts free cash flows to equity at the equity cost of capital $r_E$.",
+            "APV is equivalent to WACC only when the firm has zero debt."
+          ],
+          "answer_index": 1,
+          "explanation": "APV decomposes firm value into two components: (1) the value of the unlevered firm, obtained by discounting unlevered FCFs at $r_U$, and (2) the PV of financing side-effects, primarily the interest tax shield. This decomposition is most useful when leverage changes over time. Option A describes the WACC method; option C describes the FTE method.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.5",
+          "stem": "A firm has an unlevered cost of capital of $r_U = 10\\%$, a debt cost of $r_D = 5\\%$, a corporate tax rate of $\\tau_c = 30\\%$, and maintains a constant debt-to-value ratio of $d = D/(D+E) = 40\\%$. What is the firm's after-tax WACC?",
+          "options": [
+            "$10.0\\%$",
+            "$8.8\\%$",
+            "$7.6\\%$",
+            "$9.4\\%$"
+          ],
+          "answer_index": 3,
+          "explanation": "Using the after-tax WACC formula with $r_E = r_U + \\frac{D}{E}(r_U - r_D) = 0.10 + \\frac{0.40}{0.60}(0.10 - 0.05) = 0.10 + 0.0333 = 13.33\\%$: $r_{wacc} = 0.60 \\times 0.1333 + 0.40 \\times 0.05 \\times (1 - 0.30) = 0.08 + 0.014 = 9.4\\%$. Equivalently, $r_{wacc} = r_U - d \\cdot \\tau_c \\cdot r_D = 0.10 - 0.40 \\times 0.30 \\times 0.05 = 9.4\\%$. The correct answer is $\\mathbf{9.4\\%}$.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.6",
+          "stem": "Which of the following is the correct formula for **Free Cash Flow to Equity (FCFE)**?",
+          "options": [
+            "$FCFE = FCF + \\text{Net Borrowing}$",
+            "$FCFE = FCF - (1-\\tau_c) \\times \\text{Interest} + \\text{Net Borrowing}$",
+            "$FCFE = FCF - \\text{Interest} + \\text{Net Borrowing}$",
+            "$FCFE = FCF - \\tau_c \\times \\text{Interest} + \\text{Net Borrowing}$"
+          ],
+          "answer_index": 1,
+          "explanation": "FCFE starts from the unlevered FCF, subtracts after-tax interest payments — because interest is tax-deductible, the net cash outflow from interest is $(1-\\tau_c) \\times \\text{Interest}$ — and then adds net new borrowing (new debt issued minus repayments). This gives the cash flow that actually accrues to equity holders and is discounted at $r_E$ in the FTE method.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.7",
+          "stem": "The **double materiality** concept required under the EU's CSRD means that companies must assess:",
+          "options": [
+            "Both the probability and the severity of ESG risks to the firm's financial performance.",
+            "ESG risks in both the short term and the long term.",
+            "Both how ESG factors affect the company's own financial position (financial materiality) and how the company's activities affect people and the planet (impact materiality).",
+            "ESG risks at both the parent company level and at each subsidiary level separately."
+          ],
+          "answer_index": 2,
+          "explanation": "Double materiality, as defined in ESRS 1 under the CSRD, requires assessment in two directions: (1) financial materiality — how sustainability matters affect the company's cash flows, cost of capital, and financial position (impact flowing inward); and (2) impact materiality — how the company's activities affect the environment and society (impact flowing outward). Both directions must be assessed, not just the traditional single-direction financial materiality.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.8",
+          "stem": "A firm's **unlevered beta** is $\\beta_U = 0.80$, its debt beta is $\\beta_D = 0.10$, the corporate tax rate is $\\tau_c = 25\\%$, and the market-value debt-to-equity ratio is $D/E = 0.50$. Assuming a **target leverage ratio** (tax shield as risky as the unlevered firm), what is the firm's levered equity beta $\\beta_E$?",
+          "options": [
+            "$\\beta_E = 1.15$",
+            "$\\beta_E = 0.835$",
+            "$\\beta_E = 1.05$",
+            "$\\beta_E = 0.90$"
+          ],
+          "answer_index": 0,
+          "explanation": "Under a target leverage ratio, $\\beta_E = \\beta_U + \\frac{D}{E}(\\beta_U - \\beta_D) = 0.80 + 0.50 \\times (0.80 - 0.10) = 0.80 + 0.35 = 1.15$. Note that with a target leverage ratio, the tax rate does not appear in the levering formula because the risk of the tax shield equals the risk of the unlevered firm.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.9",
+          "stem": "According to the **Integrated Present Value (IPV)** framework, which of the following best describes what happens when weights $b = c = 1$ are applied to financial, social, and environmental value flows?",
+          "options": [
+            "Only the financial NPV is counted, because social and environmental flows are not commensurable with money.",
+            "The social discount rate $\\rho_S$ and environmental discount rate $\\rho_E$ are both set equal to the firm's WACC.",
+            "Financial, social, and environmental value streams are each discounted at their respective rates and then summed with equal weight, giving $IPV = FV + SV + EV$.",
+            "The firm maximises shareholder value subject to the constraint that social and environmental impacts are non-negative."
+          ],
+          "answer_index": 2,
+          "explanation": "The IPV framework is $IPV = FV + b \\cdot SV + c \\cdot EV$, where each value stream ($FV$, $SV$, $EV$) is discounted at its own appropriate rate. When $b = c = 1$, the three streams receive equal weight and are simply summed. The financial value $FV$ uses the market discount rate (WACC), while $SV$ and $EV$ use social and environmental discount rates (e.g., the Ramsey rate) that may differ substantially.",
+          "marks": 2
+        },
+        {
+          "type": "mcq",
+          "id": "q1.10",
+          "stem": "Which of the following statements about the **WACC**, **APV**, and **FTE** methods is **FALSE**?",
+          "options": [
+            "All three methods yield the same NPV when applied consistently to the same project.",
+            "The WACC method is most convenient when the firm maintains a constant target debt-to-value ratio.",
+            "The APV method explicitly isolates the value of the interest tax shield, making it preferable when leverage changes over time.",
+            "The FTE method discounts unlevered free cash flows at the equity cost of capital $r_E$ to obtain total firm value."
+          ],
+          "answer_index": 3,
+          "explanation": "The FTE method discounts **free cash flows to equity (FCFE)** — not unlevered FCFs — at the equity cost of capital $r_E$, yielding the **equity value** of the project, not total firm value. Unlevered FCFs discounted at $r_{wacc}$ gives total levered firm value (WACC method). Statement D is therefore false. The other three statements are all correct characterisations of when and how each method is used.",
+          "marks": 2
+        }
+      ]
+    },
+    {
+      "title": "Section 2 — Capital Structure with Corporate Taxes",
+      "instructions": "Answer all parts. Show all working. Partial credit is awarded for correct methodology even if numerical errors occur.",
+      "weight_pct": 30,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q2.1",
+          "stem": "NordTech AS is an all-equity firm with $10{,}000{,}000$ shares outstanding and a share price of $\\$20$. The firm's unlevered cost of capital is $r_U = 12\\%$ and the corporate tax rate is $\\tau_c = 22\\%$. NordTech is considering a leveraged recapitalisation: it will issue permanent debt with face value $D = \\$80{,}000{,}000$ and use all proceeds to repurchase shares at the new post-announcement price.\\n\\n**(a)** Calculate the current (all-equity) firm value $V^U$.\\n\\n**(b)** Using MM with taxes, calculate the levered firm value $V^L$ after the recapitalisation.\\n\\n**(c)** Calculate the new share price after the announcement of the recapitalisation (before any repurchase takes place).\\n\\n**(d)** How many shares does NordTech repurchase, and how many shares remain outstanding?",
+          "model_answer": "**(a) Unlevered firm value:**\\n$$V^U = 10{,}000{,}000 \\times \\$20 = \\$200{,}000{,}000$$\\n\\n**(b) Levered firm value:**\\nFor permanent debt, $PV(\\text{Tax Shield}) = \\tau_c \\times D = 0.22 \\times 80{,}000{,}000 = \\$17{,}600{,}000$.\n$$V^L = V^U + PV(\\text{Tax Shield}) = 200{,}000{,}000 + 17{,}600{,}000 = \\$217{,}600{,}000$$\n\n**(c) New share price after announcement:**\nAfter announcement but before repurchase, the equity value equals $V^L - D$ (the firm has committed to issuing $D$ in debt, so the benefit accrues to current shareholders):\n$$E^L = V^L - D = 217{,}600{,}000 - 80{,}000{,}000 = \\$137{,}600{,}000$$\n$$P_{\\text{new}} = \\frac{E^L}{\\text{Shares outstanding}} = \\frac{137{,}600{,}000}{10{,}000{,}000} = \\$13.76$$\n\nWait — the standard result is that original shareholders capture the full tax shield. Let us apply correctly. After the announcement, the equity value of the firm before repurchase must reflect the total firm value minus the face value of the planned debt:\n$$P_{\\text{new}} = \\frac{V^L - D}{N_0} = \\frac{217{,}600{,}000 - 80{,}000{,}000}{10{,}000{,}000} = \\frac{137{,}600{,}000}{10{,}000{,}000} = \\$13.76$$\n\nThis cannot be right — the share price should **rise** on announcement. The correct logic: at announcement, the equity value rises by the PV of the tax shield because those shares are still outstanding:\n$$P_{\\text{new}} = \\frac{V^U + PV(\\text{Tax Shield})}{N_0} = \\frac{200{,}000{,}000 + 17{,}600{,}000}{10{,}000{,}000} = \\frac{217{,}600{,}000}{10{,}000{,}000} = \\$21.76$$\n\nAt the time of announcement (before the repurchase is executed), the firm has not yet issued debt so total equity value equals $V^L = \\$217.6\\text{M}$ spread over all $10{,}000{,}000$ shares:\\n$$\\boxed{P_{\\text{new}} = \\$21.76}$$\\n\\n**(d) Shares repurchased and remaining:**\\nThe repurchase is executed at $P_{\\text{new}} = \\$21.76$ per share using debt proceeds of $\\$80{,}000{,}000$:\\n$$\\text{Shares repurchased} = \\frac{D}{P_{\\text{new}}} = \\frac{80{,}000{,}000}{21.76} \\approx 3{,}676{,}471 \\text{ shares}$$\\n$$\\text{Shares remaining} = 10{,}000{,}000 - 3{,}676{,}471 \\approx 6{,}323{,}529 \\text{ shares}$$\\n\\nVerification: equity value after recapitalisation $= 6{,}323{,}529 \\times 21.76 \\approx \\$137{,}600{,}000 = V^L - D$. ✓",
+          "rubric": "Award marks for (a) correct $V^U$ (2 marks); (b) correct tax shield and $V^L$ (4 marks); (c) correct announcement-day price logic — full marks only if student recognises all 10M shares benefit before repurchase (4 marks); (d) correct number of shares repurchased and remaining with verification (5 marks). Total 15 marks.",
+          "marks": 15
+        },
+        {
+          "type": "short",
+          "id": "q2.2",
+          "stem": "Continuing from Question 2.1. After the leveraged recapitalisation, NordTech maintains a **target debt-to-value ratio** of $d = D/V^L$. The debt cost of capital is $r_D = 5\\%$ and the corporate tax rate remains $\\tau_c = 22\\%$.\\n\\n**(a)** Compute the equity cost of capital $r_E$ after the recapitalisation using MM Proposition II with a target leverage ratio.\\n\\n**(b)** Compute the after-tax WACC $r_{wacc}$ using both the standard formula and the project-based shortcut $r_{wacc} = r_U - d \\cdot \\tau_c \\cdot r_D$, verifying that both give the same answer.\\n\\n**(c)** Interpret the result: why does the WACC fall when the firm levers up, even though equity becomes riskier?",
+          "model_answer": "**(a) Equity cost of capital $r_E$:**\\n\\nFrom part (b) of Q2.1: $V^L = \\$217{,}600{,}000$ and $D = \\$80{,}000{,}000$, so $E = V^L - D = \\$137{,}600{,}000$.\\n\\nDebt-to-equity ratio: $D/E = 80/137.6 = 0.5814$.\\n\\nWith a target leverage ratio:\\n$$r_E = r_U + \\frac{D}{E}(r_U - r_D) = 0.12 + 0.5814 \\times (0.12 - 0.05) = 0.12 + 0.5814 \\times 0.07$$\\n$$r_E = 0.12 + 0.04070 = 0.16070 \\approx 16.07\\%$$\\n\\n**(b) After-tax WACC:**\\n\\nTarget leverage ratio: $d = D/V^L = 80/217.6 = 0.36765$, so $1-d = 0.63235$.\\n\\n**Standard formula:**\\n$$r_{wacc} = (1-d)\\,r_E + d\\,r_D(1-\\tau_c) = 0.63235 \\times 0.16070 + 0.36765 \\times 0.05 \\times 0.78$$\\n$$= 0.10162 + 0.01433 = 0.11596 \\approx 11.60\\%$$\\n\\n**Shortcut formula:**\\n$$r_{wacc} = r_U - d \\cdot \\tau_c \\cdot r_D = 0.12 - 0.36765 \\times 0.22 \\times 0.05$$\\n$$= 0.12 - 0.004044 = 0.115956 \\approx 11.60\\%$$\\n\\nBoth approaches give $r_{wacc} \\approx 11.60\\%$. ✓\\n\\n**(c) Interpretation:**\\n\\nAlthough leverage increases $r_E$ (equity holders bear more financial risk and demand higher compensation), the government effectively subsidises part of the debt cost via the interest tax shield. The after-tax cost of debt to the firm is $r_D(1-\\tau_c) = 5\\% \\times 0.78 = 3.90\\%$, which is well below $r_U = 12\\%$. Because the firm replaces expensive equity with cheaper after-tax debt, and because the tax shield creates real value (reducing the government's claim on firm cash flows), the blended cost of capital declines. The WACC falls from $r_U = 12\\%$ to $r_{wacc} \\approx 11.60\\%$, reflecting the gain from the tax shield. In perfect markets without taxes the WACC would stay at $r_U$ regardless of leverage.",
+          "rubric": "Award 4 marks for correct $r_E$ with workings; 4 marks for after-tax WACC verified by both formulas; 7 marks for the interpretation (3 for economic intuition on tax shield, 2 for noting that WACC equals $r_U$ without taxes, 2 for connecting the result to the MM framework). Total 15 marks.",
+          "marks": 15
+        }
+      ]
+    },
+    {
+      "title": "Section 3 — Adjusted Present Value and Flow-to-Equity",
+      "instructions": "Answer all parts. Show all working. Partial credit is awarded for correct methodology even if numerical errors occur.",
+      "weight_pct": 20,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q3.1",
+          "stem": "BlueSky Energy is evaluating a three-year project with the following unlevered free cash flows: $FCF_1 = \\$30$ million, $FCF_2 = \\$40$ million, $FCF_3 = \\$55$ million (including the terminal value). The project's unlevered cost of capital is $r_U = 10\\%$ and the corporate tax rate is $\\tau_c = 25\\%$. BlueSky will finance the project with a **fixed debt schedule** (not a target ratio): $D_0 = \\$60$ million at inception, $D_1 = \\$40$ million after year 1, $D_2 = \\$20$ million after year 2, and $D_3 = 0$. The debt cost of capital is $r_D = 6\\%$.\\n\\n**(a)** Compute the unlevered NPV of the project ($V^U$) — i.e., the NPV of the unlevered FCFs discounted at $r_U$.\\n\\n**(b)** With a fixed debt schedule, the interest tax shields are relatively certain and should be discounted at $r_D$. Compute the present value of the interest tax shield $PV(\\text{ITS})$ under this assumption.\\n\\n**(c)** Compute the APV of the project: $APV = V^U + PV(\\text{ITS})$. Should BlueSky accept the project?",
+          "model_answer": "**(a) Unlevered NPV $V^U$:**\\n\\n$$V^U = \\frac{FCF_1}{(1+r_U)^1} + \\frac{FCF_2}{(1+r_U)^2} + \\frac{FCF_3}{(1+r_U)^3}$$\\n\\nNote: the initial investment is already embedded in the FCF signs (the FCFs given are net of any outlay at $t=0$ unless stated otherwise). Assuming the question intends these as positive net cash inflows and the initial outlay $I_0$ is captured separately — or that $FCF_0 = 0$ (no initial cost stated) and we simply value the cash flow stream:\\n\\n$$V^U = \\frac{30}{1.10} + \\frac{40}{1.10^2} + \\frac{55}{1.10^3}$$\\n$$= 27.273 + 33.058 + 41.323 = \\$101.65 \\text{ million}$$\\n\\n**(b) Present value of interest tax shields:**\\n\\nWith a **fixed debt schedule**, the interest in each year is based on the debt outstanding at the start of that year:\\n- Year 1: $D_0 = \\$60\\text{M}$ $\\Rightarrow$ $\\text{Interest}_1 = 0.06 \\times 60 = \\$3.60\\text{M}$ $\\Rightarrow$ $\\text{ITS}_1 = 0.25 \\times 3.60 = \\$0.90\\text{M}$\n- Year 2: $D_1 = \\$40\\text{M}$ $\\Rightarrow$ $\\text{Interest}_2 = 0.06 \\times 40 = \\$2.40\\text{M}$ $\\Rightarrow$ $\\text{ITS}_2 = 0.25 \\times 2.40 = \\$0.60\\text{M}$\\n- Year 3: $D_2 = \\$20\\text{M}$ $\\Rightarrow$ $\\text{Interest}_3 = 0.06 \\times 20 = \\$1.20\\text{M}$ $\\Rightarrow$ $\\text{ITS}_3 = 0.25 \\times 1.20 = \\$0.30\\text{M}$\n\nDiscounting at $r_D = 6\\%$:\n$$PV(\\text{ITS}) = \\frac{0.90}{1.06} + \\frac{0.60}{1.06^2} + \\frac{0.30}{1.06^3}$$\n$$= 0.8491 + 0.5340 + 0.2519 = \\$1.635 \\text{ million}$$\n\n**(c) APV:**\n\n$$APV = V^U + PV(\\text{ITS}) = 101.65 + 1.635 = \\$103.28 \\text{ million}$$\n\nSince the problem does not state an initial investment separately, and all $FCF_t > 0$, $APV > 0$: **BlueSky should accept the project.** If there were an initial outflow $I_0$ to compare against, the decision rule would be $APV > I_0$.",
+          "rubric": "Award 4 marks for correct unlevered FCF discounting; 6 marks for correctly computing all three annual interest tax shields and discounting them at $r_D$ (not $r_U$); 2 marks for summing to APV and stating the accept decision with reasoning. Deduct 2 marks if student discounts ITS at $r_U$ instead of $r_D$ without justification. Total 12 marks.",
+          "marks": 12
+        },
+        {
+          "type": "short",
+          "id": "q3.2",
+          "stem": "Using the same project parameters from Question 3.1 ($r_U = 10\\%$, $r_D = 6\\%$, $\\tau_c = 25\\%$, $FCF_t$ as given, fixed debt schedule $D_0 = \\$60$M, $D_1 = \\$40$M, $D_2 = \\$20$M, $D_3 = 0$), apply the **Flow-to-Equity (FTE)** method to value the equity contribution of the project.\\n\\n**(a)** Compute the equity cost of capital $r_E$ at each date using the levered firm's debt-to-equity ratio. Use the levered firm value at each date as $V^L_t = V^U_t + PV_t(\\text{ITS})$ (where $V^U_t$ and $PV_t(\\text{ITS})$ are the remaining unlevered NPV and remaining ITS value at time $t$), and $E_t = V^L_t - D_t$.\\n\\n**(b)** Compute the Free Cash Flow to Equity ($FCFE_t$) for $t = 1, 2, 3$.\\n\\n**(c)** Discount the $FCFE_t$ at the appropriate $r_{E,t}$ from part (a) to obtain the equity value at $t = 0$, and verify that it equals $APV - D_0$ from Question 3.1.",
+          "model_answer": "**(a) Equity cost of capital at each date:**\\n\\nFirst, compute $V^U_t$ (remaining unlevered value) and $PV_t(\\text{ITS})$ (remaining ITS value) at each date:\\n\\n**At $t = 2$:**\\n$$V^U_2 = \\frac{55}{1.10} = 50.00\\text{M}; \\quad PV_2(\\text{ITS}) = \\frac{0.30}{1.06} = 0.2830\\text{M}$$\\n$$V^L_2 = 50.00 + 0.2830 = 50.283\\text{M}; \\quad E_2 = 50.283 - 20 = 30.283\\text{M}$$\\n$$\\frac{D_2}{E_2} = \\frac{20}{30.283} = 0.6804$$\\n$$r_{E,2} = r_U + \\frac{D_2}{E_2}(r_U - r_D) = 0.10 + 0.6804 \\times 0.04 = 0.10 + 0.02722 = 12.72\\%$$\\n\\n**At $t = 1$:**\\n$$V^U_1 = \\frac{40}{1.10} + \\frac{55}{1.10^2} = 36.364 + 45.455 = 81.818\\text{M} - \\text{Wait: } V^U_1 \\text{ is PV at }t=1\\text{ of remaining FCFs}$$\\n$$V^U_1 = \\frac{40}{1.10} + \\frac{55}{1.10^2} = 36.364 + 45.455 = 81.818 - \\frac{30}{1} \\text{ already paid}$$\\nNo — $V^U_t$ is the continuation value (PV of future cash flows from $t+1$ onward). At $t=1$, we have already received $FCF_1$. The continuation values are:\\n$$V^U_1 = \\frac{FCF_2}{1.10} + \\frac{FCF_3}{1.10^2} = \\frac{40}{1.10} + \\frac{55}{1.21} = 36.364 + 45.455 = 81.818\\text{M}$$\\n\\nHmm — that counts all remaining FCFs. But at $t=0$, $V^U_0 = 101.65\\text{M}$ from Q3.1. After paying $FCF_1 = 30$ at $t=1$:\\n$$V^U_1 = (V^U_0 - \\underbrace{FCF_1/1 }_{\\text{note: already in }V^U_0})\\times 1.10$$\\nMore cleanly: at $t=1$, $V^U_1 = \\frac{40}{1.10} + \\frac{55}{1.10^2} = 36.364 + 45.455 = 81.818 - 30/\\text{note}$. \\n\\nStandard approach: $V^U_t$ at time $t$ = PV at time $t$ of all **future** (i.e., after $t$) unlevered FCFs.\\n- $V^U_2 = \\frac{55}{1.10} = 50.000\\text{M}$\\n- $V^U_1 = \\frac{40}{1.10} + \\frac{55}{1.10^2} = 36.364 + 45.455 = 81.818\\text{M}$\\n- $V^U_0 = 101.65\\text{M}$ (from Q3.1)\\n\\n$PV_t(\\text{ITS})$ = remaining ITS value at time $t$:\\n- $PV_2(\\text{ITS}) = \\frac{0.30}{1.06} = 0.2830\\text{M}$\\n- $PV_1(\\text{ITS}) = \\frac{0.60}{1.06} + \\frac{0.30}{1.06^2} = 0.5660 + 0.2670 = 0.8330\\text{M}$\\n- $PV_0(\\text{ITS}) = 1.635\\text{M}$ (from Q3.1)\\n\\nLevered values $V^L_t = V^U_t + PV_t(\\text{ITS})$ and equity $E_t = V^L_t - D_t$:\\n\\n| $t$ | $V^U_t$ | $PV_t(\\text{ITS})$ | $V^L_t$ | $D_t$ | $E_t$ | $D_t/E_t$ | $r_{E,t}$ |\\n|---|---|---|---|---|---|---|---|\\n| 0 | 101.65 | 1.635 | 103.285 | 60 | 43.285 | 1.3862 | $10\\%+1.3862\\times4\\% = 15.54\\%$ |\\n| 1 | 81.818 | 0.833 | 82.651 | 40 | 42.651 | 0.9379 | $10\\%+0.9379\\times4\\% = 13.75\\%$ |\\n| 2 | 50.000 | 0.283 | 50.283 | 20 | 30.283 | 0.6604 | $10\\%+0.6604\\times4\\% = 12.64\\%$ |\\n\\n**(b) Free Cash Flow to Equity:**\\n\\n$$FCFE_t = FCF_t - (1-\\tau_c)\\times\\text{Interest}_t + \\text{Net Borrowing}_t$$\\n\\nNet borrowing = $D_t - D_{t-1}$ (negative means debt repayment):\\n- $t=1$: Net Borrowing $= D_1 - D_0 = 40 - 60 = -20\\text{M}$\\n- $t=2$: Net Borrowing $= D_2 - D_1 = 20 - 40 = -20\\text{M}$\\n- $t=3$: Net Borrowing $= D_3 - D_2 = 0 - 20 = -20\\text{M}$\\n\\nAfter-tax interest $= (1-0.25)\\times r_D \\times D_{t-1}$:\\n- $t=1$: $(0.75)(0.06)(60) = 2.70\\text{M}$\\n- $t=2$: $(0.75)(0.06)(40) = 1.80\\text{M}$\\n- $t=3$: $(0.75)(0.06)(20) = 0.90\\text{M}$\\n\\n$$FCFE_1 = 30 - 2.70 + (-20) = 7.30\\text{M}$$\\n$$FCFE_2 = 40 - 1.80 + (-20) = 18.20\\text{M}$$\\n$$FCFE_3 = 55 - 0.90 + (-20) = 34.10\\text{M}$$\\n\\n**(c) Equity value by FTE:**\\n\\nBecause $r_E$ changes each period, discount sequentially backward:\\n$$E_2 = \\frac{FCFE_3}{1+r_{E,2}} = \\frac{34.10}{1.1264} = 30.27\\text{M}$$\\n$$E_1 = \\frac{FCFE_2 + E_2}{1+r_{E,1}} = \\frac{18.20 + 30.27}{1.1375} = \\frac{48.47}{1.1375} = 42.61\\text{M}$$\\n$$E_0 = \\frac{FCFE_1 + E_1}{1+r_{E,0}} = \\frac{7.30 + 42.61}{1.1554} = \\frac{49.91}{1.1554} = 43.20\\text{M}$$\\n\\nVerification: $APV - D_0 = 103.285 - 60 = 43.285\\text{M}$.\\n\\nThe FTE result $E_0 \\approx 43.20\\text{M}$ is very close to $43.285\\text{M}$, with small rounding differences in intermediate $r_E$ values. ✓",
+          "rubric": "Award 4 marks for correct continuation values $V^U_t$, $PV_t(\\text{ITS})$, and $r_{E,t}$; 4 marks for correct $FCFE_t$ at each period (with correct net borrowing and after-tax interest); 4 marks for correct sequential discounting and verification that $E_0 \\approx APV - D_0$. Penalise 1 mark if student uses a constant $r_E$ rather than allowing it to vary with leverage. Total 12 marks.",
+          "marks": 12
+        }
+      ]
+    },
+    {
+      "title": "Section 4 — Comprehensive Valuation and Sustainable Finance",
+      "instructions": "Answer all parts. Show all working. Partial credit is awarded for correct methodology even if numerical errors occur.",
+      "weight_pct": 30,
+      "questions": [
+        {
+          "type": "short",
+          "id": "q4.1",
+          "stem": "GreenPort AS operates a container terminal and is valued using a DCF model. The firm currently has no debt ($V^U_0 = \\$300$ million). The CFO plans to permanently raise $D = \\$90$ million in debt at $r_D = 5\\%$ and invest the proceeds in an expansion project. The corporate tax rate is $\\tau_c = 21\\%$. The expansion generates incremental unlevered FCFs of $FCF^{\\text{exp}} = \\$12$ million per year in perpetuity. The unlevered cost of capital for the expansion (same risk as existing business) is $r_U = 8\\%$.\n\n**(a)** Compute the unlevered NPV of the expansion project.\n\n**(b)** Compute the APV of the expansion project, including the interest tax shield from the $\\$90$ million in permanent debt raised to finance it.\\n\\n**(c)** The firm's current unlevered cost of equity equals $r_U = 8\\%$. After the expansion and debt issuance, what is the firm's after-tax WACC? (Use $V^L_{\\text{exp}} = NPV_{\\text{exp}}^{APV} + D$ as the levered enterprise value of the expansion to find the target leverage ratio for the expansion.)\\n\\n**(d)** Verify your WACC by discounting the expansion's unlevered FCFs at $r_{wacc}$ and confirming you recover $V^L_{\\text{exp}}$.",
+          "model_answer": "**(a) Unlevered NPV of expansion:**\\n\\nThe expansion is a perpetuity:\\n$$V^U_{\\text{exp}} = \\frac{FCF^{\\text{exp}}}{r_U} = \\frac{12}{0.08} = \\$150\\text{ million}$$\\n\\nInitial investment (proceeds from debt) $= D = \\$90$ million:\\n$$NPV^U_{\\text{exp}} = V^U_{\\text{exp}} - I = 150 - 90 = \\$60\\text{ million}$$\\n\\n**(b) APV of expansion:**\\n\\nFor permanent debt: $PV(\\text{ITS}) = \\tau_c \\times D = 0.21 \\times 90 = \\$18.9\\text{ million}$.\n$$APV_{\\text{exp}} = NPV^U_{\\text{exp}} + PV(\\text{ITS}) = 60 + 18.9 = \\$78.9\\text{ million}$$\n\nThe levered value created by the expansion: $V^L_{\\text{exp}} = V^U_{\\text{exp}} + PV(\\text{ITS}) = 150 + 18.9 = \\$168.9\\text{ million}$.\\n\\n**(c) After-tax WACC:**\\n\\nTarget leverage ratio for the expansion project:\\n$$d = \\frac{D}{V^L_{\\text{exp}}} = \\frac{90}{168.9} = 0.5328$$\\n\\nEquity in expansion: $E_{\\text{exp}} = V^L_{\\text{exp}} - D = 168.9 - 90 = \\$78.9\\text{ million}$, so $D/E = 90/78.9 = 1.1407$.\n\nEquity cost of capital (target leverage):\n$$r_E = r_U + \\frac{D}{E}(r_U - r_D) = 0.08 + 1.1407 \\times (0.08 - 0.05) = 0.08 + 0.03422 = 11.42\\%$$\n\nAfter-tax WACC:\n$$r_{wacc} = (1-d)\\,r_E + d\\,r_D(1-\\tau_c) = 0.4672 \\times 0.1142 + 0.5328 \\times 0.05 \\times 0.79$$\n$$= 0.05336 + 0.02105 = 0.07441 \\approx 7.44\\%$$\n\nShortcut check: $r_{wacc} = r_U - d \\cdot \\tau_c \\cdot r_D = 0.08 - 0.5328 \\times 0.21 \\times 0.05 = 0.08 - 0.005594 = 7.44\\%$ ✓\n\n**(d) Verification:**\n\nDiscounting the perpetual FCF at $r_{wacc}$:\n$$V^L_{\\text{exp}} = \\frac{FCF^{\\text{exp}}}{r_{wacc}} = \\frac{12}{0.07441} = \\$161.3\\text{ million}$$\n\nNote: there is a small discrepancy ($168.9$ vs. $161.3$) because the leverage ratio $d$ was computed from $V^L_{\\text{exp}}$ which already embeds the tax shield. The self-consistency condition requires iterating: $d = D/V^L_{\\text{exp}}$ and $V^L_{\\text{exp}} = FCF/r_{wacc}$ simultaneously. Setting $V = 12/r_{wacc}$ and $r_{wacc} = 0.08 - (90/V)(0.21)(0.05)$:\n$$r_{wacc} = 0.08 - \\frac{0.945}{V} = 0.08 - \\frac{0.945}{12/r_{wacc}} = 0.08 - \\frac{0.945 \\cdot r_{wacc}}{12}$$\n$$12 \\cdot r_{wacc} = 12 \\times 0.08 - 0.945 \\cdot r_{wacc}$$\n$$r_{wacc}(12 + 0.945) = 0.96 \\Rightarrow r_{wacc} = \\frac{0.96}{12.945} = 7.416\\%$$\n$$V^L_{\\text{exp}} = \\frac{12}{0.07416} = \\$161.8\\text{ million}$$\n\nAt the consistent solution, $APV = V^L - D = 161.8 - 90 = \\$71.8\\text{ million}$ and the leverage ratio $d = 90/161.8 = 55.6\\%$. The APV approach gives $\\$78.9\\text{ million}$ because it assumes fixed debt (so $\\tau_c D$ is certain), while the WACC approach with a target ratio implies a lower PV of the tax shield. Full credit if the student correctly identifies this consistency issue and the two methods' distinct assumptions.",
+          "rubric": "Award 3 marks for correct unlevered NPV; 4 marks for correct APV with tax shield; 6 marks for $r_E$, $r_{wacc}$ with both formulas; 5 marks for the verification including correctly identifying the self-consistency requirement. Strong answers discuss the fixed-debt vs. target-ratio difference. Total 18 marks.",
+          "marks": 18
+        },
+        {
+          "type": "short",
+          "id": "q4.2",
+          "stem": "GreenPort AS (from Question 4.1) emits $Q^E = 120{,}000$ tonnes of CO$_2$ per year. A climate analyst applies a shadow carbon price of $SP^E = \\$85$ per tonne. The analyst uses the Ramsey social discount rate $r_s = 3.5\\%$ per year to discount environmental flows. The expansion project in Q4.1 is expected to **reduce** annual emissions by $\\Delta Q^E = 20{,}000$ tonnes per year permanently (as the new equipment is more energy-efficient).\\n\\n**(a)** Compute the annual environmental value flow from the emissions reduction (i.e., the annual social cost saving from reducing emissions, in \\$).\n\n**(b)** Compute the present value of this environmental benefit stream $EV$ (a perpetuity at $r_s = 3.5\\%$).\n\n**(c)** Using the Integrated Present Value framework with $b = 0$ (no social value component) and $c = 1$ (full weight on environmental value), compute the IPV of the expansion project. Compare it to the APV from Q4.1(b) and discuss what drives the difference.\n\n**(d)** Critically evaluate **one** limitation of using shadow prices to quantify environmental value in an IPV analysis.",
+          "model_answer": "**(a) Annual environmental value flow:**\n\n$$\\text{EV flow per year} = \\Delta Q^E \\times SP^E = 20{,}000 \\times 85 = \\$1{,}700{,}000 \\text{ per year}$$\n\n**(b) Present value of environmental benefit stream:**\n\nThe reduction is permanent (perpetuity) at discount rate $r_s = 3.5\\%$:\n$$EV = \\frac{\\text{EV flow}}{r_s} = \\frac{1{,}700{,}000}{0.035} = \\$48{,}571{,}429 \\approx \\$48.6\\text{ million}$$\n\n**(c) Integrated Present Value:**\n\n$$IPV = FV + b \\cdot SV + c \\cdot EV = APV_{\\text{exp}} + 0 \\cdot SV + 1 \\cdot EV$$\n$$= 78.9 + 0 + 48.6 = \\$127.5\\text{ million}$$\n\nThe APV in Q4.1(b) was $\\$78.9$ million. The IPV is $\\$48.6$ million higher, entirely due to the environmental benefit of the emissions reduction. This difference arises because:\n1. The shadow price $SP^E = \\$85$/tonne assigns a monetary value to a cost that is **external** to GreenPort — it is not a cash inflow the firm receives, but a social cost avoided by society.\\n2. The social discount rate $r_s = 3.5\\%$ is much lower than the firm's financial WACC ($\\approx 7.4\\%$), so environmental benefits far in the future are discounted less heavily than financial cash flows. This amplifies the PV of long-term environmental improvements relative to standard financial analysis.\\n3. Standard financial NPV / APV captures only the private financial value of the project. IPV widens the lens to include planetary value creation, which can make a marginal project (small positive APV) appear highly attractive when environmental benefits are substantial.\\n\\n**(d) Limitation of shadow prices:**\\n\\nShadow prices are theoretically appealing but practically fragile. They must be set to reflect the **true marginal social cost of carbon**, which depends on modelling assumptions about future warming trajectories, economic damage functions, the choice of social discount rate, and the distribution of damages across countries and generations. Different integrated assessment models produce shadow carbon prices ranging from roughly \\$40 to over \\$300 per tonne of CO$_2$, a range wide enough to reverse the sign of the environmental value component. Moreover, shadow prices are not market prices — they cannot be verified by market transactions and may reflect political or ethical choices embedded in the model rather than an objective measure of scarcity. A firm that builds its IPV on an optimistic (high) shadow carbon price chosen to justify a preferred project outcome engages in **impact-washing**, undermining the credibility of the entire framework. Sensitivity analysis on the shadow price is therefore essential.",
+          "rubric": "Award 2 marks for correct annual EV flow; 3 marks for correct perpetuity PV at the Ramsey rate; 5 marks for IPV calculation and the threefold discussion of why IPV > APV (shadow externalities, different discount rate, expanded value lens); 5 marks for a well-reasoned critique of shadow prices identifying estimation uncertainty, model sensitivity, lack of market verification, and/or potential for impact-washing. Deduct marks for superficial critiques that merely say 'shadow prices are uncertain' without elaboration. Total 15 marks.",
+          "marks": 15
+        },
+        {
+          "type": "short",
+          "id": "q4.3",
+          "stem": "A private-equity firm is considering acquiring HarbourCo for an enterprise value of $\\$500$ million. The acquisition will be financed with $40\\%$ debt ($D/V = 0.40$) at $r_D = 6\\%$ and $60\\%$ equity. The unlevered cost of capital is $r_U = 9\\%$ and the corporate tax rate is $\\tau_c = 25\\%$. After the acquisition, HarbourCo is projected to generate unlevered FCFs of $\\$45$ million per year growing at $g = 2\\%$ per year in perpetuity.\\n\\n**(a)** Compute the after-tax WACC for HarbourCo under the new capital structure.\\n\\n**(b)** Compute the levered enterprise value $V^L$ by discounting the growing perpetuity of unlevered FCFs at $r_{wacc}$.\\n\\n**(c)** The PE firm invested $\\$300$ million in equity at acquisition (i.e., $60\\%$ of $\\$500$M). After five years, they exit at an enterprise value equal to $V^L$ from part (b), with remaining debt of $D_5 = \\$120$ million. Compute the **equity value at exit**, the **cash multiple** (multiple of money) on the equity investment, and the approximate **IRR** of the equity investment assuming all returns are realised at exit (use the formula $(1+IRR)^5 = \\text{Cash Multiple}$).\n\n**(d)** Identify and briefly explain **one** key risk that could cause the realised IRR to fall significantly below your estimate.",
+          "model_answer": "**(a) After-tax WACC:**\n\n$$r_{wacc} = r_U - d \\cdot \\tau_c \\cdot r_D = 0.09 - 0.40 \\times 0.25 \\times 0.06 = 0.09 - 0.006 = 8.40\\%$$\n\nAlternatively, first compute $r_E$:\n$$D/E = 0.40/0.60 = 0.6\\overline{6}$$\n$$r_E = r_U + \\frac{D}{E}(r_U - r_D) = 0.09 + 0.6667 \\times 0.03 = 0.09 + 0.02 = 11.00\\%$$\n$$r_{wacc} = 0.60 \\times 0.11 + 0.40 \\times 0.06 \\times 0.75 = 0.066 + 0.018 = 8.40\\%$$ ✓\n\n**(b) Levered enterprise value (growing perpetuity):**\n\n$$V^L = \\frac{FCF_1}{r_{wacc} - g} = \\frac{45}{0.084 - 0.02} = \\frac{45}{0.064} = \\$703.125\\text{ million}$$\n\nNote: the acquisition price was $\\$500$ million, but the DCF value at the projected FCFs and WACC is $\\$703.1$ million, implying the PE firm is acquiring the business at a discount to intrinsic value.\n\n**(c) Exit equity value, cash multiple, and IRR:**\n\nEquity value at exit:\n$$E_{\\text{exit}} = V^L - D_5 = 703.125 - 120 = \\$583.125\\text{ million}$$\n\nCash multiple on equity:\n$$\\text{Cash Multiple} = \\frac{E_{\\text{exit}}}{E_{\\text{invested}}} = \\frac{583.125}{300} = 1.9438 \\approx 1.94\\times$$\n\nIRR from $(1+IRR)^5 = 1.9438$:\n$$1+IRR = 1.9438^{1/5} = 1.9438^{0.20}$$\n$$\\ln(1.9438) = 0.6647 \\Rightarrow 0.20 \\times 0.6647 = 0.13294 \\Rightarrow 1+IRR = e^{0.13294} = 1.1422$$\n$$IRR \\approx 14.2\\%$$\n\n**(d) Key risk:**\n\nThe **growth rate assumption $g = 2\\%$** is the most sensitive input in a growing perpetuity valuation. A small downward revision — for example, to $g = 1\\%$ — changes the terminal value significantly:\n$$V^L\\big|_{g=1\\%} = \\frac{45}{0.084 - 0.01} = \\frac{45}{0.074} = \\$608\\text{ million}$$\nEquity at exit $= 608 - 120 = \\$488\\text{M}$, cash multiple $= 488/300 = 1.627\\times$, IRR $\\approx 10.2\\%$. A growth-rate decline of just one percentage point reduces the IRR by roughly four percentage points. Other valid risks include: higher-than-expected interest rates increasing $r_{wacc}$; FCF shortfalls from competitive pressures; or inability to exit at a favourable multiple if capital markets deteriorate.",
+          "rubric": "Award 3 marks for correct $r_{wacc}$; 4 marks for correct growing-perpetuity $V^L$; 5 marks for equity exit value, cash multiple, and IRR calculation; 3 marks for a well-explained specific risk with supporting numerical illustration or economic reasoning. Total 15 marks.",
+          "marks": 15
+        }
+      ]
+    }
+  ]
+}
