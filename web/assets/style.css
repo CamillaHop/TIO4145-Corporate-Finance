@@ -412,6 +412,227 @@ li { margin-bottom: 0.4rem; }
   font-style: italic;
 }
 
+/* ─────────── Landing — hero / stats / feature cards ─────────── */
+
+.landing-hero { padding: 4.5rem 0 2rem; }
+.landing-hero h1 {
+  font-size: 3.2rem;
+  line-height: 1.05;
+  margin: 0.4rem 0 1.1rem;
+  letter-spacing: -0.02em;
+}
+.landing-hero .lede {
+  font-size: 1.32rem;
+  max-width: 42em;
+  margin: 0;
+}
+.landing-hero .lede em {
+  font-style: italic;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* At-a-glance stat ribbon under the hero. Numbers in display sans for
+   editorial weight; labels in small mono caps. */
+.stat-strip {
+  display: flex;
+  gap: 2.2rem;
+  margin: 2.2rem 0 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--border-soft);
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 0.15rem; }
+.stat-num {
+  font-family: var(--display-sans);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+
+/* Three-up feature grid: Browse / Drill / Prep. Sits right under the hero. */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 3rem 0 0;
+}
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.3rem 1.4rem 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none !important;
+  transition: transform .2s cubic-bezier(.4,0,.2,1),
+              border-color .18s ease,
+              box-shadow .22s cubic-bezier(.4,0,.2,1),
+              background .18s ease;
+}
+.feature-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
+  background: var(--bg);
+  box-shadow: 0 14px 30px -18px rgba(9, 68, 89, 0.35);
+}
+.feature-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--primary-mist);
+  color: var(--primary);
+}
+.feature-icon svg { width: 20px; height: 20px; }
+.feature-body h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
+}
+.feature-body p {
+  margin: 0 0 0.8rem;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.feature-cta {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* Generic landing-page section block: eyebrow, h2, optional sub, body. */
+.landing-block { margin: 4.5rem 0 0; }
+.landing-block:last-of-type { margin-bottom: 1rem; }
+.block-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.5rem;
+}
+.landing-block > h2 {
+  font-family: var(--display-sans);
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+}
+.landing-block .block-sub {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  margin: 0 0 1.6rem;
+  max-width: 56ch;
+}
+
+/* "What you'll be studying" — two-column prose, justified line-length. */
+.prose { color: var(--ink-soft); line-height: 1.7; font-size: 1rem; }
+.prose p { margin: 0 0 1rem; }
+.prose h3 {
+  font-family: var(--display-sans);
+  font-size: 1.15rem;
+  margin: 1.4rem 0 0.7rem;
+  color: var(--ink);
+}
+.prose ol, .prose ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+.prose li { margin-bottom: 0.4rem; }
+.prose strong { color: var(--ink); }
+@media (min-width: 820px) {
+  .two-col-prose > p { max-width: 62ch; }
+  .two-col-prose > ol,
+  .two-col-prose > ul {
+    columns: 2;
+    column-gap: 2.2rem;
+  }
+  .two-col-prose > ol > li,
+  .two-col-prose > ul > li {
+    break-inside: avoid;
+    padding-right: 0.5rem;
+  }
+}
+
+/* How-to numbered list — large outlined numerals with prose alongside. */
+.howto-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.4rem 0 0;
+  display: grid;
+  gap: 1.1rem;
+}
+.howto-list li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1.1rem;
+  align-items: start;
+  padding: 1.1rem 1.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.howto-num {
+  font-family: var(--display-sans);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+}
+.howto-list h4 {
+  margin: 0 0 0.3rem;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.howto-list p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.howto-list kbd {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.05rem 0.42rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  .landing-hero { padding: 3rem 0 1.5rem; }
+  .landing-hero h1 { font-size: 2.3rem; }
+  .stat-strip { gap: 1.4rem; }
+  .stat-num { font-size: 1.6rem; }
+  .howto-list li { grid-template-columns: 2.2rem 1fr; gap: 0.8rem; padding: 0.9rem 1rem; }
+  .howto-num { font-size: 1.5rem; }
+}
+
 /* ─────────── Index — section grid ─────────── */
 /*
  * Each tile is a two-column card. The LEFT column is a slim editorial
@@ -503,6 +724,9 @@ li { margin-bottom: 0.4rem; }
    digit's left portion still stands free on the page background. The
    internal padding-left is calc'd to keep title/desc text safely to the
    right of the digit, never underneath it. */
+/* Matches the feature-card language up top: neutral surface, soft border,
+   lift + teal shadow on hover. The number column still overlaps to keep
+   the editorial "digit-over-card" effect. */
 .section-card .sc-body {
   grid-column: 2;
   position: relative;
@@ -510,7 +734,7 @@ li { margin-bottom: 0.4rem; }
   margin-left: calc(-1 * var(--sc-overlap));
   padding: var(--sc-pad-y) calc(var(--sc-pad-x) + 1.4rem)
            var(--sc-pad-y) calc(var(--sc-overlap) + 0.9rem);
-  background: var(--primary-mist);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
   display: flex;
@@ -521,9 +745,9 @@ li { margin-bottom: 0.4rem; }
               box-shadow .22s cubic-bezier(.4, 0, .2, 1);
 }
 .section-card:hover .sc-body {
-  background: var(--primary-pale);
+  background: var(--bg);
   border-color: var(--primary-light);
-  box-shadow: 0 10px 24px -14px rgba(9, 68, 89, 0.35);
+  box-shadow: 0 14px 30px -18px rgba(9, 68, 89, 0.35);
 }
 .section-card .sc-title {
   font-size: 1.08rem;
@@ -538,6 +762,31 @@ li { margin-bottom: 0.4rem; }
   line-height: 1.55;
   color: var(--ink-soft);
   margin: 0;
+}
+
+/* Italic chapter footer — small editorial tail showing the textbook
+   chapters that map to this section. "Chapters" label is plain caps,
+   numerals italic for contrast. */
+.section-card .sc-chapters {
+  margin: 0.6rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-soft);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.section-card .sc-chapters em {
+  font-family: var(--sans);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.86rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-soft);
+  margin-left: 0.45rem;
 }
 
 /* Chevron — slides in on hover. */

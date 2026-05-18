@@ -28,26 +28,112 @@
   </div>
 </nav>
 
-<header class="hero">
+<header class="hero landing-hero">
   <div class="container">
-    <p class="eyebrow"><span data-university>—</span></p>
-    <h1><span data-course-code>—</span> · <em data-course-name>—</em></h1>
-    <p class="lede">A study companion built from the course materials. Browse sections, drill flashcards, and prep for the exam.</p>
+    <p class="eyebrow">
+      <span data-university>—</span> · <span data-course-code>—</span>
+    </p>
+    <h1 data-course-name>—</h1>
+    <p class="lede" id="landing-lede">
+      A self-contained study companion built from the lecture slides, the
+      textbook and past exams — organised so you can <em>read,
+      recall</em> and <em>review</em> in one place.
+    </p>
+    <div class="stat-strip" id="stat-strip" aria-label="At a glance">
+      <div class="stat"><span class="stat-num" id="stat-sections">—</span><span class="stat-label">Sections</span></div>
+      <div class="stat"><span class="stat-num" id="stat-cards">—</span><span class="stat-label">Flashcards</span></div>
+      <div class="stat"><span class="stat-num" id="stat-exam">—</span><span class="stat-label">Past exams indexed</span></div>
+    </div>
   </div>
 </header>
 
 <main class="container" id="main">
-  <section>
+
+  <section class="feature-grid" aria-label="Study tools">
+    <a class="feature-card" href="#sections">
+      <div class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v16H4z"/><path d="M13 4h7v10h-7z"/><path d="M13 18h7v2h-7z"/></svg>
+      </div>
+      <div class="feature-body">
+        <h3>Browse sections</h3>
+        <p>Each lecture week distilled into structured notes, key concepts, worked examples and common mistakes — with math typeset cleanly.</p>
+        <span class="feature-cta">Open library →</span>
+      </div>
+    </a>
+
+    <a class="feature-card" href="flashcards.html">
+      <div class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 3h14v12"/></svg>
+      </div>
+      <div class="feature-body">
+        <h3>Drill flashcards</h3>
+        <p>Active recall over every section. Flip, shuffle, filter by difficulty — built from the same source material as the notes.</p>
+        <span class="feature-cta">Start drilling →</span>
+      </div>
+    </a>
+
+    <a class="feature-card" href="exam.html">
+      <div class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 12h8M9 16h6M9 8h5"/></svg>
+      </div>
+      <div class="feature-body">
+        <h3>Prep for the exam</h3>
+        <p>Priority topics, practice questions and a multi-day study schedule synthesised from past papers and learning outcomes.</p>
+        <span class="feature-cta">See exam plan →</span>
+      </div>
+    </a>
+  </section>
+
+  <section class="landing-block">
+    <p class="block-eyebrow">About the course</p>
+    <h2>What you'll be studying</h2>
+    <div class="prose two-col-prose" id="about-prose">
+      <p>Loading course description…</p>
+    </div>
+  </section>
+
+  <section class="landing-block">
+    <p class="block-eyebrow">How to use this site</p>
+    <h2>Three ways in</h2>
+    <ol class="howto-list">
+      <li>
+        <span class="howto-num">1</span>
+        <div>
+          <h4>Read the section pages</h4>
+          <p>Open any week to get a structured walkthrough — overview, math, worked examples, glossary and pitfalls. Use the <strong>Contents</strong> rail on the left to jump within a section, or the <strong>search</strong> in the top bar (press <kbd>/</kbd>) to find a concept across the whole course.</p>
+        </div>
+      </li>
+      <li>
+        <span class="howto-num">2</span>
+        <div>
+          <h4>Drill with flashcards</h4>
+          <p>Once a section feels familiar, switch to the flashcard view to test recall. Cards are tagged easy / medium / hard and can be filtered or shuffled per section.</p>
+        </div>
+      </li>
+      <li>
+        <span class="howto-num">3</span>
+        <div>
+          <h4>Plan the exam</h4>
+          <p>The exam prep page surfaces the highest-yield topics, common question patterns from past papers, and a day-by-day plan you can adapt to your timeline.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="landing-block" id="sections">
+    <p class="block-eyebrow">Curriculum</p>
     <h2>Sections</h2>
+    <p class="block-sub">Eleven weeks of material, ordered to mirror the lecture syllabus and the corresponding Berk &amp; DeMarzo chapters.</p>
     <div class="section-grid" id="section-grid">
       <p class="empty-state"><span>Loading sections…</span></p>
     </div>
   </section>
+
 </main>
 
 <footer>
   <div class="container">
-    <p>Generated study site · edit <code>course_config.json</code> to retheme</p>
+    <p>Built from <code>course_config.json</code>, lecture PDFs and past exams · regenerate with <code>bash scripts/generate_all.sh</code></p>
   </div>
 </footer>
 
@@ -57,6 +143,9 @@
     StudySite.loadConfig().then(function (cfg) {
       StudySite.applyCourseChrome(cfg);
       renderSections(cfg);
+      renderStats(cfg);
+      loadAbout();
+      countExams();
       StudySite.maybeLoadChat(cfg);
     }).catch(function (err) {
       document.getElementById('section-grid').innerHTML =
@@ -74,6 +163,10 @@
     }
     grid.innerHTML = sections.map(function (s, i) {
       var num = (String(s.id || '').match(/(\d+)$/) || [, String(i + 1).padStart(2, '0')])[1];
+      var split = extractChapters(s.description || '');
+      var chaptersLine = split.chapters
+        ? '<p class="sc-chapters">Chapters <em>' + StudySite.escapeHtml(split.chapters) + '</em></p>'
+        : '';
       return (
         '<a class="section-card" href="section.html?id=' + encodeURIComponent(s.id) + '">' +
           '<span class="sc-num" aria-hidden="true">' +
@@ -83,12 +176,105 @@
           '</span>' +
           '<div class="sc-body">' +
             '<div class="sc-title">' + StudySite.escapeHtml(s.title || s.id) + '</div>' +
-            '<p class="sc-desc">' + StudySite.escapeHtml(s.description || '') + '</p>' +
+            '<p class="sc-desc">' + StudySite.escapeHtml(split.desc) + '</p>' +
+            chaptersLine +
           '</div>' +
           '<svg class="sc-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
         '</a>'
       );
     }).join('');
+  }
+
+  // Pull a "(Berk & DeMarzo ch. 1–5 and 7)" / "(ch. 14–15)" tail off the
+  // description so we can render it as a separate italic footer line.
+  // Returns the cleaned description and a chapter string like "1–5, 7".
+  function extractChapters(desc) {
+    var m = desc.match(/\s*\(([^()]*?ch\.?\s*[^)]+)\)\s*\.?\s*$/i);
+    if (!m) return { desc: desc, chapters: '' };
+    var raw = m[1].replace(/^.*?ch(?:apters?|s)?\.?\s*/i, '').trim();
+    // Normalise " and " / "&" → comma so the rendered line reads as a list.
+    raw = raw.replace(/\s+and\s+/gi, ', ').replace(/\s*&\s*/g, ', ');
+    var cleaned = desc.slice(0, m.index).replace(/[\s,;]+$/, '').trim();
+    if (cleaned && !/[.!?]$/.test(cleaned)) cleaned += '.';
+    return { desc: cleaned, chapters: raw };
+  }
+
+  // Stats strip — section count is sync; flashcards loaded async via fetch.
+  function renderStats(cfg) {
+    var sections = (cfg.sections || []);
+    document.getElementById('stat-sections').textContent = sections.length;
+
+    // Sum flashcard counts across all section flashcard JSON files.
+    Promise.all(sections.map(function (s) {
+      return fetch('../generated/flashcards/' + encodeURIComponent(s.id) + '_flashcards.json',
+                   { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (d) {
+          if (Array.isArray(d)) return d.length;
+          if (d && Array.isArray(d.flashcards)) return d.flashcards.length;
+          return 0;
+        })
+        .catch(function () { return 0; });
+    })).then(function (counts) {
+      var total = counts.reduce(function (a, b) { return a + b; }, 0);
+      document.getElementById('stat-cards').textContent = total || '—';
+    });
+  }
+
+  // Count past-exam files in resources/_exams/ via the directory listing.
+  // Fallback to a static figure if the listing isn't browsable (most static
+  // hosts don't expose autoindex).
+  function countExams() {
+    fetch('../resources/_exams/', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : ''; })
+      .then(function (html) {
+        var m = html.match(/href="[^"]*\.pdf"/gi);
+        var n = m ? m.length : 7;
+        document.getElementById('stat-exam').textContent = n;
+      })
+      .catch(function () {
+        document.getElementById('stat-exam').textContent = '7+';
+      });
+  }
+
+  // Fetch the human-written course description and pull out a couple of
+  // sections to render. We keep the rendering lean — drop the editor
+  // comment + frontmatter and only show the "What the course is" prose
+  // and the "Topics covered" list.
+  function loadAbout() {
+    fetch('../context/course_description.md', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : ''; })
+      .then(function (md) {
+        if (!md) throw new Error('empty');
+        // Strip HTML comments and the leading `# Title` line.
+        md = md.replace(/<!--[\s\S]*?-->/g, '').trim();
+        md = md.replace(/^#\s+.+\n+/, '');
+
+        // Extract the body of "What the course is" + the "Topics covered"
+        // list, in that order. Each section ends at the next "##" heading.
+        function take(header) {
+          var re = new RegExp('##\\s+' + header + '\\s*\\n([\\s\\S]+?)(?=\\n##\\s|$)', 'i');
+          var m = md.match(re);
+          return m ? m[1].trim() : '';
+        }
+        var about  = take('What the course is');
+        var topics = take('Topics covered');
+
+        return StudySite.ensureMarkdown().then(function () {
+          var html = '';
+          if (about)  html += StudySite.renderMarkdown(about);
+          if (topics) {
+            html += '<h3>Topics covered</h3>';
+            html += StudySite.renderMarkdown(topics);
+          }
+          document.getElementById('about-prose').innerHTML =
+            html || '<p>Course description unavailable.</p>';
+        });
+      })
+      .catch(function () {
+        document.getElementById('about-prose').innerHTML =
+          '<p>Course description not available locally.</p>';
+      });
   }
 
   if (document.readyState === 'loading') {
