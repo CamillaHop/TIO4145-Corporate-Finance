@@ -38,6 +38,21 @@
   </div>
 </header>
 
+<aside class="toc-rail" id="toc-rail" aria-label="Table of contents" hidden>
+  <button class="toc-rail-trigger" type="button" aria-controls="toc-rail-panel" aria-expanded="false" title="Table of contents">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="4" y1="7"  x2="20" y2="7"/>
+      <line x1="4" y1="12" x2="14" y2="12"/>
+      <line x1="4" y1="17" x2="18" y2="17"/>
+    </svg>
+    <span class="toc-rail-label">Contents</span>
+  </button>
+  <div class="toc-rail-panel" id="toc-rail-panel" role="navigation">
+    <div class="toc-rail-head">On this page</div>
+    <div class="toc-rail-body" id="toc-rail-body"></div>
+  </div>
+</aside>
+
 <main class="container section-content" id="main">
 
   <section class="coverage" id="coverage-wrap" hidden>
@@ -131,6 +146,117 @@
     toc.hidden = false;
   }
 
+  // Floating left-rail ToC: mirrors the same h1/h2 structure the page hero
+  // uses, but lives in a hover-expanding panel pinned to the viewport edge
+  // so it's reachable from anywhere on the page. Also runs scrollspy so
+  // the link for the currently-visible section is highlighted.
+  function buildRailTOC() {
+    var body = document.getElementById('notes-body');
+    var rail = document.getElementById('toc-rail');
+    var out  = document.getElementById('toc-rail-body');
+    if (!body || !rail || !out) return;
+    var nodes = body.querySelectorAll('h1[id], h2[id]');
+    if (!nodes.length) return;
+
+    function splitPrefix(text) {
+      var t = (text || '').trim();
+      var m = t.match(/^([0-9]+(?:\.[0-9]+)+)\s+(.+)$/);
+      if (m) return { num: m[1], rest: m[2] };
+      var c = t.match(/^Chapter\s+\d+\s*[—–-]\s*(.+)$/i);
+      if (c) return { num: t.match(/^Chapter\s+\d+/i)[0], rest: c[1] };
+      return { num: '', rest: t };
+    }
+
+    var html = '';
+    nodes.forEach(function (h) {
+      var parts = splitPrefix(h.textContent || '');
+      var cls = h.tagName === 'H1' ? 'toc-r-ch' : 'toc-r-sub';
+      html +=
+        '<a class="' + cls + '" href="#' + h.id + '" data-target="' + h.id + '">' +
+          (parts.num ? '<span class="toc-r-num">' + StudySite.escapeHtml(parts.num) + '</span>' : '') +
+          '<span class="toc-r-text">' + StudySite.escapeHtml(parts.rest) + '</span>' +
+        '</a>';
+    });
+    out.innerHTML = html;
+    rail.hidden = false;
+
+    wireRailToc(rail, out, nodes);
+  }
+
+  function wireRailToc(rail, out, headings) {
+    var trigger = rail.querySelector('.toc-rail-trigger');
+    var panel   = rail.querySelector('.toc-rail-panel');
+
+    // Click trigger → toggle a sticky-open state so it doesn't only work
+    // on hover (touch / keyboard friendly).
+    trigger.addEventListener('click', function () {
+      var open = rail.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // Click a link → close the panel and let the browser scroll.
+    out.addEventListener('click', function (e) {
+      var a = e.target.closest('a');
+      if (!a) return;
+      rail.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+    // Click outside while sticky-open → close.
+    document.addEventListener('click', function (e) {
+      if (!rail.classList.contains('is-open')) return;
+      if (!rail.contains(e.target)) {
+        rail.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Scrollspy: mark the most-recently-passed heading as active.
+    var links = out.querySelectorAll('a[data-target]');
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('data-target')] = a; });
+
+    function activate(id) {
+      links.forEach(function (a) { a.classList.remove('is-active'); });
+      if (id && byId[id]) {
+        byId[id].classList.add('is-active');
+        // Keep the active link in view inside the panel.
+        var rect = byId[id].getBoundingClientRect();
+        var pRect = panel.getBoundingClientRect();
+        if (rect.top < pRect.top || rect.bottom > pRect.bottom) {
+          byId[id].scrollIntoView({ block: 'nearest' });
+        }
+      }
+    }
+
+    if (!('IntersectionObserver' in window)) return;
+    var visible = new Set();
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) visible.add(en.target.id);
+        else visible.delete(en.target.id);
+      });
+      // Pick the topmost visible heading; if none, pick the last one above.
+      var first = null, firstTop = Infinity;
+      Array.from(visible).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var t = el.getBoundingClientRect().top;
+        if (t < firstTop) { firstTop = t; first = id; }
+      });
+      if (first) {
+        activate(first);
+      } else {
+        // No heading currently in viewport — find the last one above.
+        var last = null;
+        headings.forEach(function (h) {
+          if (h.getBoundingClientRect().top < 80) last = h.id;
+        });
+        activate(last);
+      }
+    }, { rootMargin: '-72px 0px -60% 0px', threshold: [0, 1] });
+
+    headings.forEach(function (h) { io.observe(h); });
+  }
+
   function init() {
     StudySite.loadConfig().then(function (cfg) {
       StudySite.applyCourseChrome(cfg);
@@ -146,6 +272,7 @@
       }).then(function (data) {
         render(data);
         buildTOC();
+        buildRailTOC();
         renderBookCoverage(data.book_coverage);
         StudySite.ensureKatex().then(function () {
           StudySite.renderMath(document.body);

@@ -668,6 +668,164 @@ li { margin-bottom: 0.4rem; }
   .toc:not(:has(.toc-chapter)) { grid-template-columns: 1fr 1fr; }
 }
 
+/* ─────────── Floating table-of-contents rail ─────────── */
+/*
+ * Vertical strip pinned to the left edge of the viewport. Shows only a
+ * compact icon trigger by default; hovering it (or clicking, for sticky
+ * open) slides out a panel with the section's h1/h2 outline. Includes
+ * scrollspy: the link for the currently-visible heading is highlighted.
+ */
+.toc-rail {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: stretch;
+  pointer-events: none;     /* children re-enable */
+  max-height: calc(100vh - 96px);
+}
+.toc-rail[hidden] { display: none; }
+
+/* Idle: blends into the page — no surface, faded ink, no border. The
+   only thing visible is the icon + vertical label. On hover/open the
+   chip materialises (surface + border + colour). */
+.toc-rail-trigger {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.85rem 0.5rem 0.85rem 0.7rem;
+  background: transparent;
+  color: var(--ink-faded);
+  border: 1px solid transparent;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  font: inherit;
+  opacity: 0.55;
+  transition: opacity .18s ease, color .18s ease,
+              background .18s ease, border-color .18s ease,
+              padding .18s ease;
+}
+.toc-rail:hover .toc-rail-trigger,
+.toc-rail:focus-within .toc-rail-trigger,
+.toc-rail.is-open .toc-rail-trigger {
+  opacity: 1;
+  color: var(--primary);
+  background: var(--bg);
+  border-color: var(--border);
+}
+.toc-rail-trigger svg { width: 18px; height: 18px; }
+.toc-rail-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.toc-rail-panel {
+  pointer-events: auto;
+  width: 300px;
+  max-width: 78vw;
+  max-height: calc(100vh - 96px);
+  margin-left: -6px;        /* tuck under the trigger's rounded corner */
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 14px 0 32px -16px rgba(15, 23, 34, 0.22);
+  padding: 0.85rem 0.2rem 0.85rem 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-12px);
+  transition: opacity .18s ease, transform .22s cubic-bezier(.4,0,.2,1), visibility .18s ease;
+}
+.toc-rail:hover .toc-rail-panel,
+.toc-rail:focus-within .toc-rail-panel,
+.toc-rail.is-open .toc-rail-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.toc-rail-head {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  padding: 0 1rem 0.55rem;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 0.4rem;
+}
+.toc-rail-body {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  padding: 0 0.35rem 0 0.6rem;
+}
+.toc-rail-body::-webkit-scrollbar { width: 6px; }
+.toc-rail-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.toc-rail-body a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.32rem 0.7rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: background .12s ease, color .12s ease;
+}
+.toc-rail-body a:hover { background: var(--surface); color: var(--primary); }
+.toc-rail-body a.is-active {
+  background: var(--primary-mist);
+  color: var(--primary);
+  font-weight: 600;
+}
+.toc-rail-body .toc-r-ch {
+  font-family: var(--display-sans);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-top: 0.6rem;
+  padding-left: 0.55rem;
+}
+.toc-rail-body .toc-r-ch:first-child { margin-top: 0; }
+.toc-rail-body .toc-r-sub { padding-left: 1.6rem; }
+.toc-rail-body .toc-r-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--primary);
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+.toc-rail-body .toc-r-text { flex: 1; }
+
+/* Hide the rail on narrow screens — there isn't enough horizontal room
+   to keep it out of the content's way. */
+@media (max-width: 980px) {
+  .toc-rail { display: none; }
+}
+
+/* Smooth-scroll target offset so headings don't sit flush under the
+   sticky nav after a ToC click. */
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
 /* ─────────── Section content body ─────────── */
 
 .section-content { padding: 0 0 4rem; }
