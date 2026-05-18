@@ -3136,6 +3136,316 @@ a.cov-item:hover {
 .empty-state p { color: var(--ink-faded); margin: 0; font-size: 0.95rem; }
 .empty-state code { font-size: 0.85em; background: var(--surface-alt); }
 
+/* ─────────── Mindmap ─────────── */
+/* Page layout: a controls toolbar above a tall canvas with an
+   absolutely-positioned slide-out detail panel and a legend below. */
+
+.mm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 1.5rem 0 1rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.mm-toolbar-search {
+  position: relative;
+  flex: 1 1 240px;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+}
+.mm-toolbar-search svg {
+  position: absolute;
+  left: 9px;
+  width: 14px; height: 14px;
+  color: var(--ink-faded);
+  pointer-events: none;
+}
+#mm-search {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 12px 7px 30px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+#mm-search::placeholder { color: var(--ink-faded); }
+#mm-search:focus {
+  border-color: var(--primary-mid);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-mid) 18%, transparent);
+}
+
+.mm-toolbar-group {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+.mm-toolbar-group .mm-pill {
+  border: none !important;
+  background: transparent;
+  padding: 5px 11px;
+}
+.mm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 11px;
+  color: var(--ink-soft);
+  background: var(--bg);
+  border: 1px solid var(--border) !important;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: color .12s ease, background .12s ease, border-color .12s ease;
+}
+.mm-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+.mm-pill:hover {
+  color: var(--primary);
+  background: var(--primary-mist);
+  border-color: var(--primary-light) !important;
+}
+.mm-pill.is-on {
+  color: var(--primary);
+  background: var(--primary-mist);
+  border-color: var(--primary-light) !important;
+}
+.mm-pill-toggle.is-on {
+  color: var(--bg);
+  background: var(--primary);
+  border-color: var(--primary) !important;
+}
+
+/* Canvas — tall, contained, with a clipping border so Cytoscape's
+   pan stays inside the card. */
+.mm-canvas-wrap {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 560px;
+}
+.mm-canvas {
+  width: 100%;
+  height: 70vh;
+  min-height: 560px;
+  max-height: 820px;
+}
+.mm-loading {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin: 0;
+}
+.mm-error {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 32rem;
+  text-align: center;
+}
+
+/* Slide-out detail panel pinned to the right edge of the canvas. */
+.mm-panel {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 320px;
+  max-width: calc(100% - 28px);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 18px 36px -22px rgba(15, 23, 34, 0.32);
+  padding: 0.9rem 1rem 1.1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(8px);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.4,0,.2,1), visibility .2s ease;
+  pointer-events: none;
+}
+.mm-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.mm-panel h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0.15rem 0 0.5rem;
+  color: var(--ink);
+}
+.mm-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.mm-panel-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.mm-panel-close {
+  background: none;
+  border: none;
+  color: var(--ink-faded);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.mm-panel-close:hover { color: var(--ink); }
+.mm-panel-body {
+  margin: 0 0 0.7rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.mm-panel-meta { margin: 0 0 0.7rem; }
+.mm-meta-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.mm-meta-warm {
+  background: var(--warm-pale);
+  color: var(--warm-deep, var(--warm));
+}
+.mm-panel-cta {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  text-decoration: none !important;
+  border: none;
+}
+.mm-panel-cta:hover { color: var(--primary-deep); }
+
+/* Legend strip below the canvas. */
+.mm-legend {
+  margin: 1.2rem 0 2rem;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.5rem 1.4rem;
+}
+.mm-legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.mm-legend-item strong { color: var(--ink); font-weight: 600; }
+.mm-legend-swatch {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border-radius: 50%;
+}
+.mm-swatch-course   { background: var(--ink); border-radius: 4px; height: 14px; margin-top: 3px; }
+.mm-swatch-section  { background: var(--surface); border: 2px solid var(--primary); border-radius: 4px; height: 14px; margin-top: 3px; }
+.mm-swatch-concept  { background: var(--bg); border: 1.4px solid var(--primary-mid); }
+.mm-swatch-priority { background: var(--primary-mist); border: 2.4px solid var(--highlight); }
+.mm-swatch-bridge {
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  background-image: linear-gradient(90deg,
+    var(--primary-light) 0 4px, transparent 4px 8px,
+    var(--primary-light) 8px 12px, transparent 12px 16px,
+    var(--primary-light) 16px 18px);
+  height: 2px;
+  margin-top: 9px;
+  width: 18px;
+}
+.mm-swatch-badge {
+  background: radial-gradient(circle at 80% 20%, var(--warm) 0 35%, transparent 36%) var(--bg);
+  border: 1.2px solid var(--primary-mid);
+}
+.mm-legend-tip {
+  grid-column: 1 / -1;
+  margin: 0.3rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-faded);
+}
+.mm-legend-tip kbd {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Per-section deep link injected into the source-pdfs header. */
+.source-pdfs .mm-deep-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+  text-decoration: none !important;
+  border: none;
+  transition: color .12s ease;
+}
+.source-pdfs .mm-deep-link:hover { color: var(--primary-deep); }
+
+@media (max-width: 640px) {
+  .mm-canvas { height: 60vh; min-height: 440px; }
+  .mm-panel { width: calc(100% - 28px); }
+  .mm-legend { grid-template-columns: 1fr; }
+}
+
 /* ─────────── Footer ─────────── */
 
 footer {

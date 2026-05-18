@@ -24,6 +24,7 @@
       <div id="nav-search-results" role="listbox"></div>
     </div>
     <div class="nav-links">
+      <a href="mindmap.html">Mindmap</a>
       <a href="flashcards.html">Flashcards</a>
       <a href="exam.html">Exam prep</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
@@ -61,7 +62,7 @@
 <main class="container section-content" id="main">
 
   <section class="source-pdfs" id="source-pdfs-wrap" hidden>
-    <h2>Source materials</h2>
+    <h2>Source materials <a class="mm-deep-link" id="mm-deep-link" href="mindmap.html">See this section in the mindmap →</a></h2>
     <p class="source-pdfs-sub">The lecture slides and textbook chapters this section was built from.</p>
     <ul class="resource-list" id="source-pdfs-list"></ul>
   </section>
@@ -420,6 +421,11 @@
   // loaded from generated/resources.json. Silently hides itself if the
   // index file isn't present yet.
   function renderSourcePdfs(id) {
+    // Always point the "See this section in the mindmap →" link at the
+    // current section, even if there are no PDFs to show.
+    var mmLink = document.getElementById('mm-deep-link');
+    if (mmLink) mmLink.href = 'mindmap.html?focus=' + encodeURIComponent(id);
+
     fetch('../generated/resources.json', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (idx) {
