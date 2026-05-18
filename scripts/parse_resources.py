@@ -65,11 +65,11 @@ def needs_reparse(source: Path, force: bool) -> tuple[bool, Path]:
     return out.stat().st_mtime < source.stat().st_mtime, out
 
 
-def process_section(section_id: str, force: bool) -> tuple[int, int]:
-    """Returns (parsed_count, skipped_count)."""
-    folder = REPO_ROOT / "resources" / section_id
+def process_folder(folder: Path, force: bool) -> tuple[int, int]:
+    """Walk every PDF/PPTX in a folder, parsing those that need it.
+    Returns (parsed_count, skipped_count)."""
     if not folder.exists():
-        print(f"  (no folder for {section_id}, skipping)")
+        print(f"  (no folder {folder.relative_to(REPO_ROOT)}, skipping)")
         return 0, 0
 
     parsed = 0
@@ -129,16 +129,22 @@ def main() -> None:
             )
         sections = [args.section]
 
+    # Always also scan the non-section folders that hold past exams and the
+    # full textbook. They aren't listed in course_config but the curriculum
+    # page links to them, so their PDFs need parsed sidecars too.
+    extras: list[str] = [] if args.section else ["_exams", "_course"]
+
     total_parsed = 0
     total_skipped = 0
-    for sid in sections:
+    folders = sections + extras
+    for sid in folders:
         print(f"▶ {sid}")
-        p, s = process_section(sid, args.force)
+        p, s = process_folder(REPO_ROOT / "resources" / sid, args.force)
         total_parsed += p
         total_skipped += s
 
     print(
-        f"\nParsed {total_parsed} file(s) across {len(sections)} section(s) "
+        f"\nParsed {total_parsed} file(s) across {len(folders)} folder(s) "
         f"(skipped {total_skipped} already up-to-date)."
     )
 

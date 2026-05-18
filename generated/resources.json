@@ -123,6 +123,21 @@
   ],
   "_exams": [
     {
+      "year": "2025",
+      "exam": {
+        "name": "2025.pdf",
+        "path": "resources/_exams/2025.pdf"
+      },
+      "mcq_solutions": {
+        "name": "2025_mcq_solutions.pdf",
+        "path": "resources/_exams/2025_mcq_solutions.pdf"
+      },
+      "solutions": {
+        "name": "2025_solutions.pdf",
+        "path": "resources/_exams/2025_solutions.pdf"
+      }
+    },
+    {
       "year": "2024",
       "exam": {
         "name": "2024.pdf",
