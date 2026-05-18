@@ -1605,19 +1605,12 @@ a.cov-item:hover {
 
 /* ─────────── Detailed notes — chapter body ─────────── */
 
-/* Reading-width container for body prose. Math, tables, callouts, and
-   figures can break out by using negative margins or `.bleed` — the cap
-   only applies to paragraph-flow children. */
-.notes {
-  margin: 0 0 3rem;
-  max-width: 68ch;
-}
-.notes .katex-display,
-.notes table,
-.notes .callout,
-.notes pre {
-  max-width: none;
-}
+/* The .container already caps the content column at 820px (≈ 46ch at
+   the body font size — comfortably readable). Dropping the old
+   max-width:68ch on .notes lets the prose use the same horizontal
+   bounds as the figures / glossary / mistakes panels below it, so
+   every section on the page lines up at the same left and right edge. */
+.notes { margin: 0 0 3rem; }
 
 /* Chapter divider (only when section spans multiple textbook chapters) */
 .notes h1 {
