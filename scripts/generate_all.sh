@@ -7,6 +7,10 @@ echo "▶ Parsing resources…"
 python scripts/parse_resources.py
 
 echo
+echo "▶ Indexing source PDFs…"
+python scripts/index_resources.py
+
+echo
 echo "▶ Generating sections…"
 python scripts/generate_sections.py
 

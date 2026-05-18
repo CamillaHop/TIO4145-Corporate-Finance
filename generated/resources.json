@@ -1,0 +1,219 @@
+{
+  "section_01": [
+    {
+      "name": "1-introductionAndBackground.pdf",
+      "path": "resources/section_01/1-introductionAndBackground.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap1-5and7.pdf",
+      "path": "resources/section_01/chap1-5and7.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_02": [
+    {
+      "name": "2-valuingBonds-capitalBudgeting.pdf",
+      "path": "resources/section_02/2-valuingBonds-capitalBudgeting.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap6and8.pdf",
+      "path": "resources/section_02/chap6and8.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_03": [
+    {
+      "name": "3-valuingStocks-capmAndPricingOfRisk.pdf",
+      "path": "resources/section_03/3-valuingStocks-capmAndPricingOfRisk.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap9-10.pdf",
+      "path": "resources/section_03/chap9-10.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_04": [
+    {
+      "name": "4-optimalPortfolioAndCAPM.pdf",
+      "path": "resources/section_04/4-optimalPortfolioAndCAPM.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap11.pdf",
+      "path": "resources/section_04/chap11.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_05": [
+    {
+      "name": "5-costOfCapital-marketEfficiency.pdf",
+      "path": "resources/section_05/5-costOfCapital-marketEfficiency.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap12-13.pdf",
+      "path": "resources/section_05/chap12-13.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_06": [
+    {
+      "name": "6-sustainableFinance.pdf",
+      "path": "resources/section_06/6-sustainableFinance.pdf",
+      "kind": "slides"
+    }
+  ],
+  "section_07": [
+    {
+      "name": "7-capitalStructure-debtAndTaxes.pdf",
+      "path": "resources/section_07/7-capitalStructure-debtAndTaxes.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap14-15.pdf",
+      "path": "resources/section_07/chap14-15.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_08": [
+    {
+      "name": "8-payoutPolicy.pdf",
+      "path": "resources/section_08/8-payoutPolicy.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap17.pdf",
+      "path": "resources/section_08/chap17.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_09": [
+    {
+      "name": "9-advancedValuation.pdf",
+      "path": "resources/section_09/9-advancedValuation.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap18-19.pdf",
+      "path": "resources/section_09/chap18-19.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_10": [
+    {
+      "name": "10-options.pdf",
+      "path": "resources/section_10/10-options.pdf",
+      "kind": "slides"
+    },
+    {
+      "name": "chap20-22.pdf",
+      "path": "resources/section_10/chap20-22.pdf",
+      "kind": "book"
+    }
+  ],
+  "section_11": [
+    {
+      "name": "11-realOptions.pdf",
+      "path": "resources/section_11/11-realOptions.pdf",
+      "kind": "slides"
+    }
+  ],
+  "_exams": [
+    {
+      "year": "2024",
+      "exam": {
+        "name": "2024.pdf",
+        "path": "resources/_exams/2024.pdf"
+      },
+      "mcq_solutions": {
+        "name": "2024_mcq_solutions.pdf",
+        "path": "resources/_exams/2024_mcq_solutions.pdf"
+      },
+      "solutions": {
+        "name": "2024_solutios.pdf",
+        "path": "resources/_exams/2024_solutios.pdf"
+      }
+    },
+    {
+      "year": "2023",
+      "exam": {
+        "name": "2023.pdf",
+        "path": "resources/_exams/2023.pdf"
+      },
+      "mcq_solutions": {
+        "name": "2023_mcq_solutions.pdf",
+        "path": "resources/_exams/2023_mcq_solutions.pdf"
+      },
+      "solutions": {
+        "name": "2023_solutions.pdf",
+        "path": "resources/_exams/2023_solutions.pdf"
+      }
+    },
+    {
+      "year": "2022",
+      "exam": {
+        "name": "2022.pdf",
+        "path": "resources/_exams/2022.pdf"
+      }
+    },
+    {
+      "year": "2021",
+      "exam": {
+        "name": "2021.pdf",
+        "path": "resources/_exams/2021.pdf"
+      },
+      "mcq": {
+        "name": "2021_mcq.pdf",
+        "path": "resources/_exams/2021_mcq.pdf"
+      },
+      "mcq_solutions": {
+        "name": "2021_mcq_solutions.pdf",
+        "path": "resources/_exams/2021_mcq_solutions.pdf"
+      },
+      "solutions": {
+        "name": "2021_solutions.pdf",
+        "path": "resources/_exams/2021_solutions.pdf"
+      }
+    },
+    {
+      "year": "2019",
+      "exam": {
+        "name": "2019.pdf",
+        "path": "resources/_exams/2019.pdf"
+      },
+      "solutions": {
+        "name": "2019_solutions.pdf",
+        "path": "resources/_exams/2019_solutions.pdf"
+      }
+    },
+    {
+      "year": "2018",
+      "exam": {
+        "name": "2018.pdf",
+        "path": "resources/_exams/2018.pdf"
+      },
+      "solutions": {
+        "name": "2018_solutions.pdf",
+        "path": "resources/_exams/2018_solutions.pdf"
+      }
+    },
+    {
+      "year": "2017",
+      "exam": {
+        "name": "2017.pdf",
+        "path": "resources/_exams/2017.pdf"
+      },
+      "solutions": {
+        "name": "2017_solutions.pdf",
+        "path": "resources/_exams/2017_solutions.pdf"
+      }
+    }
+  ],
+  "_book": {
+    "name": "book.pdf",
+    "path": "resources/_course/book.pdf"
+  }
+}

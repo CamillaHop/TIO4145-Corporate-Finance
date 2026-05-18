@@ -23,6 +23,23 @@
   // Index build
   // ──────────────────────────────────────────────────────────────────
 
+  // Strip the markdown markers that show up in titles/summaries
+  // (`_italic_`, `**bold**`, `` `code` ``, `$math$`, `\$`). Without this,
+  // the dropdown renders raw underscores/stars and Fuse matches against
+  // tokens that include those punctuation glyphs.
+  function stripMd(s) {
+    return String(s == null ? '' : s)
+      .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+      .replace(/\$[^$\n]+\$/g, ' ')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/__([^_]+)__/g, '$1')
+      .replace(/(^|[^\w])[_*]([^_*\n]+?)[_*](?!\w)/g, '$1$2')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\\([\\_*`$])/g, '$1')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   // Flatten any JSON value into a single searchable string. Keeps prose
   // intact; for arrays of {concept, explanation} or similar, joins all
   // string leaves with " · " so word boundaries survive.
@@ -54,17 +71,15 @@
               var parts = [];
               if (data) flatten(data, parts);
               // Strip markdown noise so snippets read as prose.
-              var body = parts.join(' ')
-                .replace(/\$\$[\s\S]*?\$\$/g, ' ')   // drop display math
-                .replace(/\$[^$\n]+\$/g, ' ')        // drop inline math
-                .replace(/[#*_`>|\\]/g, ' ')
+              var body = stripMd(parts.join(' '))
+                .replace(/[#>|]/g, ' ')
                 .replace(/\s+/g, ' ')
                 .trim();
               return {
                 id:       s.id,
                 num:      num,
-                title:    (data && data.title) || s.title || s.id,
-                summary:  (data && data.summary) || s.description || '',
+                title:    stripMd((data && data.title) || s.title || s.id),
+                summary:  stripMd((data && data.summary) || s.description || ''),
                 body:     body,
                 url:      'section.html?id=' + encodeURIComponent(s.id),
               };
@@ -73,9 +88,9 @@
               return {
                 id: s.id,
                 num: num,
-                title: s.title || s.id,
-                summary: s.description || '',
-                body: (s.title || '') + ' ' + (s.description || ''),
+                title: stripMd(s.title || s.id),
+                summary: stripMd(s.description || ''),
+                body: stripMd((s.title || '') + ' ' + (s.description || '')),
                 url: 'section.html?id=' + encodeURIComponent(s.id),
               };
             });

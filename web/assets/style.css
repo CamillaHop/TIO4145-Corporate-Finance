@@ -65,8 +65,46 @@
           Consolas, monospace;
 }
 
+/* Dark palette. Applied when:
+   (a) the user has explicitly chosen dark via the toolbar toggle
+       (`html[data-theme="dark"]`), OR
+   (b) the OS prefers dark AND the user hasn't forced light. */
+:root[data-theme="dark"] {
+  --primary:        #6fb8d4;
+  --primary-deep:   #9ed0e3;
+  --primary-dark:   #87c3da;
+  --primary-strong: #9ed0e3;
+  --primary-mid:    #6fb8d4;
+  --primary-light:  #4fa8c8;
+  --primary-pale:   #103040;
+  --primary-mist:   #0c2532;
+  --primary-faint:  #081e29;
+
+  --bg:             #0d1419;
+  --surface:        #161e26;
+  --surface-alt:    #1d262f;
+  --border:         #2a3340;
+  --border-strong:  #3a4554;
+  --border-soft:    #1d262f;
+
+  --ink:            #e8edf3;
+  --ink-soft:       #c4ccd6;
+  --ink-faded:      #8b94a1;
+  --ink-ghost:      #5e6773;
+
+  --warm:           #e09354;
+  --warm-pale:      #2e1f12;
+  --warm-deep:      #f0a87a;
+  --ok:             #5fb5a0;
+  --ok-pale:        #122a25;
+  --highlight:      #e0b146;
+  --highlight-pale: #2b2210;
+  --theorem:        #c47087;
+  --theorem-pale:   #2e1822;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --primary:        #6fb8d4;
     --primary-deep:   #9ed0e3;
     --primary-dark:   #87c3da;
@@ -203,7 +241,18 @@ li { margin-bottom: 0.4rem; }
   z-index: 50;
   padding: 12px 0;
 }
-.site-nav .container { display: flex; align-items: center; gap: 24px; }
+/* Nav extends wider than the body content so the brand, optional back
+   link, search, page links and theme toggle all fit on one line. The
+   nav bar living wider than the body column is a common pattern (most
+   docs sites do this) and stops the toolbar from wrapping when the
+   page is a Section / Flashcards / Exam view with the extra back link. */
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+  max-width: 1100px;
+}
 .site-nav a {
   text-decoration: none;          /* no underlines on any nav link */
   border: none;
@@ -228,17 +277,25 @@ li { margin-bottom: 0.4rem; }
   border-color: var(--border-strong) !important;
 }
 .site-nav .nav-back {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--ink-faded);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .site-nav .nav-back:hover { color: var(--primary); }
+/* Collapse the back-link label below ~860px viewport so the toolbar
+   stays one row on smaller laptops; the arrow alone still goes home. */
+@media (max-width: 860px) {
+  .site-nav .nav-back { font-size: 0; }
+  .site-nav .nav-back::before { content: '←'; font-size: 1rem; }
+}
 
 /* ─────── Global nav search ─────── */
 .nav-search-wrapper {
   position: relative;
   margin-left: auto;
-  width: 240px;
-  flex-shrink: 0;
+  flex: 0 1 240px;     /* shrinks under pressure but caps at 240px */
+  min-width: 150px;
 }
 .nav-search-icon {
   position: absolute;
@@ -364,16 +421,22 @@ li { margin-bottom: 0.4rem; }
 
 /* Right-side nav links — minimalist pill links. Active page is filled,
    others are hover-only. The mono font matches the brand chip's vibe. */
-.site-nav .nav-links { display: flex; gap: 6px; align-items: center; }
+.site-nav .nav-links {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
 .site-nav .nav-links a {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 4px;
+  white-space: nowrap;
   transition: background .15s ease, color .15s ease;
 }
 .site-nav .nav-links a:hover {
@@ -385,12 +448,51 @@ li { margin-bottom: 0.4rem; }
   background: var(--primary-mist);
 }
 
+/* Theme toggle — icon-only square button. The sun (light) and moon
+   (dark) glyphs are layered as SVG inside the button; CSS shows the
+   one matching the current effective theme. */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-left: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: inherit;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.theme-toggle:hover {
+  color: var(--primary);
+  background: var(--surface);
+  border-color: var(--border);
+}
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: none;
+}
+/* Effective-dark: show the sun (clicking will go light/system).
+   Effective-light: show the moon (clicking will go dark). */
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun  { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
 /* ─────────── Hero ─────────── */
 
 .hero { padding: 4rem 0 2rem; }
 .eyebrow {
   font-family: var(--mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--primary);
@@ -415,19 +517,46 @@ li { margin-bottom: 0.4rem; }
 /* ─────────── Landing — hero / stats / feature cards ─────────── */
 
 .landing-hero { padding: 4.5rem 0 2rem; }
+
+/* Display title: oversized serif with a diagonal ink→teal gradient fill
+   for a bit of editorial swagger. Clamps so it scales on small viewports
+   but doesn't blow out the line on a 1600px monitor. The gradient is
+   clipped to the text via background-clip; in dark mode the same CSS
+   variables resolve to a light-ink → light-teal fade so it still pops. */
 .landing-hero h1 {
-  font-size: 3.2rem;
-  line-height: 1.05;
-  margin: 0.4rem 0 1.1rem;
-  letter-spacing: -0.02em;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 6.2vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin: 0.5rem 0 1.2rem;
+  background: linear-gradient(
+    100deg,
+    var(--primary-deep)   0%,
+    var(--primary)       45%,
+    var(--primary-mid) 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+          color: transparent;
+  /* Keeps wide letters from getting visually clipped by the gradient
+     when they sit at the very edge of the text box. */
+  padding-right: 0.05em;
+  width: max-content;
+  max-width: 100%;
 }
 .landing-hero .lede {
   font-size: 1.32rem;
   max-width: 42em;
   margin: 0;
 }
-.landing-hero .lede em {
-  font-style: italic;
+/* Emphasis inside an italic lede flips to upright Roman so the marked
+   words actually contrast against the surrounding italics. */
+.landing-hero .lede em,
+.section-hero .lede em,
+.hero .lede em {
+  font-style: normal;
   color: var(--ink);
   font-weight: 500;
 }
@@ -532,10 +661,16 @@ li { margin-bottom: 0.4rem; }
   color: var(--primary);
   margin: 0 0 0.5rem;
 }
+/* Section-level h2s on the landing inherit the same serif voice as the
+   h1 (Source Serif 4, upright). Smaller size + slightly lighter weight
+   for hierarchy, but the typeface and posture match so the page reads
+   as one consistent editorial system. */
 .landing-block > h2 {
-  font-family: var(--display-sans);
-  font-size: 1.7rem;
-  font-weight: 600;
+  font-family: var(--display);
+  font-style: normal;
+  font-size: 1.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 0.6rem;
   border: none;
   padding: 0;
@@ -863,9 +998,9 @@ li { margin-bottom: 0.4rem; }
 .toc-chapter-title {
   display: block;
   font-family: var(--mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   color: var(--primary);
   font-weight: 600;
   margin: 0.3rem 0 0.5rem;
@@ -915,6 +1050,226 @@ li { margin-bottom: 0.4rem; }
 }
 @media (min-width: 720px) {
   .toc:not(:has(.toc-chapter)) { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─────────── Curriculum page ─────────── */
+
+/* Top jump-links under the hero */
+.curr-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+}
+.curr-jump a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  text-decoration: none !important;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.curr-jump a:hover {
+  color: var(--primary);
+  background: var(--bg);
+  border-color: var(--primary-light) !important;
+}
+
+.curr-block { margin: 3rem 0 0; }
+.curr-block:last-of-type { margin-bottom: 2rem; }
+
+/* Section-style block headers — match the landing block voice */
+.curr-block > h2 {
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  border: none;
+  padding: 0;
+}
+
+/* Per-week materials table — mirrors the exam-row pattern below: a
+   left header column with the big display section number + title, and
+   a right column with all available PDF chips (slides first, then
+   chapters). One row per week, all 11 weeks visible at once. */
+.week-table {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.week-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1.2rem;
+  align-items: center;
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .15s ease;
+}
+.week-row:hover { border-color: var(--primary-light); }
+
+.week-row-head { display: flex; flex-direction: column; gap: 2px; }
+.week-num {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-decoration: none !important;
+  border: none;
+}
+.week-num:hover { color: var(--primary); }
+.week-title {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  text-decoration: none !important;
+  border: none;
+  line-height: 1.35;
+}
+.week-title:hover { color: var(--primary); }
+
+.week-row-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+/* Chips share the visual language of .exam-btn so the curriculum page
+   reads as one consistent system. */
+.week-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 12px;
+  color: var(--primary);
+  background: var(--primary-mist);
+  border: 1px solid transparent !important;
+  border-radius: 5px;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: background .12s ease, border-color .12s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.week-chip svg { width: 13px; height: 13px; }
+.week-chip:hover {
+  background: var(--primary-pale);
+  border-color: var(--primary-light) !important;
+  transform: translateY(-1px);
+}
+.week-empty {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+  padding: 7px 0;
+}
+
+@media (max-width: 640px) {
+  .week-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .week-row-files { justify-content: flex-start; }
+}
+
+/* Past-exams: stack of year-rows, each with an inline button strip */
+.exam-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+.exam-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1.2rem;
+  align-items: center;
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .15s ease;
+}
+.exam-row:hover { border-color: var(--primary-light); }
+.exam-row-head { display: flex; flex-direction: column; gap: 2px; }
+.exam-year {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.exam-format {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.exam-row-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.exam-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 12px;
+  color: var(--primary);
+  background: var(--primary-mist);
+  border: 1px solid transparent !important;
+  border-radius: 5px;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: color .12s ease, background .12s ease, border-color .12s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.exam-btn svg { width: 13px; height: 13px; }
+.exam-btn:hover {
+  background: var(--primary-pale);
+  border-color: var(--primary-light) !important;
+  transform: translateY(-1px);
+}
+.exam-btn-empty {
+  color: var(--ink-ghost);
+  background: transparent;
+  border-style: dashed !important;
+  border-color: var(--border) !important;
+  cursor: default;
+}
+.exam-btn-empty:hover { transform: none; background: transparent; }
+
+@media (max-width: 640px) {
+  .exam-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .exam-row-files { justify-content: flex-start; }
 }
 
 /* ─────────── Floating table-of-contents rail ─────────── */
@@ -1079,6 +1434,106 @@ html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 .section-content { padding: 0 0 4rem; }
 
+/* ─────────── Source PDFs panel ─────────── */
+/* Lecture slides + textbook chapters used to build this section, shown
+   at the top of the page so they're one click away. Each row is a
+   feature-card-style tile with an icon, a small mono "kind" label, the
+   filename, and an external-link glyph. */
+.source-pdfs { margin: 0 0 2.5rem; }
+.source-pdfs > h2 {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.3rem;
+  border: none;
+  padding: 0;
+}
+.source-pdfs > h2::before { content: none; }
+.source-pdfs-sub {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  color: var(--ink-faded);
+}
+
+.resource-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.7rem;
+}
+.resource-list li { margin: 0; }
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.95rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none !important;
+  transition: transform .18s cubic-bezier(.4,0,.2,1),
+              border-color .15s ease,
+              background .15s ease,
+              box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.resource-item:hover {
+  transform: translateY(-1px);
+  background: var(--bg);
+  border-color: var(--primary-light);
+  box-shadow: 0 12px 26px -16px rgba(9, 68, 89, 0.32);
+}
+.resource-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--primary-mist);
+  color: var(--primary);
+}
+.resource-icon svg { width: 18px; height: 18px; }
+.resource-icon-book {
+  background: color-mix(in srgb, var(--ok) 14%, var(--surface));
+  color: var(--ok);
+}
+.resource-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+.resource-kind {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.resource-name {
+  font-size: 0.92rem;
+  color: var(--ink);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.resource-ext {
+  width: 14px;
+  height: 14px;
+  color: var(--ink-faded);
+  flex: 0 0 auto;
+}
+.resource-item:hover .resource-ext { color: var(--primary); }
+
 /* ─────────── "From the textbook" coverage panel ─────────── */
 
 .coverage {
@@ -1092,10 +1547,10 @@ html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 .coverage > h2 {
   margin: 0;
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   color: var(--primary);
 }
 .coverage > h2::before { content: none; }
@@ -1724,7 +2179,15 @@ a.cov-item:hover {
 /* ─────────── Exam page ─────────── */
 
 .exam-block { margin: 2rem 0; }
-.exam-block h2 { margin-bottom: 0.8rem; }
+.exam-block h2 {
+  font-family: var(--display);
+  font-style: normal;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.8rem;
+  color: var(--ink);
+}
 .exam-block details {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1802,18 +2265,50 @@ a.cov-item:hover {
 /* ─────────── Footer ─────────── */
 
 footer {
-  padding: 3rem 0 2rem;
+  padding: 2.4rem 0 2.4rem;
   border-top: 1px solid var(--border);
-  margin-top: 3rem;
-  text-align: center;
+  margin-top: 4rem;
   color: var(--ink-faded);
 }
-footer p {
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+.footer-btn {
   font-family: var(--mono);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin: 0;
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  text-decoration: none !important;
+  transition: color .15s ease, background .15s ease, border-color .15s ease,
+              transform .18s cubic-bezier(.4,0,.2,1);
+}
+.footer-btn:hover {
+  color: var(--primary);
+  background: var(--bg);
+  border-color: var(--primary-light) !important;
+  transform: translateY(-1px);
+}
+.footer-btn svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 6px; }
+.footer-tag {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+@media (max-width: 560px) {
+  .footer-tag { margin-left: 0; margin-top: 0.4rem; flex-basis: 100%; }
 }
 
 /* ─────────── Responsive ─────────── */
