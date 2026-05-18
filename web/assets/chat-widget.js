@@ -111,41 +111,146 @@
   }
 
   // ─── Styles ─────────────────────────────────────────────────────────────
+  // Right-edge sidebar in the site's teal / cool-grey palette. Reads the
+  // page-wide CSS variables (--primary, --surface, --ink, etc.) so light
+  // and dark themes are picked up automatically.
   var css =
-    '.sca-toggle{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent,#1f4e79);color:#fff;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);z-index:9999;display:grid;place-items:center;font-family:var(--sans,system-ui);font-size:24px;transition:transform .15s,background .15s}' +
-    '.sca-toggle:hover{transform:scale(1.06);background:var(--accent-dark,#163758)}' +
-    '.sca-panel{position:fixed;bottom:96px;right:24px;width:420px;max-width:calc(100vw - 32px);height:min(78vh,720px);background:var(--paper,#f4f1ea);border:1px solid var(--line,#c9c0ae);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,.22);display:none;flex-direction:column;z-index:9999;overflow:hidden;font-family:var(--serif,Georgia,serif)}' +
-    '.sca-panel.open{display:flex}' +
-    '.sca-header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line-soft,#ddd5c4);background:var(--paper-dark,#e8e3d6)}' +
-    '.sca-header h3{margin:0;font-size:1rem;font-weight:500;flex:1}' +
-    '.sca-icon-btn{background:none;border:none;color:var(--ink-faded,#6b6257);cursor:pointer;width:30px;height:30px;border-radius:4px;display:grid;place-items:center;font-size:18px}' +
-    '.sca-icon-btn:hover{background:var(--paper,#f4f1ea);color:var(--ink,#1a1612)}' +
-    '.sca-preset-bar{padding:6px 12px;border-bottom:1px solid var(--line-soft,#ddd5c4);background:var(--paper-dark,#e8e3d6);position:relative}' +
-    '.sca-preset-trigger{font-family:var(--mono,monospace);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faded,#6b6257);background:none;border:1px solid var(--line,#c9c0ae);padding:4px 10px;border-radius:14px;cursor:pointer}' +
-    '.sca-preset-trigger:hover{border-color:var(--accent,#1f4e79);color:var(--accent,#1f4e79)}' +
-    '.sca-preset-pop{position:absolute;top:calc(100% + 4px);left:12px;right:12px;background:var(--paper,#f4f1ea);border:1px solid var(--line,#c9c0ae);border-radius:6px;box-shadow:0 8px 20px rgba(0,0,0,.12);padding:6px;display:none;z-index:5}' +
+    '.sca-toggle{' +
+      'position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;' +
+      'background:var(--primary);color:var(--bg);border:none;cursor:pointer;' +
+      'box-shadow:0 10px 24px -8px rgba(9,68,89,.45);' +
+      'z-index:9999;display:grid;place-items:center;font-family:var(--sans);' +
+      'transition:transform .18s cubic-bezier(.4,0,.2,1),background .15s ease,box-shadow .18s ease' +
+    '}' +
+    '.sca-toggle:hover{transform:translateY(-2px) scale(1.04);background:var(--primary-deep);box-shadow:0 14px 30px -10px rgba(9,68,89,.55)}' +
+    '.sca-toggle svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}' +
+    '.sca-toggle.is-open{opacity:0;pointer-events:none;transform:translateY(8px)}' +
+
+    /* Full-height sidebar docked to the right edge. Slides in from the
+       right; doesn't touch the page itself (uses fixed positioning). */
+    '.sca-panel{' +
+      'position:fixed;top:0;right:0;bottom:0;width:400px;max-width:96vw;' +
+      'background:var(--bg);border-left:1px solid var(--border);' +
+      'box-shadow:-18px 0 48px -28px rgba(15,23,34,.30);' +
+      'display:flex;flex-direction:column;z-index:9999;overflow:hidden;' +
+      'font-family:var(--sans);color:var(--ink);' +
+      'transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);' +
+      'visibility:hidden' +
+    '}' +
+    '.sca-panel.open{transform:translateX(0);visibility:visible}' +
+
+    /* When the sidebar is open, push the page content over by the
+       sidebar's width so the user can still see what they were reading.
+       Transition the body shift in sync with the sidebar slide. The
+       nav bar is sticky (in-flow) so it follows automatically; the
+       left-side TOC rail is position:fixed against the viewport so it
+       stays put — both are intended. */
+    'body{transition:padding-right .28s cubic-bezier(.4,0,.2,1)}' +
+    'body.sca-open{padding-right:400px}' +
+    '@media (max-width:560px){body.sca-open{padding-right:0}}' +
+
+    '.sca-header{' +
+      'display:flex;align-items:center;gap:8px;padding:14px 18px;' +
+      'border-bottom:1px solid var(--border-soft);background:var(--surface)' +
+    '}' +
+    '.sca-header h3{' +
+      'margin:0;flex:1;color:var(--ink);' +
+      'font-family:var(--mono);font-size:.72rem;font-weight:600;' +
+      'letter-spacing:.18em;text-transform:uppercase' +
+    '}' +
+    '.sca-icon-btn{' +
+      'background:none;border:none;color:var(--ink-faded);cursor:pointer;' +
+      'width:30px;height:30px;border-radius:5px;display:grid;place-items:center;' +
+      'transition:color .15s ease,background .15s ease' +
+    '}' +
+    '.sca-icon-btn:hover{background:var(--surface-alt);color:var(--primary)}' +
+    '.sca-icon-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}' +
+
+    '.sca-preset-bar{padding:8px 14px;border-bottom:1px solid var(--border-soft);background:var(--surface);position:relative}' +
+    '.sca-preset-trigger{' +
+      'font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.12em;' +
+      'text-transform:uppercase;color:var(--ink-soft);' +
+      'background:var(--bg);border:1px solid var(--border);padding:5px 12px;' +
+      'border-radius:14px;cursor:pointer;transition:border-color .15s ease,color .15s ease,background .15s ease' +
+    '}' +
+    '.sca-preset-trigger:hover{border-color:var(--primary-light);color:var(--primary);background:var(--primary-mist)}' +
+    '.sca-preset-pop{' +
+      'position:absolute;top:calc(100% + 4px);left:14px;right:14px;' +
+      'background:var(--bg);border:1px solid var(--border);border-radius:6px;' +
+      'box-shadow:0 12px 28px -10px rgba(15,23,34,.20);padding:6px;display:none;z-index:5' +
+    '}' +
     '.sca-preset-pop.open{display:block}' +
-    '.sca-preset-opt{display:block;width:100%;text-align:left;padding:8px 10px;background:none;border:none;border-radius:4px;cursor:pointer;font-family:var(--serif,Georgia);font-size:.9rem;color:var(--ink,#1a1612)}' +
-    '.sca-preset-opt:hover,.sca-preset-opt.active{background:var(--paper-dark,#e8e3d6)}' +
-    '.sca-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}' +
-    '.sca-msg{font-size:.95rem;line-height:1.55;max-width:95%}' +
-    '.sca-msg.user{align-self:flex-end;background:var(--accent,#1f4e79);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;max-width:80%}' +
-    '.sca-msg.bot{align-self:flex-start;color:var(--ink,#1a1612)}' +
+    '.sca-preset-opt{' +
+      'display:block;width:100%;text-align:left;padding:8px 10px;' +
+      'background:none;border:none;border-radius:4px;cursor:pointer;' +
+      'font-family:var(--sans);font-size:.88rem;color:var(--ink);' +
+      'transition:background .12s ease,color .12s ease' +
+    '}' +
+    '.sca-preset-opt:hover{background:var(--surface)}' +
+    '.sca-preset-opt.active{background:var(--primary-mist);color:var(--primary);font-weight:600}' +
+
+    '.sca-messages{' +
+      'flex:1;overflow-y:auto;padding:16px 18px 8px;' +
+      'display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth' +
+    '}' +
+    '.sca-messages::-webkit-scrollbar{width:6px}' +
+    '.sca-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}' +
+
+    '.sca-msg{font-size:.94rem;line-height:1.6;max-width:100%}' +
+    '.sca-msg.user{' +
+      'align-self:flex-end;background:var(--primary);color:var(--bg);' +
+      'padding:9px 13px;border-radius:14px 14px 4px 14px;max-width:85%' +
+    '}' +
+    '.sca-msg.bot{align-self:flex-start;color:var(--ink);max-width:100%}' +
     '.sca-msg.bot p{margin:0 0 .6rem}.sca-msg.bot p:last-child{margin-bottom:0}' +
-    '.sca-msg.bot pre{background:var(--paper-dark,#e8e3d6);padding:8px 10px;border-radius:4px;font-size:.82rem;overflow-x:auto}' +
-    '.sca-msg.bot code{background:var(--paper-dark,#e8e3d6);padding:.1em .3em;border-radius:3px;font-size:.88em}' +
-    '.sca-msg.bot pre code{background:none;padding:0}' +
-    '.sca-msg.bot ul,.sca-msg.bot ol{padding-left:1.2rem;margin:.4rem 0}' +
-    '.sca-msg.error{color:#a02020;font-style:italic}' +
-    '.sca-hint{padding:0 16px 8px;font-size:.78rem;color:var(--ink-faded,#6b6257);font-style:italic;line-height:1.4}' +
-    '.sca-form{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line-soft,#ddd5c4);background:var(--paper-dark,#e8e3d6)}' +
-    '.sca-form textarea{flex:1;font-family:var(--serif,Georgia);font-size:.95rem;background:var(--paper,#f4f1ea);border:1px solid var(--line,#c9c0ae);border-radius:6px;padding:8px 10px;resize:none;min-height:40px;max-height:140px;outline:none}' +
-    '.sca-form textarea:focus{border-color:var(--accent,#1f4e79)}' +
-    '.sca-form button{background:var(--accent,#1f4e79);color:#fff;border:none;border-radius:6px;padding:0 16px;font-family:var(--sans,system-ui);font-size:.9rem;cursor:pointer}' +
-    '.sca-form button:hover{background:var(--accent-dark,#163758)}' +
-    '.sca-form button:disabled{opacity:.5;cursor:wait}' +
-    '.sca-typing{font-size:.85rem;color:var(--ink-faded,#6b6257);font-style:italic}' +
-    '@media (max-width:480px){.sca-panel{right:8px;left:8px;width:auto;bottom:80px;height:calc(100vh - 100px)}.sca-toggle{bottom:16px;right:16px}}';
+    '.sca-msg.bot strong{color:var(--ink);font-weight:600}' +
+    '.sca-msg.bot pre{' +
+      'background:var(--surface-alt);padding:10px 12px;border-radius:5px;' +
+      'font-family:var(--mono);font-size:.82rem;overflow-x:auto;' +
+      'border:1px solid var(--border-soft)' +
+    '}' +
+    '.sca-msg.bot code{' +
+      'background:var(--surface-alt);padding:.1em .35em;border-radius:3px;' +
+      'font-family:var(--mono);font-size:.86em;color:var(--primary-dark)' +
+    '}' +
+    '.sca-msg.bot pre code{background:none;padding:0;color:inherit}' +
+    '.sca-msg.bot ul,.sca-msg.bot ol{padding-left:1.3rem;margin:.4rem 0}' +
+    '.sca-msg.bot li{margin-bottom:.3rem}' +
+    '.sca-msg.bot a{color:var(--primary-mid);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--primary-mid) 40%,transparent);text-underline-offset:2px}' +
+    '.sca-msg.bot .katex-display{margin:.7rem 0;padding:0;background:transparent;border:none;overflow-x:auto}' +
+    '.sca-msg.error{color:var(--warm-deep);font-style:italic}' +
+
+    '.sca-hint{' +
+      'padding:0 18px 8px;font-size:.74rem;color:var(--ink-faded);' +
+      'font-family:var(--sans);font-style:italic;line-height:1.5' +
+    '}' +
+
+    '.sca-form{' +
+      'display:flex;gap:8px;padding:12px 14px;' +
+      'border-top:1px solid var(--border-soft);background:var(--surface)' +
+    '}' +
+    '.sca-form textarea{' +
+      'flex:1;font-family:var(--sans);font-size:.94rem;color:var(--ink);' +
+      'background:var(--bg);border:1px solid var(--border);border-radius:6px;' +
+      'padding:9px 11px;resize:none;min-height:40px;max-height:160px;outline:none;' +
+      'transition:border-color .15s ease,box-shadow .15s ease' +
+    '}' +
+    '.sca-form textarea:focus{border-color:var(--primary-mid);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary-mid) 16%,transparent)}' +
+    '.sca-form textarea::placeholder{color:var(--ink-faded)}' +
+    '.sca-form button{' +
+      'background:var(--primary);color:var(--bg);border:none;border-radius:6px;' +
+      'padding:0 16px;font-family:var(--mono);font-size:.74rem;font-weight:600;' +
+      'letter-spacing:.1em;text-transform:uppercase;cursor:pointer;' +
+      'transition:background .15s ease,transform .15s cubic-bezier(.4,0,.2,1)' +
+    '}' +
+    '.sca-form button:hover{background:var(--primary-deep);transform:translateY(-1px)}' +
+    '.sca-form button:disabled{opacity:.5;cursor:wait;transform:none}' +
+    '.sca-typing{font-size:.85rem;color:var(--ink-faded);font-style:italic}' +
+
+    '@media (max-width:560px){' +
+      '.sca-panel{width:100vw;max-width:100vw;border-left:none}' +
+      '.sca-toggle{bottom:16px;right:16px}' +
+    '}';
 
   // ─── DOM ────────────────────────────────────────────────────────────────
   var toggleBtn, panel, messagesEl, formEl, textareaEl, sendBtn, presetTrigger, presetPop;
@@ -163,7 +268,11 @@
     toggleBtn.className = 'sca-toggle';
     toggleBtn.setAttribute('aria-label', STR.openChat);
     toggleBtn.title = STR.openChat;
-    toggleBtn.textContent = '?';
+    toggleBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M21 12a8 8 0 0 1-8 8H8l-4 3v-7a8 8 0 1 1 17-4z"/>' +
+        '<path d="M8 11h8M8 14h5"/>' +
+      '</svg>';
     toggleBtn.addEventListener('click', togglePanel);
     document.body.appendChild(toggleBtn);
 
@@ -174,8 +283,12 @@
     panel.innerHTML =
       '<div class="sca-header">' +
         '<h3>' + STR.title + '</h3>' +
-        '<button class="sca-icon-btn sca-reset" aria-label="' + STR.resetAria + '" title="' + STR.resetTitle + '">↻</button>' +
-        '<button class="sca-icon-btn sca-close" aria-label="' + STR.closeAria + '" title="' + STR.closeTitle + '">×</button>' +
+        '<button class="sca-icon-btn sca-reset" aria-label="' + STR.resetAria + '" title="' + STR.resetTitle + '">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>' +
+        '</button>' +
+        '<button class="sca-icon-btn sca-close" aria-label="' + STR.closeAria + '" title="' + STR.closeTitle + '">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>' +
+        '</button>' +
       '</div>' +
       '<div class="sca-preset-bar">' +
         '<button class="sca-preset-trigger" aria-haspopup="true">' + STR.presetTriggerHint + ': <span class="sca-preset-label">balanced</span> ▾</button>' +
@@ -244,11 +357,29 @@
     textareaEl.style.height = Math.min(140, textareaEl.scrollHeight) + 'px';
   }
   function togglePanel() {
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) {
-      setTimeout(function () { textareaEl.focus(); }, 100);
+    var nowOpen = panel.classList.toggle('open');
+    toggleBtn.classList.toggle('is-open', nowOpen);
+    document.body.classList.toggle('sca-open', nowOpen);
+    if (nowOpen) {
+      setTimeout(function () { textareaEl.focus(); }, 280);
     }
   }
+  // Escape closes the sidebar while it's open.
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && panel && panel.classList.contains('open')) {
+      togglePanel();
+      toggleBtn.focus();
+    }
+  });
+
+  // Click anywhere outside the sidebar (and not on the toggle button)
+  // also closes it. Uses the capture phase so we see the click before
+  // any inner stopPropagation handlers.
+  document.addEventListener('mousedown', function (e) {
+    if (!panel || !panel.classList.contains('open')) return;
+    if (panel.contains(e.target) || toggleBtn.contains(e.target)) return;
+    togglePanel();
+  });
   function resetChat() { history = []; messagesEl.innerHTML = ''; }
 
   function appendMsg(role, text, opts) {

@@ -92,7 +92,7 @@
   },
   "features": {
     "chat": {
-      "enabled": false,
+      "enabled": true,
       "provider": "openrouter",
       "embed_model": "nvidia/llama-nemotron-embed-vl-1b-v2:free",
       "chat_models": {

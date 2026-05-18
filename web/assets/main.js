@@ -356,7 +356,7 @@
     meta2.content = cfg.course_code || '';
     document.head.appendChild(meta2);
     var script = document.createElement('script');
-    script.src = 'assets/chat-widget.js';
+    script.src = 'assets/chat-widget.js?v=4';
     script.defer = true;
     document.body.appendChild(script);
   }
