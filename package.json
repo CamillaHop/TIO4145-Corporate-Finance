@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "vercel-build": "node scripts/vercel_build.mjs"
+    "build": "node scripts/vercel_build.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
