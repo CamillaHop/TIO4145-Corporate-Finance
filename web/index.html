@@ -6,6 +6,7 @@
 <title>Study site</title>
 <link rel="stylesheet" href="assets/style.css" />
 <script defer src="assets/main.js"></script>
+<script defer src="assets/nav-search.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
@@ -14,6 +15,12 @@
 <nav class="site-nav">
   <div class="container">
     <a href="index.html" class="brand" data-course-code>—</a>
+    <div class="nav-search-wrapper">
+      <svg class="nav-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="nav-search" placeholder="Loading search…" autocomplete="off" spellcheck="false" disabled />
+      <span class="nav-search-kbd" aria-hidden="true">/</span>
+      <div id="nav-search-results" role="listbox"></div>
+    </div>
     <div class="nav-links">
       <a href="flashcards.html">Flashcards</a>
       <a href="exam.html">Exam prep</a>
@@ -66,8 +73,6 @@
       return;
     }
     grid.innerHTML = sections.map(function (s, i) {
-      // Pull a numeric prefix off the section id when present
-      // ("section_03" → "03"); fall back to the running index.
       var num = (String(s.id || '').match(/(\d+)$/) || [, String(i + 1).padStart(2, '0')])[1];
       return (
         '<a class="section-card" href="section.html?id=' + encodeURIComponent(s.id) + '">' +

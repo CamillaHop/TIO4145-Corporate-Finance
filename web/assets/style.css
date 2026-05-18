@@ -1,5 +1,5 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Big+Shoulders+Display:wght@500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
 
 /* ─────────────────────────────────────────────────────────────────────
    Palette built around the project accent #094459 (deep teal).
@@ -19,56 +19,60 @@
   --primary-mist:   #ebf3f6;   /* subtle hover */
   --primary-faint:  #f5fafc;
 
-  /* Neutrals — soft cool greys with a subtle blue undertone that picks
-     up the teal accent without competing with it. Easier on the eyes
-     than a stark white but clearly not warm/cream. */
+  /* Neutrals — pared down to a single ink/soft/faded and two border tones.
+     Fewer decision points = a calmer page. */
   --bg:             #e8ebee;
   --surface:        #f3f5f7;
   --surface-alt:    #dde2e7;
   --border:         #c8cfd6;
-  --border-strong:  #9ea7b0;
   --border-soft:    #dde2e7;
+  --border-strong:  #c8cfd6;   /* alias kept so legacy rules don't break */
 
-  /* Text */
+  /* Text — three tones only */
   --ink:            #0f1722;
-  --ink-soft:       #3d4654;
-  --ink-faded:      #6c7585;
-  --ink-ghost:      #a8b0bc;
+  --ink-soft:       #4a5360;
+  --ink-faded:      #7c8593;
+  --ink-ghost:      #7c8593;   /* alias */
 
-  /* Semantic accents — purposeful, restrained */
-  --warm:           #c9742f;   /* warnings / mistakes (rust) */
-  --warm-pale:      #fbeede;
-  --warm-deep:      #a85e22;
-  --ok:             #2d7d6b;   /* definitions / success (muted teal-green) */
+  /* Semantic accents — kept for label colors only. Callouts use a left
+     border + colored label rather than tinted backgrounds, so the page
+     reads as one coherent surface. */
+  --warm:           #b35c2a;   /* warnings / pitfalls */
+  --warm-pale:      #fbeede;   /* legacy — used only on .mistakes li tint */
+  --warm-deep:      #8e4820;
+  --ok:             #2d7d6b;   /* definitions */
   --ok-pale:        #dfeee9;
-  --highlight:      #c98b1f;   /* key insights (ochre) */
+  --highlight:      #b07a1c;   /* key insights / intuition */
   --highlight-pale: #fbf0d5;
-  --theorem:        #94455c;   /* theorems / propositions (muted plum) */
+  --theorem:        #94455c;
   --theorem-pale:   #f5e2e9;
 
   /* Typography:
      --sans     General Sans, the body face (humanist, slightly geometric)
-     --display  Manrope, used only for h1 and h2 — gives headings a
-                distinct voice without breaking the sans-only constraint
-     --mono     IBM Plex Mono for code, eyebrows, badges, TOC numbers
-     Big Shoulders Display is also loaded but used only inside the section
-     card SVGs (see .section-card .sc-num text), not for HTML headings. */
+     --display  Source Serif 4 — used for h1 and the lede. The serif/sans
+                contrast gives the page an editorial voice instead of
+                "two sans cousins that look almost the same".
+     --display-sans  Manrope, used for h2 only so subsection headings
+                still feel structural without competing with h1.
+     --mono     IBM Plex Mono for code, eyebrows, badges, TOC numbers. */
   --sans: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
           Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --display: 'Manrope', 'General Sans', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --display: 'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman',
+             serif;
+  --display-sans: 'Manrope', 'General Sans', -apple-system, BlinkMacSystemFont,
+                  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', 'JetBrains Mono', 'SF Mono', Menlo,
           Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary:        #4fa8c8;
-    --primary-deep:   #87c3da;
-    --primary-dark:   #6db8d4;
-    --primary-strong: #87c3da;
-    --primary-mid:    #4fa8c8;
-    --primary-light:  #157caa;
+    --primary:        #6fb8d4;
+    --primary-deep:   #9ed0e3;
+    --primary-dark:   #87c3da;
+    --primary-strong: #9ed0e3;
+    --primary-mid:    #6fb8d4;   /* link colour — meets WCAG AA on dark bg */
+    --primary-light:  #4fa8c8;
     --primary-pale:   #103040;
     --primary-mist:   #0c2532;
     --primary-faint:  #081e29;
@@ -116,29 +120,42 @@ html, body {
 
 body { position: relative; min-height: 100vh; }
 
+/* Links carry the only teal in body text — the accent now reliably
+   signals "interactive" instead of also being a heading-decoration. */
 a {
   color: var(--primary-mid);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--primary-mid) 30%, transparent);
-  transition: color .15s ease, border-color .15s ease;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--primary-mid) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  border: none;
+  transition: color .15s ease, text-decoration-color .15s ease;
 }
-a:hover { color: var(--primary); border-color: var(--primary); }
+a:hover {
+  color: var(--primary);
+  text-decoration-color: var(--primary);
+}
 
-/* h1/h2 use --display (Manrope) for a distinct editorial voice;
-   h3/h4 stay on --sans (General Sans) so finer subsection headings feel
-   continuous with the body, not like more "loud" headlines. */
+/* Global keyboard-focus ring — previously invisible. */
+:focus-visible {
+  outline: 2px solid var(--primary-mid);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* h1 = serif (editorial), h2 = sans display (structural),
+   h3/h4 = body sans. Two clearly different faces, not five. Heading
+   colour stays plain --ink so teal can do its link job in peace. */
 h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.2;
   margin-top: 0;
 }
-h1, h2 { font-family: var(--display); }
-h3, h4, h5, h6 { font-family: var(--sans); }
-h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
-h2 { font-size: 1.7rem; font-weight: 600; margin: 2.4rem 0 1rem; }
-h3 { font-size: 1.22rem; font-weight: 600; margin: 1.8rem 0 0.65rem; }
-h4 { font-size: 1.02rem; font-weight: 600; margin: 1.3rem 0 0.4rem; color: var(--ink-soft); }
+h1 { font-family: var(--display); font-weight: 700; font-size: 2.6rem; margin-bottom: 1rem; letter-spacing: -0.015em; }
+h2 { font-family: var(--display-sans); font-weight: 600; font-size: 1.65rem; margin: 4rem 0 1rem; }
+h3 { font-family: var(--sans); font-weight: 600; font-size: 1.18rem; margin: 2rem 0 0.55rem; }
+h4 { font-family: var(--sans); font-weight: 600; font-size: 1rem; margin: 1.3rem 0 0.4rem; color: var(--ink-soft); }
 
 p { margin: 0 0 1.05rem; }
 em { font-style: italic; }
@@ -179,36 +196,194 @@ li { margin-bottom: 0.4rem; }
 .site-nav {
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: saturate(140%) blur(8px);
-  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--border-soft);
   z-index: 50;
-  padding: 14px 0;
+  padding: 12px 0;
 }
 .site-nav .container { display: flex; align-items: center; gap: 24px; }
+.site-nav a {
+  text-decoration: none;          /* no underlines on any nav link */
+  border: none;
+}
+.site-nav a:hover { text-decoration: none; }
+
 .site-nav .brand {
   font-family: var(--mono);
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 6px 10px;
+  border: 1px solid var(--border) !important;   /* override .site-nav a */
+  border-radius: 4px;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.site-nav .brand:hover {
   color: var(--primary);
-  border: none;
+  background: var(--surface);
+  border-color: var(--border-strong) !important;
 }
 .site-nav .nav-back {
   font-size: 0.9rem;
   color: var(--ink-faded);
-  border: none;
 }
 .site-nav .nav-back:hover { color: var(--primary); }
-.site-nav .nav-links { margin-left: auto; display: flex; gap: 22px; }
-.site-nav .nav-links a {
-  border: none;
-  font-size: 0.92rem;
-  color: var(--ink-soft);
-  font-weight: 500;
+
+/* ─────── Global nav search ─────── */
+.nav-search-wrapper {
+  position: relative;
+  margin-left: auto;
+  width: 240px;
+  flex-shrink: 0;
 }
-.site-nav .nav-links a:hover { color: var(--primary); }
+.nav-search-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--ink-faded);
+  pointer-events: none;
+}
+#nav-search {
+  width: 100%;
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 2rem 6px 1.85rem;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#nav-search::placeholder { color: var(--ink-faded); }
+#nav-search:hover { border-color: var(--border-strong); }
+#nav-search:focus {
+  border-color: var(--primary-mid);
+  background: var(--bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-mid) 16%, transparent);
+}
+#nav-search:disabled { opacity: .55; cursor: progress; }
+.nav-search-kbd {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--ink-faded);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+#nav-search:focus + .nav-search-kbd { display: none; }
+
+#nav-search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(440px, 92vw);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 14px 32px -10px rgba(15, 23, 34, 0.22);
+  max-height: 460px;
+  overflow-y: auto;
+  z-index: 60;
+}
+#nav-search-results.active { display: block; }
+.nav-sr-item {
+  display: block;
+  padding: 0.7rem 0.95rem;
+  text-decoration: none !important;
+  color: inherit;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  transition: background .1s ease;
+}
+.nav-sr-item:last-child { border-bottom: none; }
+.nav-sr-item:hover,
+.nav-sr-item.nav-sr-active { background: var(--surface); }
+.nav-sr-chapter {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 3px;
+}
+.nav-sr-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+.nav-sr-body {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nav-sr-body mark,
+.nav-sr-title mark {
+  background: color-mix(in srgb, var(--primary-mid) 22%, transparent);
+  color: var(--primary);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+.nav-sr-empty {
+  padding: 0.95rem 1.05rem;
+  color: var(--ink-faded);
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .nav-search-wrapper { width: 160px; }
+  #nav-search { font-size: 16px; padding-right: 0.85rem; }
+  .nav-search-kbd { display: none; }
+  #nav-search-results { right: -0.5rem; width: calc(100vw - 1rem); }
+}
+
+/* Right-side nav links — minimalist pill links. Active page is filled,
+   others are hover-only. The mono font matches the brand chip's vibe. */
+.site-nav .nav-links { display: flex; gap: 6px; align-items: center; }
+.site-nav .nav-links a {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background .15s ease, color .15s ease;
+}
+.site-nav .nav-links a:hover {
+  color: var(--primary);
+  background: var(--surface);
+}
+.site-nav .nav-links a[aria-current="page"] {
+  color: var(--primary);
+  background: var(--primary-mist);
+}
 
 /* ─────────── Hero ─────────── */
 
@@ -222,14 +397,19 @@ li { margin-bottom: 0.4rem; }
   font-weight: 600;
   margin-bottom: 0.9rem;
 }
+/* Lede — editorial chapter opener. Serif + italic + a left rule give it
+   real presence rather than reading as "slightly bigger body". */
 .lede {
-  font-size: 1.18rem;
+  font-family: var(--display);
+  font-size: 1.3rem;
   line-height: 1.55;
   color: var(--ink-soft);
   max-width: 38em;
-  margin-top: 1rem;
+  margin: 1.1rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--border);
   font-weight: 400;
-  font-style: italic;     /* editorial signal — distinguishes the intro */
+  font-style: italic;
 }
 
 /* ─────────── Index — section grid ─────────── */
@@ -291,11 +471,12 @@ li { margin-bottom: 0.4rem; }
   overflow: visible;
 }
 .section-card .sc-num text {
+  /* Big Shoulders Display is a narrow grotesque sized specifically for
+     this SVG (the 60-unit viewBox can't fit a wide humanist sans like
+     Manrope at the same point size — it overflows the column). */
   font-family: 'Big Shoulders Display', 'Arial Narrow', var(--sans);
   font-weight: 700;
   font-stretch: 75%;
-  /* font-size 70 keeps even the widest two-digit glyph ("08", "80")
-     inside the 60-unit viewBox so the digit never clips horizontally. */
   font-size: 70px;
   letter-spacing: -2px;
   /* Deep teal — the digit is now clearly silhouetted against the card
@@ -405,16 +586,19 @@ li { margin-bottom: 0.4rem; }
 }
 .section-hero h1 em {
   font-style: italic;
-  color: var(--primary-mid);
-  font-weight: 600;
+  color: var(--ink-soft);
+  font-weight: 400;
 }
 .section-hero .lede {
-  font-size: 1.2rem;
+  font-family: var(--display);
+  font-size: 1.3rem;
   line-height: 1.55;
   color: var(--ink-soft);
-  margin: 0 0 1.2rem;
+  margin: 0 0 1.3rem;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--border);
   max-width: 42em;
-  font-style: italic;     /* editorial signal — see .lede */
+  font-style: italic;
 }
 .section-hero .lede p { margin: 0; }
 
@@ -559,7 +743,19 @@ a.cov-item:hover {
 
 /* ─────────── Detailed notes — chapter body ─────────── */
 
-.notes { margin: 0 0 3rem; }
+/* Reading-width container for body prose. Math, tables, callouts, and
+   figures can break out by using negative margins or `.bleed` — the cap
+   only applies to paragraph-flow children. */
+.notes {
+  margin: 0 0 3rem;
+  max-width: 68ch;
+}
+.notes .katex-display,
+.notes table,
+.notes .callout,
+.notes pre {
+  max-width: none;
+}
 
 /* Chapter divider (only when section spans multiple textbook chapters) */
 .notes h1 {
@@ -593,9 +789,10 @@ a.cov-item:hover {
 .notes h2,
 .glossary > h2,
 .mistakes h2 {
+  font-family: var(--display-sans);
   font-size: 1.55rem;
   font-weight: 600;
-  margin: 2.6rem 0 1rem;
+  margin: 4rem 0 1.1rem;
   padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--border);
   color: var(--ink);
@@ -609,8 +806,8 @@ a.cov-item:hover {
 .mistakes h2 { margin-bottom: 1.4rem; }
 .notes h3 {
   font-size: 1.2rem;
-  margin: 1.9rem 0 0.6rem;
-  color: var(--primary);
+  margin: 2.2rem 0 0.55rem;
+  color: var(--ink);
   font-weight: 600;
 }
 .notes h4 {
@@ -855,25 +1052,24 @@ a.cov-item:hover {
 .mistakes ul { margin: 0; padding-left: 0; list-style: none; }
 .mistakes li {
   position: relative;
-  padding: 0.85rem 1.1rem 0.85rem 2.6rem;
-  margin-bottom: 0.55rem;
-  background: var(--warm-pale);
+  padding: 0.6rem 0.2rem 0.6rem 2.6rem;
+  margin-bottom: 0.3rem;
+  background: transparent;
   border-left: 3px solid var(--warm);
-  border-radius: 0 4px 4px 0;
   color: var(--ink);
   line-height: 1.7;
-  font-size: 0.97rem;
+  font-size: 1rem;
 }
 .mistakes li::before {
   content: '!';
   position: absolute;
-  left: 0.85rem;
-  top: 0.95rem;
+  left: 0.9rem;
+  top: 0.7rem;
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 50%;
   background: var(--warm);
-  color: var(--surface);
+  color: var(--bg);
   font-family: var(--mono);
   font-size: 0.78rem;
   font-weight: 700;
@@ -885,11 +1081,10 @@ a.cov-item:hover {
 /* Don't touch the math font — KaTeX bundles its own (KaTeX_Main, etc.). */
 .katex { font-size: 1em; }
 .katex-display {
-  margin: 1.4rem 0;
-  padding: 1rem 1.2rem;
-  background: var(--primary-faint);
-  border-left: 3px solid color-mix(in srgb, var(--primary) 45%, transparent);
-  border-radius: 0 4px 4px 0;
+  margin: 1.6rem 0;
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  background: transparent;
+  border-left: 2px solid var(--border);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -907,44 +1102,59 @@ a.cov-item:hover {
 
 /* ─────────── Textbook callouts ─────────── */
 
+/* Callouts: one neutral surface for ALL lanes so the page never reads as
+   a stoplight. Category is signaled by (a) a colored uppercase chip
+   sitting on the top-left edge, and (b) a 3px colored left rule. The
+   chip + rule are the only places category colour appears. */
 .callout {
-  margin: 1.4rem 0;
-  padding: 1rem 1.3rem 1.1rem;
-  border-radius: 4px;
+  position: relative;
+  margin: 1.8rem 0;
+  padding: 1.2rem 1.3rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--border-strong);
-  background: var(--surface-alt);
+  border-radius: 6px;
 }
 .callout-label {
+  display: inline-block;
+  position: absolute;
+  top: -0.7rem;
+  left: 1rem;
+  padding: 0.18rem 0.55rem;
+  background: var(--bg);             /* punch through the box's top edge */
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: var(--ink-faded);
-  margin-bottom: 0.55rem;
+  border-radius: 3px;
+  margin: 0;
+  line-height: 1.2;
 }
-.callout-body { font-size: 0.97rem; line-height: 1.65; }
+.callout-body { font-size: 1rem; line-height: 1.65; color: var(--ink); margin-top: 0.15rem; }
+.callout-body > :first-child { margin-top: 0; }
 .callout-body p:last-child,
 .callout-body ul:last-child,
 .callout-body ol:last-child { margin-bottom: 0; }
-.callout-body .katex-display { margin: 0.8rem 0; }
-.callout-body .katex-display:first-child { margin-top: 0; }
-.callout-body .katex-display:last-child  { margin-bottom: 0; }
+.callout-body .katex-display {
+  margin: 0.9rem 0;
+  padding: 0;
+  border-left: none;
+  background: transparent;
+}
+.callout-body .katex-display:first-child { margin-top: 0.2rem; }
+.callout-body .katex-display:last-child  { margin-bottom: 0.2rem; }
 
-/* Four semantic lanes — see the CALLOUT_KINDS map in main.js for which
-   labels resolve to which lane:
-     .callout-primary   → examples, rules, theorems, proofs, lemmas …
-     .callout-success   → definitions
-     .callout-highlight → intuition / key idea / note / recall / remark
-     .callout-warning   → caveats / limitations / warnings / cautions
-*/
-.callout-primary   { border-left-color: var(--primary);   background: var(--primary-mist); }
+/* Four semantic lanes — only the left rule + chip colour vary; surface
+   stays neutral so the page reads as one consistent material. */
+.callout-primary   { border-left-color: var(--primary); }
 .callout-primary   .callout-label { color: var(--primary); }
-.callout-success   { border-left-color: var(--ok);        background: var(--ok-pale); }
+.callout-success   { border-left-color: var(--ok); }
 .callout-success   .callout-label { color: var(--ok); }
-.callout-highlight { border-left-color: var(--highlight); background: var(--highlight-pale); }
+.callout-highlight { border-left-color: var(--highlight); }
 .callout-highlight .callout-label { color: var(--highlight); }
-.callout-warning   { border-left-color: var(--warm);      background: var(--warm-pale); }
+.callout-warning   { border-left-color: var(--warm); }
 .callout-warning   .callout-label { color: var(--warm-deep, var(--warm)); }
 
 /* ─────────── Flashcards ─────────── */
