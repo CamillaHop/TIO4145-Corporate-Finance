@@ -206,7 +206,9 @@
     for (var i = 0; i < items.length; i++) items[i].classList.remove('nav-sr-active');
     if (idx >= 0 && idx < items.length) {
       items[idx].classList.add('nav-sr-active');
-      items[idx].scrollIntoView({ block: 'nearest' });
+      // Keep arrow-key navigation inside the dropdown — never bubble
+       // to the document and shift the whole page.
+      items[idx].scrollIntoView({ block: 'nearest', behavior: 'instant' });
     }
     active = idx;
   }
@@ -252,7 +254,9 @@
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
     e.preventDefault();
-    input.focus();
+    // preventScroll stops the browser from re-scrolling the page when
+    // focusing an input that's already visible inside the sticky nav.
+    input.focus({ preventScroll: true });
     input.select();
   });
 })();

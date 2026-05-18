@@ -237,14 +237,21 @@
 
     function activate(id) {
       links.forEach(function (a) { a.classList.remove('is-active'); });
-      if (id && byId[id]) {
-        byId[id].classList.add('is-active');
-        // Keep the active link in view inside the panel.
-        var rect = byId[id].getBoundingClientRect();
-        var pRect = panel.getBoundingClientRect();
-        if (rect.top < pRect.top || rect.bottom > pRect.bottom) {
-          byId[id].scrollIntoView({ block: 'nearest' });
-        }
+      if (!id || !byId[id]) return;
+      byId[id].classList.add('is-active');
+      // Only adjust the ToC body's own scroll when the rail is visible.
+      // While the panel is collapsed (visibility:hidden), scrollIntoView
+      // falls through to the document and shifts the whole page on
+      // first load — which is exactly what we don't want.
+      if (!rail.classList.contains('is-open') && !rail.matches(':hover')) return;
+      var body = panel.querySelector('.toc-rail-body');
+      if (!body) return;
+      var aRect = byId[id].getBoundingClientRect();
+      var bRect = body.getBoundingClientRect();
+      if (aRect.top < bRect.top) {
+        body.scrollTop -= (bRect.top - aRect.top);
+      } else if (aRect.bottom > bRect.bottom) {
+        body.scrollTop += (aRect.bottom - bRect.bottom);
       }
     }
 
