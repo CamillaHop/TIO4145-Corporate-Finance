@@ -10,9 +10,14 @@ __pycache__/
 node_modules/
 .DS_Store
 
-# Raw materials + prompt templates are not needed on the deployed site.
-resources/
+# Prompt templates are not needed on the deployed site.
 prompts/
+
+# Resource sidecars: ship the PDFs (the curriculum & section pages link
+# to them), but keep the parser sidecar JSONs out — they're tens of MB
+# of intermediate text used only during local content generation.
+resources/**/*.parsed.json
+resources/**/*.reducto.json
 
 # This repo contains Python tooling for generating content, but the deployed
 # website is static (dist/) + an optional Node serverless function (api/chat.js).

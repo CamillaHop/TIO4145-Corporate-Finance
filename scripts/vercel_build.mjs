@@ -26,7 +26,10 @@ async function copyFile(src, dest) {
   await fs.copyFile(src, dest);
 }
 
-async function copyDir(srcDir, destDir) {
+async function copyDir(srcDir, destDir, opts = {}) {
+  // Optional `filter(absPath, dirent)` returning `false` to skip a file
+  // or whole subtree. Used to ship only the PDFs from resources/.
+  const filter = opts.filter || (() => true);
   const entries = await fs.readdir(srcDir, { withFileTypes: true });
   await mkdirp(destDir);
 
@@ -34,8 +37,10 @@ async function copyDir(srcDir, destDir) {
     const srcPath = path.join(srcDir, entry.name);
     const destPath = path.join(destDir, entry.name);
 
+    if (!filter(srcPath, entry)) continue;
+
     if (entry.isDirectory()) {
-      await copyDir(srcPath, destPath);
+      await copyDir(srcPath, destPath, opts);
     } else if (entry.isSymbolicLink()) {
       const linkTarget = await fs.readlink(srcPath);
       await fs.symlink(linkTarget, destPath);
@@ -94,6 +99,19 @@ async function main() {
   const contextDir = path.join(ROOT, 'context');
   if (await exists(contextDir)) {
     await copyDir(contextDir, path.join(DIST, 'context'));
+  }
+
+  // Resources: ship only the PDFs (lecture slides, textbook chapters,
+  // exam papers, the full book). The .parsed.json / .reducto.json
+  // sidecars are local-only and would balloon the deploy size.
+  const resourcesDir = path.join(ROOT, 'resources');
+  if (await exists(resourcesDir)) {
+    await copyDir(resourcesDir, path.join(DIST, 'resources'), {
+      filter(_p, entry) {
+        if (entry.isDirectory()) return true;
+        return entry.isFile() && /\.pdf$/i.test(entry.name);
+      },
+    });
   }
 
   // Optional: expose vercel.json for debugging (harmless).
