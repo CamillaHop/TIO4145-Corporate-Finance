@@ -12,7 +12,6 @@ node_modules/
 
 # Raw materials + prompt templates are not needed on the deployed site.
 resources/
-context/
 prompts/
 
 # This repo contains Python tooling for generating content, but the deployed

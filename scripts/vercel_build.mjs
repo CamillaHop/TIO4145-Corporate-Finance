@@ -89,6 +89,12 @@ async function main() {
   await copyDir(webDir, path.join(DIST, 'web'));
   await copyDir(generatedDir, path.join(DIST, 'generated'));
   await copyFile(courseConfig, path.join(DIST, 'course_config.json'));
+  
+  // The landing page fetches the course description from here.
+  const contextDir = path.join(ROOT, 'context');
+  if (await exists(contextDir)) {
+    await copyDir(contextDir, path.join(DIST, 'context'));
+  }
 
   // Optional: expose vercel.json for debugging (harmless).
   const vercelJson = path.join(ROOT, 'vercel.json');
