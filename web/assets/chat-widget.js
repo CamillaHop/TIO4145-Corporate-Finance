@@ -245,6 +245,23 @@
     '}' +
     '.sca-form button:hover{background:var(--primary-deep);transform:translateY(-1px)}' +
     '.sca-form button:disabled{opacity:.5;cursor:wait;transform:none}' +
+    /* "Thinking…" pulse shown while the request is in flight and no
+       streamed text has arrived yet. Three dots that pulse in sequence. */
+    '.sca-thinking{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faded)}' +
+    '.sca-thinking-dots{display:inline-flex;gap:3px}' +
+    '.sca-thinking-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--primary);opacity:.35;animation:sca-pulse 1.1s infinite ease-in-out}' +
+    '.sca-thinking-dots span:nth-child(2){animation-delay:.18s}' +
+    '.sca-thinking-dots span:nth-child(3){animation-delay:.36s}' +
+    '@keyframes sca-pulse{0%,80%,100%{transform:scale(.7);opacity:.35}40%{transform:scale(1);opacity:1}}' +
+    /* Spinner inside the Send button while waiting for the first chunk */
+    '.sca-form button{position:relative}' +
+    '.sca-form button.is-loading{color:transparent}' +
+    '.sca-form button.is-loading::after{' +
+      'content:"";position:absolute;top:50%;left:50%;width:14px;height:14px;' +
+      'margin:-7px 0 0 -7px;border:2px solid color-mix(in srgb,var(--bg) 60%,transparent);' +
+      'border-top-color:var(--bg);border-radius:50%;animation:sca-spin .8s linear infinite' +
+    '}' +
+    '@keyframes sca-spin{to{transform:rotate(360deg)}}' +
     '.sca-typing{font-size:.85rem;color:var(--ink-faded);font-style:italic}' +
 
     '@media (max-width:560px){' +
@@ -386,7 +403,11 @@
     var el = document.createElement('div');
     el.className = 'sca-msg ' + role + (opts && opts.error ? ' error' : '');
     if (role === 'user') el.textContent = text;
-    else el.innerHTML = '<span class="sca-typing">…</span>';
+    else el.innerHTML =
+      '<span class="sca-thinking">' +
+        '<span class="sca-thinking-dots"><span></span><span></span><span></span></span>' +
+        'Thinking' +
+      '</span>';
     messagesEl.appendChild(el);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return el;
@@ -425,6 +446,8 @@
     var botEl = appendMsg('bot', '');
     busy = true;
     sendBtn.disabled = true;
+    sendBtn.classList.add('is-loading');
+    textareaEl.disabled = true;
     streamAnswer(q, botEl)
       .catch(function (err) {
         botEl.classList.add('error');
@@ -433,6 +456,8 @@
       .finally(function () {
         busy = false;
         sendBtn.disabled = false;
+        sendBtn.classList.remove('is-loading');
+        textareaEl.disabled = false;
         textareaEl.focus();
       });
   }

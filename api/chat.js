@@ -318,7 +318,54 @@ export async function POST(request) {
       continue;
     }
     if (resp.ok && resp.body) {
-      const ndjson = openRouterSseToNdjsonStream(resp.body);
+      // Peek at the first chunk to see whether this is real SSE or a
+      // JSON-wrapped provider error (OpenRouter returns provider 429s
+      // as HTTP 200 with a `{"error":...}` JSON body instead of SSE).
+      const reader = resp.body.getReader();
+      const { value: first, done: firstDone } = await reader.read();
+      const peek = first ? new TextDecoder().decode(first) : "";
+      const looksLikeError = peek.trim().startsWith("{") && /"error"\s*:/.test(peek);
+      if (looksLikeError) {
+        let parsed = {};
+        try { parsed = JSON.parse(peek); } catch {}
+        const code = parsed?.error?.code;
+        const msg  = parsed?.error?.message
+                  || parsed?.error?.metadata?.raw
+                  || "Provider error";
+        // Treat 429 / 503 / rate-limited as a fallback signal; cancel
+        // the upstream reader and try the next candidate model.
+        if (code === 429 || code === 503 || /rate-limit/i.test(msg)) {
+          try { await reader.cancel(); } catch {}
+          lastErr = new Error(`Model ${model} rate-limited: ${msg}`);
+          continue;
+        }
+        // Any other model-level error: surface it to the client.
+        try { await reader.cancel(); } catch {}
+        return Response.json(
+          { error: `Model error (${model}): ${msg}` },
+          { status: 502 }
+        );
+      }
+      // Real SSE — splice the first chunk back into a fresh stream and
+      // pass it through the SSE→NDJSON adapter.
+      const upstream = new ReadableStream({
+        start(controller) {
+          if (first) controller.enqueue(first);
+          if (firstDone) { controller.close(); return; }
+          (async () => {
+            try {
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                controller.enqueue(value);
+              }
+            } catch (err) { controller.error(err); }
+            finally { controller.close(); }
+          })();
+        },
+        cancel(reason) { try { reader.cancel(reason); } catch {} },
+      });
+      const ndjson = openRouterSseToNdjsonStream(upstream);
       return new Response(ndjson, { status: 200, headers: NDJSON_HEADERS });
     }
     let errBody = "";

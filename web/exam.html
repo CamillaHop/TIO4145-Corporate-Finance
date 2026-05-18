@@ -168,6 +168,32 @@
     return root.innerHTML;
   }
 
+  // Build the "Read more →" footer for a single .pattern-body element
+  // by scanning the original pattern text against the concept index,
+  // then surfacing up to 3 unique section pages as named links.
+  function populatePatternReadmore(body) {
+    var slot = body.querySelector('.pattern-readmore');
+    if (!slot || !conceptIndex.length) return;
+    var text = (body.getAttribute('data-pattern-text') || '').toLowerCase();
+    if (!text) return;
+    var seen = {};
+    var ordered = [];
+    conceptIndex.forEach(function (c) {
+      if (ordered.length >= 6) return;
+      var re = new RegExp('\\b' + escapeRe(c.lower) + '\\b');
+      if (!re.test(text)) return;
+      if (seen[c.url]) return;
+      seen[c.url] = c.phrase;
+      ordered.push({ url: c.url, label: c.phrase });
+    });
+    if (!ordered.length) return;
+    slot.innerHTML =
+      '<span class="pattern-readmore-label">Read more</span>' +
+      ordered.slice(0, 4).map(function (o) {
+        return '<a href="' + o.url + '">' + StudySite.escapeHtml(o.label) + ' →</a>';
+      }).join('');
+  }
+
   function init() {
     StudySite.loadConfig().then(function (cfg) {
       StudySite.applyCourseChrome(cfg);
@@ -185,6 +211,9 @@
         document.querySelectorAll(
           '.topic-weight-why, .pattern-example, .pattern-tip'
         ).forEach(function (el) { el.innerHTML = autolink(el.innerHTML); });
+        // For each pattern, derive a "Read more" footer from the
+        // concept matches found in its prose, ranked by relevance.
+        document.querySelectorAll('.pattern-body').forEach(populatePatternReadmore);
         StudySite.renderMath(document.getElementById('root'));
       });
     }).catch(function (err) {
@@ -285,17 +314,16 @@
               '<span class="pattern-name">' + renderInlineMd(p.pattern) + '</span>' +
               '<span class="pattern-freq">' + StudySite.escapeHtml(p.frequency || '') + '</span>' +
             '</summary>' +
-            '<div class="pattern-body">' +
+            '<div class="pattern-body" data-pattern-text="' +
+                StudySite.escapeHtml(((p.pattern || '') + ' ' + (p.example || '') + ' ' + (p.tip || ''))) +
+              '">' +
               (p.example
                 ? '<div class="pattern-example"><span class="pattern-label">Example</span>' + renderBlockMd(p.example) + '</div>'
                 : '') +
               (p.tip
                 ? '<div class="pattern-tip"><span class="pattern-label">Tactic</span>' + renderBlockMd(p.tip) + '</div>'
                 : '') +
-              '<div class="pattern-links">' +
-                '<a href="mock_exams.html">Try a mock paper →</a>' +
-                '<a href="flashcards.html">Drill flashcards</a>' +
-              '</div>' +
+              '<div class="pattern-readmore"></div>' +
             '</div>' +
           '</details>'
         );

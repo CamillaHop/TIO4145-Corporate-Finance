@@ -43,7 +43,7 @@
 </header>
 
 <main class="container section-content" id="main">
-  <section class="exam-block" id="mock-exams">
+  <section class="mock-home">
     <div id="root">
       <p class="empty-state"><span>Loading mock papers…</span></p>
     </div>
@@ -89,40 +89,44 @@
         '<div class="empty-state"><p>No mock exams listed in <code>exam_prep.json</code>.</p></div>';
       return;
     }
-    var html = ['<div class="mock-grid">'];
+    var html = ['<div class="mock-home-grid">'];
     mocks.forEach(function (m, i) {
       if (!m || typeof m !== 'object') return;
-      var mid = StudySite.escapeHtml(m.id || ('mock_0' + (i + 1)));
+      var mid   = StudySite.escapeHtml(m.id || ('mock_0' + (i + 1)));
+      var num   = StudySite.escapeHtml((i + 1).toString().padStart(2, '0'));
       var focus = Array.isArray(m.focus_topics) ? m.focus_topics : [];
       html.push(
-        '<a class="mock-card" href="mock_exam.html?id=' + encodeURIComponent(m.id || '') + '">' +
-          '<div class="mock-card-head">' +
-            '<span class="mock-card-num">' + StudySite.escapeHtml((i + 1).toString().padStart(2, '0')) + '</span>' +
-            '<div>' +
-              '<div class="mock-card-title">' + StudySite.renderInline(m.title || mid) + '</div>' +
-              (m.summary ? '<p class="mock-card-summary">' + StudySite.renderInline(m.summary) + '</p>' : '') +
+        '<article class="mock-tile">' +
+          '<a class="mock-tile-link" href="mock_exam.html?id=' + encodeURIComponent(m.id || '') + '">' +
+            '<div class="mock-tile-num" aria-hidden="true">' + num + '</div>' +
+            '<div class="mock-tile-body">' +
+              '<p class="mock-tile-eyebrow">Mock paper ' + num + '</p>' +
+              '<h2 class="mock-tile-title">' + StudySite.renderInline(m.title || mid) + '</h2>' +
+              (m.summary
+                ? '<p class="mock-tile-summary">' + StudySite.renderInline(m.summary) + '</p>'
+                : '') +
+              (focus.length
+                ? '<ul class="mock-tile-tags">' +
+                    focus.map(function (f) { return '<li>' + StudySite.escapeHtml(f) + '</li>'; }).join('') +
+                  '</ul>'
+                : '') +
             '</div>' +
-          '</div>' +
-          (focus.length
-            ? '<div class="mock-card-tags">' +
-                focus.map(function (f) { return '<span class="mock-tag">' + StudySite.escapeHtml(f) + '</span>'; }).join('') +
-              '</div>'
-            : '') +
-          '<div class="mock-card-actions">' +
-            '<span class="mock-cta">Sit interactively →</span>' +
-            '<span class="mock-pdf-row">' +
-              '<a class="mock-pdf-btn" href="../generated/exam/tex/' + mid + '.zip" download onclick="event.stopPropagation()" title="LaTeX project zip — upload to Overleaf or compile with latexmk">Overleaf zip</a>' +
-            '</span>' +
-          '</div>' +
-        '</a>'
+          '</a>' +
+          '<footer class="mock-tile-foot">' +
+            '<a class="mock-tile-cta" href="mock_exam.html?id=' + encodeURIComponent(m.id || '') + '">' +
+              'Sit interactively →' +
+            '</a>' +
+            '<a class="mock-tile-zip" href="../generated/exam/tex/' + mid + '.zip" download ' +
+                'title="LaTeX project zip — upload to Overleaf">' +
+              '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>' +
+              '<span>Overleaf zip</span>' +
+            '</a>' +
+          '</footer>' +
+        '</article>'
       );
     });
     html.push('</div>');
-    var root = document.getElementById('root');
-    root.innerHTML = html.join('');
-    root.querySelectorAll('.mock-pdf-btn').forEach(function (a) {
-      a.addEventListener('click', function (e) { e.stopPropagation(); });
-    });
+    document.getElementById('root').innerHTML = html.join('');
   }
 
   if (document.readyState === 'loading') {
