@@ -1,8 +1,48 @@
-"""Shared utilities for the course-study skeleton.
+r"""Shared utilities for the course-study skeleton.
 
 Reads course_config.json, context files, prompt templates, and exposes a
 provider-agnostic call_llm() that dispatches to OpenRouter (default) or
 Anthropic based on the configured provider.
+
+────────────────────────────────────────────────────────────────────────
+LaTeX / JSON-parsing pipeline overview
+────────────────────────────────────────────────────────────────────────
+
+When an LLM is asked to emit JSON containing LaTeX, two things can go
+wrong: it sometimes single-escapes backslashes (writing `\\sum` on the
+wire as `\sum`, which is an invalid JSON escape for "s"), and free-tier
+models occasionally wrap output in markdown fences or a chatty preamble.
+We handle both before json.loads:
+
+    raw text from API
+        │
+        ▼
+    _strip_fences        — drops ```json … ``` wrappers
+        │
+        ▼
+    _extract_json_payload — slices from first `[` or `{` to last closer,
+                            stripping "Here's the JSON:" style preamble
+        │
+        ▼
+    _repair_latex_escapes — math-context-aware backslash repair:
+                            • inside $...$ / $$...$$ : doubles unpaired
+                              backslashes so LaTeX commands survive
+                              json.loads (\frac → \\frac, \sum → \\sum)
+                            • outside math: leaves \n \t \r etc. alone
+                              so genuine JSON newlines aren't corrupted
+        │
+        ▼
+    json.loads → Python dict
+
+The browser side (web/assets/main.js) then has a smaller parallel: it
+protects $...$ math blocks from marked.js before parsing markdown, so
+expressions like $r_E$ don't get italic-mangled. See protectMath /
+restoreMath / styleCallouts there.
+
+The repair logic is a SAFETY NET for inconsistent LLM output. If the
+LLM consistently double-escapes (as Sonnet usually does, given a clear
+prompt), `_repair_latex_escapes` is a no-op. The prompts in prompts/
+spell out the escape rule explicitly so the safety net rarely fires.
 """
 from __future__ import annotations
 

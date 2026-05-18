@@ -135,6 +135,15 @@ MATH FORMATTING (this is critical — the renderer is strict)
   `\text{…}`, `\underbrace{…}_{…}`, `\boxed{…}`, `\bar{R}`, `\hat{\beta}`,
   `\Rightarrow`, `\geq`, `\leq`, `\cdot`, `\times`, `\to`, `\infty`.
 
+• **JSON escape rule.** Every LaTeX backslash must be doubled in the
+  emitted JSON: write `\\frac`, `\\sum`, `\\beta`, `\\sigma`, `\\text{…}`,
+  `\\Delta`, NOT single backslashes. Single-backslash sequences like
+  `\s`, `\D`, `\R` are invalid JSON escapes and fail to parse.
+
+• **Never use Unicode Greek.** Write `\\beta`, `\\sigma`, `\\Delta` — not
+  `β`, `σ`, `Δ`. KaTeX renders LaTeX commands; Unicode Greek will appear
+  as literal symbols outside math mode and won't typeset consistently.
+
 ═══════════════════════════════════════════════════════════════════════════
 FIELD-BY-FIELD GUIDE
 ═══════════════════════════════════════════════════════════════════════════

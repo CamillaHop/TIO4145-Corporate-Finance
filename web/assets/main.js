@@ -138,29 +138,40 @@
       .replace(/@@LITDOLLAR@@/g, '<span class="lit-dollar">$</span>');
   }
 
-  // Textbook-style callouts. The LLM (and most finance/math writing)
-  // conventionally opens a "callout" paragraph with **Label:** (bold +
-  // colon). We promote those to <aside class="callout callout-{kind}">
-  // blocks so CSS can box them like a textbook would.
+  // Textbook-style callouts. The LLM opens a "callout" paragraph with
+  // **Label:** (bold + colon) — we promote that paragraph AND any
+  // subsequent block content (lists, display math, follow-on prose)
+  // into a single <aside class="callout callout-{kind}"> so CSS can
+  // box them like a textbook would.
+  //
+  // Four semantic lanes (consolidated from a longer list of labels):
+  //   primary   — examples, rules, formal results (theorem/proof/etc.)
+  //   success   — definitions
+  //   highlight — intuition / key takeaways / notes
+  //   warning   — caveats / limitations / mistakes
   var CALLOUT_KINDS = {
-    'worked example':  'example',
-    'example':         'example',
-    'definition':      'definition',
-    'theorem':         'theorem',
-    'proposition':     'theorem',
-    'lemma':           'theorem',
-    'corollary':       'theorem',
-    'proof':           'proof',
-    'rule':            'rule',
-    'key insight':     'insight',
-    'insight':         'insight',
-    'intuition':       'insight',
-    'key idea':        'insight',
-    'key lesson':      'insight',
-    'key fact':        'insight',
-    'note':            'note',
-    'recall':          'note',
-    'remark':          'note',
+    // primary: examples and formal results
+    'worked example':  'primary',
+    'example':         'primary',
+    'rule':            'primary',
+    'theorem':         'primary',
+    'proposition':     'primary',
+    'lemma':           'primary',
+    'corollary':       'primary',
+    'proof':           'primary',
+    // success: defined concept
+    'definition':      'success',
+    // highlight: intuition and takeaways
+    'key insight':     'highlight',
+    'insight':         'highlight',
+    'intuition':       'highlight',
+    'key idea':        'highlight',
+    'key lesson':      'highlight',
+    'key fact':        'highlight',
+    'note':            'highlight',
+    'recall':          'highlight',
+    'remark':          'highlight',
+    // warning: caveats and limitations
     'caveat':          'warning',
     'caveats':         'warning',
     'real-world caveats': 'warning',
@@ -169,22 +180,123 @@
     'warning':         'warning',
     'caution':         'warning'
   };
-  function styleCallouts(html) {
-    return html.replace(
-      /<p><strong>([^<:]+?)(\s*\([^)]*\))?:<\/strong>([\s\S]*?)<\/p>/g,
-      function (whole, label, suffix, body) {
-        var key = label.toLowerCase().trim();
-        var kind = CALLOUT_KINDS[key];
-        if (!kind) return whole;
-        var fullLabel = label + (suffix || '');
-        return (
-          '<aside class="callout callout-' + kind + '">' +
-            '<div class="callout-label">' + fullLabel + '</div>' +
-            '<div class="callout-body">' + body.trim() + '</div>' +
-          '</aside>'
-        );
+
+  // Try to read "Label:" / "Label (suffix):" from a <p>'s first <strong>.
+  // Returns { kind, fullLabel, inlineBody } or null if not a callout opener.
+  function detectCalloutOpener(p) {
+    if (!p || p.tagName !== 'P') return null;
+    var first = p.firstElementChild;
+    if (!first || first.tagName !== 'STRONG') return null;
+    // The <strong> can be only ONE preceding child — if there's something
+    // before it (a text node), this isn't a callout opener.
+    var fc = p.firstChild;
+    if (fc !== first && !(fc.nodeType === 3 && !fc.textContent.trim())) return null;
+
+    var strongText = (first.textContent || '').trim();
+    // Match "Label:" or "Label (suffix):"
+    var m = strongText.match(/^([^:(]+?)(\s*\([^)]*\))?:$/);
+    if (!m) return null;
+    var label = m[1].trim();
+    var suffix = m[2] || '';
+    var kind = CALLOUT_KINDS[label.toLowerCase()];
+    if (!kind) return null;
+
+    // Inline body is whatever non-strong content sits in the <p> after
+    // the <strong>. Collect those child nodes.
+    var inlineBody = document.createDocumentFragment();
+    var sib = first.nextSibling;
+    // Trim a leading whitespace text node if present.
+    if (sib && sib.nodeType === 3 && /^\s+/.test(sib.textContent)) {
+      sib.textContent = sib.textContent.replace(/^\s+/, '');
+      if (!sib.textContent) {
+        var dead = sib;
+        sib = sib.nextSibling;
+        dead.parentNode.removeChild(dead);
       }
+    }
+    while (sib) {
+      var next = sib.nextSibling;
+      inlineBody.appendChild(sib);  // moves out of <p>
+      sib = next;
+    }
+    return { kind: kind, fullLabel: label + suffix, inlineBody: inlineBody };
+  }
+
+  // True if an element is a hard stop for collecting callout body content:
+  // a heading, an hr, another callout opener, or an existing callout aside.
+  function isCalloutBoundary(el) {
+    if (!el || el.nodeType !== 1) return false;
+    var tag = el.tagName;
+    if (tag === 'H1' || tag === 'H2' || tag === 'H3' || tag === 'H4'
+        || tag === 'H5' || tag === 'H6' || tag === 'HR') return true;
+    if (tag === 'ASIDE' && el.classList && el.classList.contains('callout')) return true;
+    // Another callout opener — peek into its first <strong>.
+    if (tag === 'P' && el.firstElementChild
+        && el.firstElementChild.tagName === 'STRONG') {
+      var st = (el.firstElementChild.textContent || '').trim();
+      var mm = st.match(/^([^:(]+?)(\s*\([^)]*\))?:$/);
+      if (mm && CALLOUT_KINDS[mm[1].trim().toLowerCase()]) return true;
+    }
+    return false;
+  }
+
+  // Walk the post-marked HTML and promote each `**Label:**` paragraph
+  // (plus everything that visually belongs to it) into an <aside>.
+  function styleCallouts(html) {
+    if (!window.DOMParser) return html;
+    var doc = new DOMParser().parseFromString(
+      '<!doctype html><html><body><div id="__root">' + html + '</div></body></html>',
+      'text/html'
     );
+    var root = doc.getElementById('__root');
+    if (!root) return html;
+
+    // Walk children in source order; build a new fragment with callouts wrapped.
+    var children = Array.prototype.slice.call(root.children);
+    var i = 0;
+    while (i < children.length) {
+      var el = children[i];
+      var opener = detectCalloutOpener(el);
+      if (!opener) { i++; continue; }
+
+      // Build <aside> in the SAME document so we can move nodes into it.
+      var aside = doc.createElement('aside');
+      aside.className = 'callout callout-' + opener.kind;
+      var labelEl = doc.createElement('div');
+      labelEl.className = 'callout-label';
+      labelEl.textContent = opener.fullLabel;
+      var bodyEl = doc.createElement('div');
+      bodyEl.className = 'callout-body';
+      if (opener.inlineBody && opener.inlineBody.childNodes.length) {
+        // Wrap inline body in a <p> so it gets paragraph margins.
+        var inlinePara = doc.createElement('p');
+        inlinePara.appendChild(opener.inlineBody);
+        // Skip empty paragraphs (e.g. label was on its own line).
+        if (inlinePara.textContent.trim() || inlinePara.children.length) {
+          bodyEl.appendChild(inlinePara);
+        }
+      }
+      aside.appendChild(labelEl);
+      aside.appendChild(bodyEl);
+
+      // Replace the opener paragraph with the aside, then absorb following
+      // siblings until we hit a boundary.
+      el.parentNode.replaceChild(aside, el);
+
+      // Walk forward in the live tree (children[] is stale after replace).
+      var sib = aside.nextElementSibling;
+      while (sib && !isCalloutBoundary(sib)) {
+        var nextSib = sib.nextElementSibling;
+        bodyEl.appendChild(sib);   // moves sib into the aside body
+        sib = nextSib;
+      }
+
+      // Rebuild children array from the live tree and advance past the aside.
+      children = Array.prototype.slice.call(root.children);
+      i = Array.prototype.indexOf.call(children, aside) + 1;
+    }
+
+    return root.innerHTML;
   }
 
   function renderMarkdown(md) {

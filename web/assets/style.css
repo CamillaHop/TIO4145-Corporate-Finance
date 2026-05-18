@@ -1,5 +1,5 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Big+Shoulders+Display:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Big+Shoulders+Display:wght@500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
 
 /* ─────────────────────────────────────────────────────────────────────
    Palette built around the project accent #094459 (deep teal).
@@ -46,11 +46,17 @@
   --theorem:        #94455c;   /* theorems / propositions (muted plum) */
   --theorem-pale:   #f5e2e9;
 
-  /* Typography — General Sans is the body face: a carefully drawn,
-     slightly geometric sans-serif with humanist proportions. System fonts
-     are the fallback chain in case Fontshare is unreachable. */
+  /* Typography:
+     --sans     General Sans, the body face (humanist, slightly geometric)
+     --display  Manrope, used only for h1 and h2 — gives headings a
+                distinct voice without breaking the sans-only constraint
+     --mono     IBM Plex Mono for code, eyebrows, badges, TOC numbers
+     Big Shoulders Display is also loaded but used only inside the section
+     card SVGs (see .section-card .sc-num text), not for HTML headings. */
   --sans: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
           Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --display: 'Manrope', 'General Sans', -apple-system, BlinkMacSystemFont,
+             'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', 'JetBrains Mono', 'SF Mono', Menlo,
           Consolas, monospace;
 }
@@ -118,13 +124,17 @@ a {
 }
 a:hover { color: var(--primary); border-color: var(--primary); }
 
+/* h1/h2 use --display (Manrope) for a distinct editorial voice;
+   h3/h4 stay on --sans (General Sans) so finer subsection headings feel
+   continuous with the body, not like more "loud" headlines. */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--sans);
   color: var(--ink);
   letter-spacing: -0.01em;
   line-height: 1.25;
   margin-top: 0;
 }
+h1, h2 { font-family: var(--display); }
+h3, h4, h5, h6 { font-family: var(--sans); }
 h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
 h2 { font-size: 1.7rem; font-weight: 600; margin: 2.4rem 0 1rem; }
 h3 { font-size: 1.22rem; font-weight: 600; margin: 1.8rem 0 0.65rem; }
@@ -219,6 +229,7 @@ li { margin-bottom: 0.4rem; }
   max-width: 38em;
   margin-top: 1rem;
   font-weight: 400;
+  font-style: italic;     /* editorial signal — distinguishes the intro */
 }
 
 /* ─────────── Index — section grid ─────────── */
@@ -403,6 +414,7 @@ li { margin-bottom: 0.4rem; }
   color: var(--ink-soft);
   margin: 0 0 1.2rem;
   max-width: 42em;
+  font-style: italic;     /* editorial signal — see .lede */
 }
 .section-hero .lede p { margin: 0; }
 
@@ -574,8 +586,13 @@ a.cov-item:hover {
 }
 .notes h1:first-child { margin-top: 0; }
 
-/* Subsection heading — LLM provides the X.Y number in heading text */
-.notes h2 {
+/* Shared section-heading base used in .notes (subsection), .glossary,
+   .mistakes. Same size, weight, divider — the only difference is the
+   small ::before mono-label content (defined per context). Keeps the
+   page rhythm consistent across the body / glossary / pitfalls bands. */
+.notes h2,
+.glossary > h2,
+.mistakes h2 {
   font-size: 1.55rem;
   font-weight: 600;
   margin: 2.6rem 0 1rem;
@@ -583,8 +600,13 @@ a.cov-item:hover {
   border-bottom: 1px solid var(--border);
   color: var(--ink);
   letter-spacing: -0.005em;
+  position: relative;
 }
-.notes h2:first-child { margin-top: 0; }
+.notes h2:first-child,
+.glossary > h2,
+.mistakes h2 { margin-top: 0; }
+.glossary > h2,
+.mistakes h2 { margin-bottom: 1.4rem; }
 .notes h3 {
   font-size: 1.2rem;
   margin: 1.9rem 0 0.6rem;
@@ -709,15 +731,6 @@ a.cov-item:hover {
 /* ─────────── Glossary (key concepts) ─────────── */
 
 .glossary { margin-top: 3rem; }
-.glossary > h2 {
-  font-size: 1.55rem;
-  font-weight: 600;
-  margin: 0 0 1.4rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
-  position: relative;
-}
 .glossary > h2::before {
   content: 'glossary';
   display: block;
@@ -828,15 +841,6 @@ a.cov-item:hover {
 /* ─────────── Common mistakes / pitfalls ─────────── */
 
 .mistakes { margin: 3rem 0 2rem; }
-.mistakes h2 {
-  font-size: 1.55rem;
-  font-weight: 600;
-  margin: 0 0 1.4rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
-  position: relative;
-}
 .mistakes h2::before {
   content: 'common pitfalls';
   display: block;
@@ -927,21 +931,21 @@ a.cov-item:hover {
 .callout-body .katex-display:first-child { margin-top: 0; }
 .callout-body .katex-display:last-child  { margin-bottom: 0; }
 
-.callout-example    { border-left-color: var(--primary); background: var(--primary-mist); }
-.callout-example    .callout-label { color: var(--primary); }
-.callout-definition { border-left-color: var(--ok); background: var(--ok-pale); }
-.callout-definition .callout-label { color: var(--ok); }
-.callout-theorem    { border-left-color: var(--theorem); background: var(--theorem-pale); }
-.callout-theorem    .callout-label { color: var(--theorem); }
-.callout-proof      { border-left-color: var(--ink-faded); background: var(--surface-alt); }
-.callout-proof      .callout-label { color: var(--ink-faded); }
-.callout-rule       { border-left-color: var(--primary-deep); background: var(--primary-mist); }
-.callout-rule       .callout-label { color: var(--primary-deep); }
-.callout-insight    { border-left-color: var(--highlight); background: var(--highlight-pale); }
-.callout-insight    .callout-label { color: var(--highlight); }
-.callout-warning    { border-left-color: var(--warm); background: var(--warm-pale); }
-.callout-warning    .callout-label { color: var(--warm-deep, var(--warm)); }
-.callout-note       { border-left-color: var(--border-strong); }
+/* Four semantic lanes — see the CALLOUT_KINDS map in main.js for which
+   labels resolve to which lane:
+     .callout-primary   → examples, rules, theorems, proofs, lemmas …
+     .callout-success   → definitions
+     .callout-highlight → intuition / key idea / note / recall / remark
+     .callout-warning   → caveats / limitations / warnings / cautions
+*/
+.callout-primary   { border-left-color: var(--primary);   background: var(--primary-mist); }
+.callout-primary   .callout-label { color: var(--primary); }
+.callout-success   { border-left-color: var(--ok);        background: var(--ok-pale); }
+.callout-success   .callout-label { color: var(--ok); }
+.callout-highlight { border-left-color: var(--highlight); background: var(--highlight-pale); }
+.callout-highlight .callout-label { color: var(--highlight); }
+.callout-warning   { border-left-color: var(--warm);      background: var(--warm-pale); }
+.callout-warning   .callout-label { color: var(--warm-deep, var(--warm)); }
 
 /* ─────────── Flashcards ─────────── */
 
