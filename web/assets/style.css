@@ -3137,8 +3137,21 @@ a.cov-item:hover {
 .empty-state code { font-size: 0.85em; background: var(--surface-alt); }
 
 /* ─────────── Mindmap ─────────── */
-/* Page layout: a controls toolbar above a tall canvas with an
+/* Page layout: a controls toolbar above a wide-format canvas with an
    absolutely-positioned slide-out detail panel and a legend below. */
+
+/* Wider container than the default 820px / 1080px tiers so the canvas
+   gets the horizontal real estate it needs to read as a landscape
+   diagram instead of a portrait one. */
+.container-mindmap {
+  max-width: min(1480px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+}
+@media (max-width: 640px) {
+  .container-mindmap { padding: 0 16px; }
+}
 
 .mm-toolbar {
   display: flex;
@@ -3230,21 +3243,20 @@ a.cov-item:hover {
   border-color: var(--primary) !important;
 }
 
-/* Canvas — tall, contained, with a clipping border so Cytoscape's
-   pan stays inside the card. */
+/* Canvas — wide landscape format. Height is capped so the canvas
+   always reads wider than tall on a typical laptop / desktop. */
 .mm-canvas-wrap {
   position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
-  min-height: 560px;
+  min-height: 460px;
 }
 .mm-canvas {
   width: 100%;
-  height: 70vh;
-  min-height: 560px;
-  max-height: 820px;
+  /* Cap at ~9:16 of the container width — guarantees landscape. */
+  height: clamp(460px, 56vh, 720px);
 }
 .mm-loading {
   position: absolute;

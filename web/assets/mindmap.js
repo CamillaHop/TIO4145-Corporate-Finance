@@ -550,29 +550,52 @@
     return positions;
   }
 
+  // After any layout, stretch node positions on the x axis so the
+  // roughly-circular force / radial layout fills the wide canvas
+  // instead of leaving big horizontal gutters. The factor is the
+  // canvas aspect ratio, clamped so the graph never gets weirdly
+  // squashed on near-square viewports.
+  function stretchToCanvas(cy) {
+    var w = cy.width(), h = cy.height();
+    if (!w || !h) return;
+    var factor = Math.max(1.15, Math.min(2.0, (w / h) * 0.95));
+    var bb = cy.elements().boundingBox();
+    var cx = (bb.x1 + bb.x2) / 2;
+    cy.batch(function () {
+      cy.nodes().forEach(function (n) {
+        var p = n.position();
+        n.position({ x: cx + (p.x - cx) * factor, y: p.y });
+      });
+    });
+    cy.animate({ fit: { padding: 36 }, duration: 220 });
+  }
+
   function applyLayout(cy, mode) {
     if (mode === 'tree') {
       // Hide bridges; they create radial chaos.
       cy.edges('[kind="bridge"]').addClass('bridge-hidden');
       var pos = radialPositions(cy);
-      cy.layout({
+      var lay = cy.layout({
         name: 'preset',
         positions: function (n) { return pos[n.id()] || { x: 0, y: 0 }; },
         animate: true,
         animationDuration: 500,
-        fit: true,
-        padding: 40,
-      }).run();
+        fit: false,
+        padding: 36,
+      });
+      lay.one('layoutstop', function () { stretchToCanvas(cy); });
+      lay.run();
     } else {
       cy.edges('[kind="bridge"]').removeClass('bridge-hidden');
       var hasFcose = !!(window.cytoscape && window.cytoscape('layout', 'fcose'));
+      var lay;
       if (hasFcose) {
-        cy.layout({
+        lay = cy.layout({
           name: 'fcose',
           animate: 'end',
           animationDuration: 600,
-          fit: true,
-          padding: 40,
+          fit: false,
+          padding: 36,
           randomize: false,
           // Heavier repulsion + much longer ideal edges → clusters
           // separate clearly instead of collapsing into one ball.
@@ -587,22 +610,24 @@
           gravityRangeCompound: 1.5,
           nestingFactor: 0.3,
           numIter: 3000,
-        }).run();
+        });
       } else {
-        cy.layout({
+        lay = cy.layout({
           name: 'cose',
           animate: 'end',
           animationDuration: 600,
-          fit: true,
-          padding: 40,
+          fit: false,
+          padding: 36,
           randomize: false,
           nodeRepulsion: function () { return 350000; },
           idealEdgeLength: function () { return 110; },
           edgeElasticity: function () { return 80; },
           gravity: 35,
           numIter: 1500,
-        }).run();
+        });
       }
+      lay.one('layoutstop', function () { stretchToCanvas(cy); });
+      lay.run();
     }
   }
 
@@ -808,6 +833,11 @@
       return loadAll();
     }).then(function (vals) {
       var cfg = vals[0], sectionsData = vals[1], exam = vals[2], fc = vals[3];
+      // Fill the nav brand chip + the title + the chat-widget meta tags.
+      // All other pages call this; without it the `<a class="brand"
+      // data-course-code>—</a>` stays as a literal em-dash.
+      try { StudySite.applyCourseChrome(cfg); } catch (e) {}
+      try { StudySite.maybeLoadChat(cfg); }     catch (e) {}
       var graph = buildGraph(cfg, sectionsData, exam, fc);
 
       if (loadingEl) loadingEl.style.display = 'none';
@@ -866,6 +896,16 @@
         searchEl.value = params.q;
         setTimeout(function () { searchFor && searchFor(params.q); }, 800);
       }
+
+      // Re-fit on window resize so the graph keeps its landscape
+       // proportions when the canvas itself reflows.
+      var resizeTimer = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          cy.animate({ fit: { padding: 36 }, duration: 200 });
+        }, 180);
+      });
 
       // Re-style on theme change so node colours stay coherent.
       var mq = window.matchMedia('(prefers-color-scheme: dark)');
