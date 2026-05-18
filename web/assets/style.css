@@ -1,5 +1,5 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&family=Big+Shoulders+Display:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..900;1,8..60,400..900&display=swap');
 
 /* ─────────────────────────────────────────────────────────────────────
    Palette built around the project accent #094459 (deep teal).
@@ -259,23 +259,23 @@ li { margin-bottom: 0.4rem; }
 }
 .site-nav a:hover { text-decoration: none; }
 
+/* Soft pill language across the whole nav — no borders, no chip
+   silhouette. Brand becomes a quiet wordmark in primary, nav-links
+   become bg-tinted pills on hover, and the theme toggle drops its
+   border too. The active page sits in --primary-mist (a more
+   saturated fill than the hover state) for clear hierarchy. */
 .site-nav .brand {
   font-family: var(--mono);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--ink);
-  padding: 6px 10px;
-  border: 1px solid var(--border) !important;   /* override .site-nav a */
-  border-radius: 4px;
-  transition: background .15s ease, border-color .15s ease, color .15s ease;
-}
-.site-nav .brand:hover {
   color: var(--primary);
-  background: var(--surface);
-  border-color: var(--border-strong) !important;
+  padding: 4px 2px;
+  border: none !important;
+  transition: color .15s ease;
 }
+.site-nav .brand:hover { color: var(--primary-deep); }
 .site-nav .nav-back {
   font-size: 0.88rem;
   color: var(--ink-faded);
@@ -419,11 +419,12 @@ li { margin-bottom: 0.4rem; }
   #nav-search-results { right: -0.5rem; width: calc(100vw - 1rem); }
 }
 
-/* Right-side nav links — minimalist pill links. Active page is filled,
-   others are hover-only. The mono font matches the brand chip's vibe. */
+/* Soft pills — no borders. Hover fills with a faint tinted background;
+   the active page sits in a slightly more saturated --primary-mist
+   so it reads as "you are here" without needing an outline. */
 .site-nav .nav-links {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   align-items: center;
   flex-shrink: 0;
 }
@@ -434,23 +435,26 @@ li { margin-bottom: 0.4rem; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  padding: 6px 10px;
-  border-radius: 4px;
+  padding: 6px 11px;
+  border-radius: 5px;
   white-space: nowrap;
   transition: background .15s ease, color .15s ease;
 }
 .site-nav .nav-links a:hover {
   color: var(--primary);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--primary-mist) 70%, transparent);
 }
 .site-nav .nav-links a[aria-current="page"] {
   color: var(--primary);
   background: var(--primary-mist);
+  font-weight: 600;
 }
 
 /* Theme toggle — icon-only square button. The sun (light) and moon
    (dark) glyphs are layered as SVG inside the button; CSS shows the
    one matching the current effective theme. */
+/* Borderless circle — matches the soft-pill language of the nav links.
+   Hover fills with the same tinted background, no chip outline. */
 .theme-toggle {
   display: inline-grid;
   place-items: center;
@@ -459,17 +463,16 @@ li { margin-bottom: 0.4rem; }
   padding: 0;
   margin-left: 4px;
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 5px;
   color: var(--ink-soft);
   cursor: pointer;
   font: inherit;
-  transition: color .15s ease, background .15s ease, border-color .15s ease;
+  transition: color .15s ease, background .15s ease;
 }
 .theme-toggle:hover {
   color: var(--primary);
-  background: var(--surface);
-  border-color: var(--border);
+  background: color-mix(in srgb, var(--primary-mist) 70%, transparent);
 }
 .theme-toggle svg {
   width: 16px;
@@ -788,8 +791,8 @@ li { margin-bottom: 0.4rem; }
 }
 
 .section-card {
-  --sc-num-col: 4.6rem;     /* left column width */
-  --sc-overlap: 1.25rem;    /* how far the card slides under the number */
+  --sc-num-col: 6.4rem;     /* left column width — big enough for two-digit numerals at the display size */
+  --sc-overlap: 1.6rem;     /* how far the card slides under the number */
   --sc-pad-y:   1.25rem;
   --sc-pad-x:   1.4rem;
 
@@ -810,47 +813,45 @@ li { margin-bottom: 0.4rem; }
 
 /* Decorative number column — pinned to grid column 1, raised in the
    stacking context so the digit sits ON TOP of the body where the two
-   visually overlap. */
+   visually overlap. The glyph itself is vertically stretched with
+   scaleY so it reads as a dramatic editorial display, while the
+   gradient + Source Serif 4 typography keep it cohesive with the
+   mock-exam tile numerals. */
 .section-card .sc-num {
   grid-column: 1;
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: stretch;
-  justify-content: stretch;
-  pointer-events: none;
-}
-.section-card .sc-num svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  align-items: center;
+  justify-content: center;
   overflow: visible;
-}
-.section-card .sc-num text {
-  /* Big Shoulders Display is a narrow grotesque sized specifically for
-     this SVG (the 60-unit viewBox can't fit a wide humanist sans like
-     Manrope at the same point size — it overflows the column). */
-  font-family: 'Big Shoulders Display', 'Arial Narrow', var(--sans);
-  font-weight: 700;
-  font-stretch: 75%;
-  font-size: 70px;
-  letter-spacing: -2px;
-  /* Deep teal — the digit is now clearly silhouetted against the card
-     behind it, so we can afford the darker --primary without it
-     reading as pure black. */
-  fill: var(--primary);
+  pointer-events: none;
+  font-family: var(--display);
+  font-weight: 900;
+  /* Big editorial display — combined with the scaleY below this lets
+     the digit bleed past the card's top and bottom edges (clipped by
+     the card's overflow:hidden), reproducing the dramatic SVG look. */
+  font-size: clamp(4.5rem, 7.2vw, 7.6rem);
+  line-height: 1;
+  letter-spacing: -0.075em;
   font-feature-settings: 'tnum' 1, 'lnum' 1;
-  /* Vertical stretch — scaleY 1.7 makes the digit fill the card height
-     and bleed slightly past top/bottom. transform-box: fill-box anchors
-     the origin to the glyph's own bounding box. */
-  transform: scaleY(1.7);
+  background: linear-gradient(
+    120deg,
+    var(--primary-deep)   0%,
+    var(--primary)       50%,
+    var(--primary-mid) 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+          color: transparent;
+  /* Vertical stretch — taller than wide, like the SVG version. */
+  transform: scaleY(2.2);
   transform-origin: center;
-  transform-box: fill-box;
-  transition: fill .18s ease, transform .22s cubic-bezier(.4, 0, .2, 1);
+  transition: transform .22s cubic-bezier(.4, 0, .2, 1);
 }
-.section-card:hover .sc-num text {
-  fill: var(--primary-deep);
-  transform: scaleY(1.7) translateX(2px);
+.section-card:hover .sc-num {
+  transform: scaleY(2.2) translateX(2px);
 }
 
 /* Right column — the visible card surface. A negative left margin pulls
@@ -945,11 +946,11 @@ li { margin-bottom: 0.4rem; }
 /* Narrower screens — slim the number column. */
 @media (max-width: 560px) {
   .section-card {
-    --sc-num-col: 3.6rem;
-    --sc-overlap: 1rem;
+    --sc-num-col: 5rem;
+    --sc-overlap: 1.2rem;
     --sc-pad-x:   1rem;
   }
-  .section-card .sc-num text { font-size: 62px; }
+  .section-card .sc-num { font-size: 4rem; }
   .section-card .sc-body { min-height: 5.5rem; }
 }
 
@@ -2725,31 +2726,43 @@ a.cov-item:hover {
   box-shadow: 0 18px 36px -22px rgba(9, 68, 89, 0.4);
 }
 .mock-tile-link {
+  /* 2-column grid matching the section-card pattern. The number column
+     is sized for the stretched display digit; the body column flows. */
   display: grid;
-  grid-template-columns: 5.6rem 1fr;
-  gap: 1.1rem;
-  padding: 1.6rem 1.6rem 1.2rem;
+  grid-template-columns: 8rem 1fr;
+  gap: 1.4rem;
+  align-items: center;    /* anchor: number centered next to body */
+  padding: 1.4rem 1.6rem;
   color: inherit;
   text-decoration: none !important;
   border: none;
   flex: 1;
 }
+/* Matches the section-card .sc-num treatment — vertically stretched
+   Source Serif 4 with the same teal gradient. The visual rhyme makes
+   the section grid and mock-exam grid feel like one design system. */
 .mock-tile-num {
   font-family: var(--display);
-  font-size: 4.2rem;
-  font-weight: 700;
-  line-height: 0.9;
-  color: var(--primary);
-  letter-spacing: -0.04em;
+  font-size: clamp(4.5rem, 6.4vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.075em;
   font-feature-settings: 'tnum' 1, 'lnum' 1;
-  align-self: start;
-  margin-top: -2px;
-  /* subtle gradient to echo the landing h1 */
-  background: linear-gradient(120deg, var(--primary-deep) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+  /* Vertically anchored in its column — mirrors the section-card
+     pattern. The stretched glyph extends symmetrically above and
+     below; the tile's overflow:hidden clips the spillover. */
+  align-self: center;
+  justify-self: center;
+  margin: 0;
+  background: linear-gradient(120deg, var(--primary-deep) 0%, var(--primary) 50%, var(--primary-mid) 100%);
   -webkit-background-clip: text;
           background-clip: text;
   -webkit-text-fill-color: transparent;
           color: transparent;
+  transform: scaleY(2.2);
+  transform-origin: center;
+  display: inline-block;
+  pointer-events: none;
 }
 .mock-tile-body {
   min-width: 0;
@@ -2757,33 +2770,30 @@ a.cov-item:hover {
   flex-direction: column;
   gap: 0.55rem;
 }
-.mock-tile-eyebrow {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-faded);
-}
 .mock-tile-title {
   margin: 0;
   font-family: var(--display);
-  font-size: 1.4rem;
+  font-size: 1.32rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: -0.015em;
   color: var(--ink);
 }
 .mock-tile-summary {
   margin: 0;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   line-height: 1.55;
   color: var(--ink-soft);
+  /* Clamp to 3 lines so tile heights stay similar across mocks. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .mock-tile-tags {
   list-style: none;
-  margin: 0.25rem 0 0;
+  margin: 0.2rem 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -3494,6 +3504,21 @@ footer {
   transform: translateY(-1px);
 }
 .footer-btn svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 6px; }
+
+/* Quiet caption — not a button, just a soft reminder next to the
+   curriculum link. Keeps the same icon language for visual rhythm. */
+.footer-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.footer-meta svg { width: 13px; height: 13px; flex-shrink: 0; }
 .footer-tag {
   margin-left: auto;
   font-family: var(--mono);

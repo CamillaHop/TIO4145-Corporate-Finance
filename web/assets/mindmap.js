@@ -125,18 +125,22 @@
       var secId = s.id;
       var numMatch = /(\d+)$/.exec(secId) || [];
       var num = numMatch[1] || (i + 1);
-      var secLabel = stripMd(data.title || s.title || secId);
+      // Prefer the short course_config title — the LLM-generated title
+      // is often a 60+ char marketing sentence and overflows the node.
+      var secLabel  = stripMd(s.title  || data.title || secId);
+      var secLong   = stripMd(data.title || s.title  || secId);
 
       nodes.push({
         data: {
-          id:    secId,
-          label: secLabel,
-          short: 'Section ' + num,
-          type:  'section',
-          num:   num,
-          url:   'section.html?id=' + encodeURIComponent(secId),
-          weight: 0,    // filled in below from exam priority data
-          size:  46,    // default; scaled later
+          id:        secId,
+          label:     secLabel,
+          longLabel: secLong,
+          short:     'Section ' + num,
+          type:      'section',
+          num:       num,
+          url:       'section.html?id=' + encodeURIComponent(secId),
+          weight:    0,
+          size:      46,
         },
       });
       edges.push({
@@ -388,7 +392,9 @@
           'text-max-width': 100,
         },
       },
-      // Sections — pills with thicker primary border
+      // Sections — pills with thicker primary border. Width / height
+      // auto-fit the label so the short course_config title always
+      // sits inside the chip, regardless of its length.
       {
         selector: 'node[type="section"]',
         style: {
@@ -396,16 +402,20 @@
           'border-color': pri,
           'border-width': 2,
           'shape': 'round-rectangle',
-          'width': 'data(size)',
-          'height': 'mapData(size, 46, 68, 28, 38)',
+          'width': 'label',
+          'height': 'label',
+          'padding-left':   14,
+          'padding-right':  14,
+          'padding-top':    10,
+          'padding-bottom': 10,
           'label': 'data(label)',
           'color': ink,
-          'font-size': 10.5,
+          'font-size': 11,
           'font-weight': 600,
           'text-valign': 'center',
           'text-halign': 'center',
           'text-wrap': 'wrap',
-          'text-max-width': 110,
+          'text-max-width': 160,
         },
       },
       // Concepts
