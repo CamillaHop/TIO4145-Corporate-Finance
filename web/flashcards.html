@@ -28,6 +28,7 @@
       <a href="mindmap.html">Mindmap</a>
       <a href="flashcards.html" aria-current="page">Flashcards</a>
       <a href="exam.html">Exam prep</a>
+      <a href="formulas.html">Formulas</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
         <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -61,7 +62,10 @@
   <div class="flashcard" id="card" tabindex="0" role="button" aria-label="Flashcard — click or press Enter to flip">
     <div class="flashcard__inner" id="card-inner">
       <div class="flashcard__front">
-        <div class="fc-diff" id="fc-diff" data-d="">—</div>
+        <div class="fc-pill-row">
+          <div class="fc-diff" id="fc-diff" data-d="">—</div>
+          <div class="fc-bucket" id="fc-bucket" data-b="" hidden></div>
+        </div>
         <p class="fc-q" id="fc-q">Pick a section to start.</p>
         <div class="fc-hint">Click card to flip ↻</div>
       </div>
@@ -73,9 +77,15 @@
     </div>
   </div>
 
+  <div class="fc-rate" id="fc-rate" hidden role="group" aria-label="Rate this card">
+    <button class="fc-rate-btn" data-rate="again" type="button"><span class="fc-rate-key">1</span> Again</button>
+    <button class="fc-rate-btn" data-rate="good"  type="button"><span class="fc-rate-key">2</span> Good</button>
+    <button class="fc-rate-btn" data-rate="easy"  type="button"><span class="fc-rate-key">3</span> Easy</button>
+  </div>
+
   <p class="flashcard-hint">
     Keys: <kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>Enter</kbd>/<kbd>Space</kbd> flip ·
-    <kbd>S</kbd> shuffle · <kbd>R</kbd> reset
+    <kbd>S</kbd> shuffle · <kbd>R</kbd> reset · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> rate (when flipped)
   </p>
 </main>
 
@@ -96,9 +106,61 @@
     sections: [],
     cards: [],     // currently filtered & ordered
     rawCards: [],  // full deck for current section
+    weights: [],   // parallel to cards; SR weight per card (higher = more likely)
     current: 0,
     sectionId: null,
   };
+
+  // SR-mode weights. Unrated cards rank between "again" and "good" so a
+  // fresh deck behaves close to uniform random; ratings then tilt the
+  // distribution. Tuned so a card rated "easy" is 12× less likely to
+  // resurface than one rated "again".
+  var WEIGHTS = { again: 6, good: 1.5, easy: 0.5 };
+  function weightFor(card) {
+    if (!card) return 1;
+    var s = StudySite.store.read();
+    var hash = StudySite.cardHash(card);
+    var entry = ((s.sr || {})[state.sectionId] || {})[hash];
+    if (entry && WEIGHTS[entry.b] != null) return WEIGHTS[entry.b];
+    return 3; // unrated baseline
+  }
+  function bucketFor(card) {
+    if (!card) return '';
+    var s = StudySite.store.read();
+    var hash = StudySite.cardHash(card);
+    var entry = ((s.sr || {})[state.sectionId] || {})[hash];
+    return entry && entry.b ? entry.b : '';
+  }
+  function rebuildWeights() {
+    state.weights = state.cards.map(weightFor);
+  }
+  // Pick a weighted random index, excluding the current index when possible.
+  function pickWeighted(exclude) {
+    var n = state.cards.length;
+    if (n <= 1) return 0;
+    var total = 0;
+    for (var i = 0; i < n; i++) if (i !== exclude) total += state.weights[i];
+    if (total <= 0) return (exclude + 1) % n;
+    var r = Math.random() * total;
+    for (var j = 0; j < n; j++) {
+      if (j === exclude) continue;
+      r -= state.weights[j];
+      if (r <= 0) return j;
+    }
+    return n - 1;
+  }
+  function rateCurrent(rating) {
+    if (!state.cards.length || !state.sectionId) return;
+    var card = state.cards[state.current];
+    var hash = StudySite.cardHash(card);
+    StudySite.store.path('sr.' + state.sectionId + '.' + hash, { b: rating, t: Date.now() });
+    state.weights[state.current] = WEIGHTS[rating] != null ? WEIGHTS[rating] : 3;
+    // Advance via weighted random so the next card is biased toward the
+    // ones the user hasn't mastered yet.
+    state.current = pickWeighted(state.current);
+    unflip();
+    show();
+  }
 
   function init() {
     StudySite.loadConfig().then(function (cfg) {
@@ -113,7 +175,16 @@
       // get drawn so the first render typesets math correctly.
       StudySite.ensureMarkdown();
       StudySite.ensureKatex();
-      if (state.sections.length) loadSection(state.sections[0].id);
+      // Honour an incoming `#sec=section_xx` hash (used by the "continue
+      // where you left off" chip on the index page) — pre-select that
+      // deck before falling back to the first section.
+      var hashSec = (location.hash.match(/^#sec=([^&]+)/) || [])[1];
+      var startId = state.sections.length ? state.sections[0].id : null;
+      if (hashSec && state.sections.some(function (s) { return s.id === hashSec; })) {
+        startId = hashSec;
+        sel.value = hashSec;
+      }
+      if (startId) loadSection(startId);
       sel.addEventListener('change', function () { loadSection(sel.value); });
       bindControls();
     });
@@ -121,6 +192,8 @@
 
   function loadSection(id) {
     state.sectionId = id;
+    // Remember the deck for the index "continue where you left off" chip.
+    StudySite.store.write({ last_flashcard: { section: id, t: Date.now() } });
     StudySite.loadFlashcards(id).then(function (cards) {
       state.rawCards = Array.isArray(cards) ? cards : [];
       applyFilter();
@@ -140,6 +213,7 @@
     state.cards = state.rawCards.filter(function (c) {
       return allowed.indexOf(c.difficulty) !== -1;
     });
+    rebuildWeights();
     state.current = 0;
     unflip();
     show();
@@ -149,9 +223,12 @@
     var total = state.cards.length;
     document.getElementById('fc-total').textContent = total;
     document.getElementById('fc-current').textContent = total ? (state.current + 1) : 0;
+    var rateBar = document.getElementById('fc-rate');
     if (!total) {
       setFront('No cards match the current filter.');
       setBack('—', '');
+      setBucket('');
+      if (rateBar) rateBar.hidden = true;
       typesetCard();
       return;
     }
@@ -160,7 +237,22 @@
     // KaTeX then walks the card and typesets math after the DOM update.
     setFront(StudySite.renderInline(c.front || ''), c.difficulty);
     setBack(StudySite.renderInline(c.back || ''), c.difficulty);
+    setBucket(bucketFor(c));
     typesetCard();
+  }
+
+  function setBucket(b) {
+    var el = document.getElementById('fc-bucket');
+    if (!el) return;
+    if (!b) {
+      el.hidden = true;
+      el.textContent = '';
+      el.setAttribute('data-b', '');
+    } else {
+      el.hidden = false;
+      el.textContent = b;
+      el.setAttribute('data-b', b);
+    }
   }
 
   // Run KaTeX on the live card DOM. Idempotent — auto-render skips nodes
@@ -181,11 +273,23 @@
     document.getElementById('fc-a').innerHTML = html;
   }
 
+  function isFlipped() {
+    return document.getElementById('card-inner').classList.contains('is-flipped');
+  }
   function flip() {
     document.getElementById('card-inner').classList.toggle('is-flipped');
+    syncRateBar();
   }
   function unflip() {
     document.getElementById('card-inner').classList.remove('is-flipped');
+    syncRateBar();
+  }
+  // Show the rate buttons only when the answer is visible AND there is a
+  // card to rate. Keeps them out of the way during front-side study.
+  function syncRateBar() {
+    var bar = document.getElementById('fc-rate');
+    if (!bar) return;
+    bar.hidden = !(isFlipped() && state.cards.length);
   }
   function next() { if (!state.cards.length) return; state.current = (state.current + 1) % state.cards.length; unflip(); show(); }
   function prev() { if (!state.cards.length) return; state.current = (state.current - 1 + state.cards.length) % state.cards.length; unflip(); show(); }
@@ -209,6 +313,13 @@
     document.querySelectorAll('#filters input').forEach(function (cb) {
       cb.addEventListener('change', applyFilter);
     });
+    // Rate buttons → write SR bucket + advance via weighted random.
+    document.querySelectorAll('.fc-rate-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        rateCurrent(btn.getAttribute('data-rate'));
+      });
+    });
     document.addEventListener('keydown', function (e) {
       if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
       if (e.key === 'ArrowLeft')  { e.preventDefault(); prev(); }
@@ -216,6 +327,11 @@
       else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
       else if (e.key === 's' || e.key === 'S') { e.preventDefault(); shuffle(); }
       else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reset(); }
+      // 1/2/3 = again/good/easy, only when the answer is visible.
+      else if (isFlipped() && (e.key === '1' || e.key === '2' || e.key === '3')) {
+        e.preventDefault();
+        rateCurrent({ '1': 'again', '2': 'good', '3': 'easy' }[e.key]);
+      }
     });
   }
 

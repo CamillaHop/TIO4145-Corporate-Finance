@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Formula sheet</title>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/style.css" />
+<script defer src="assets/main.js"></script>
+<script defer src="assets/theme.js?v=2"></script>
+<script defer src="assets/nav-search.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand" data-course-code>—</a>
+    <div class="nav-search-wrapper">
+      <svg class="nav-search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="nav-search" placeholder="Loading search…" autocomplete="off" spellcheck="false" disabled />
+      <span class="nav-search-kbd" aria-hidden="true">/</span>
+      <div id="nav-search-results" role="listbox"></div>
+    </div>
+    <div class="nav-links">
+      <a href="index.html#sections">Sections</a>
+      <a href="mindmap.html">Mindmap</a>
+      <a href="flashcards.html">Flashcards</a>
+      <a href="exam.html">Exam prep</a>
+      <a href="formulas.html" aria-current="page">Formulas</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <p class="eyebrow">Reference</p>
+    <h1>Formula sheet</h1>
+    <p class="lede">Every display-mode formula extracted from the section notes and key concepts. Search across all of them, or narrow to one section.</p>
+  </div>
+</header>
+
+<main class="container" id="main">
+  <div class="formula-toolbar">
+    <input type="search" id="formula-search" class="formula-search" placeholder="Search formulas…" autocomplete="off" spellcheck="false" />
+    <select id="formula-section" aria-label="Filter by section">
+      <option value="">All sections</option>
+    </select>
+    <span class="formula-count" id="formula-count">—</span>
+  </div>
+  <div id="formula-groups">
+    <p class="empty-state"><span>Loading formulas…</span></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <a class="footer-btn" href="curriculum.html">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 10h16"/></svg>
+      Curriculum
+    </a>
+    <span class="footer-meta"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>Spot a mistake? Contact Camilla</span>
+    <span class="footer-tag">NTNU · TIØ4145</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var allItems = [];   // flat list of every formula, used for filtering
+
+  function init() {
+    StudySite.loadConfig().then(function (cfg) {
+      StudySite.applyCourseChrome(cfg);
+      StudySite.maybeLoadChat(cfg);
+      var sections = (cfg.sections || []);
+      populateSectionFilter(sections);
+
+      // Fetch every section's JSON in parallel; 404s just skip silently.
+      return Promise.all(sections.map(function (s) {
+        return StudySite.loadSection(s.id).catch(function () { return null; });
+      })).then(function (datas) {
+        return StudySite.ensureKatex().then(function () {
+          var groups = [];
+          datas.forEach(function (data, i) {
+            if (!data) return;
+            var section = sections[i];
+            var items = collectFormulas(section, data);
+            if (items.length) groups.push({ section: section, items: items });
+          });
+          renderGroups(groups);
+          // Wait for the renderMath pass to actually finish before binding
+          // the filter — KaTeX rewrites the DOM and we want a stable tree.
+          StudySite.renderMath(document.getElementById('formula-groups'));
+          bindFilter();
+        });
+      });
+    }).catch(function (err) {
+      document.getElementById('formula-groups').innerHTML =
+        '<div class="empty-state"><p>Could not load formulas: ' +
+        StudySite.escapeHtml(err.message) + '</p></div>';
+    });
+  }
+
+  function populateSectionFilter(sections) {
+    var sel = document.getElementById('formula-section');
+    if (!sel) return;
+    sections.forEach(function (s) {
+      var opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.title || s.id;
+      sel.appendChild(opt);
+    });
+  }
+
+  // Walk a section's JSON and extract every display-mode formula. Tags
+  // each one with `source`/`concept` so the chip in the UI can say where
+  // it came from, and builds a lowercase token blob for client-side
+  // filtering (KaTeX-rendered DOM is hard to grep, so we derive search
+  // tokens from the raw LaTeX).
+  function collectFormulas(section, data) {
+    var items = [];
+
+    StudySite.extractGeneralFormulas(data.detailed_notes || '').forEach(function (tex) {
+      items.push({
+        section: section.id,
+        sectionTitle: section.title || section.id,
+        source: 'notes',
+        concept: '',
+        latex: tex
+      });
+    });
+
+    (Array.isArray(data.key_concepts) ? data.key_concepts : []).forEach(function (k) {
+      if (!k || typeof k !== 'object') return;
+      StudySite.extractGeneralFormulas(k.explanation || '').forEach(function (tex) {
+        items.push({
+          section: section.id,
+          sectionTitle: section.title || section.id,
+          source: 'concept',
+          concept: k.concept || '',
+          latex: tex
+        });
+      });
+    });
+
+    // Build search tokens. Drop backslashes (so `\beta` matches "beta")
+    // and other syntax noise; keep alphanumerics + the concept name and
+    // section title.
+    items.forEach(function (it) {
+      var raw = (it.latex + ' ' + it.sectionTitle + ' ' + it.concept).toLowerCase();
+      it.tokens = raw.replace(/[\\{}_^]+/g, ' ').replace(/\s+/g, ' ').trim();
+    });
+
+    return items;
+  }
+
+  function renderGroups(groups) {
+    var wrap = document.getElementById('formula-groups');
+    if (!groups.length) {
+      wrap.innerHTML = '<div class="empty-state"><p>No display-mode formulas found across the course.</p></div>';
+      updateCount(0, 0);
+      return;
+    }
+    allItems = [];
+    var html = groups.map(function (g) {
+      var items = g.items.map(function (it) {
+        allItems.push(it);
+        var concept = it.concept
+          ? '<span class="formula-concept">' + StudySite.escapeHtml(it.concept) + '</span>'
+          : '';
+        return (
+          '<li class="formula-item" data-section="' + StudySite.escapeHtml(it.section) +
+            '" data-tokens="' + StudySite.escapeHtml(it.tokens) + '">' +
+            concept +
+            '<div class="formula-latex">$$' + it.latex + '$$</div>' +
+          '</li>'
+        );
+      }).join('');
+      return (
+        '<section class="formula-group" data-section="' + StudySite.escapeHtml(g.section.id) + '">' +
+          '<h2 class="formula-group-head">' +
+            '<a href="section.html?id=' + encodeURIComponent(g.section.id) + '">' +
+              StudySite.escapeHtml(g.section.title || g.section.id) +
+            '</a>' +
+          '</h2>' +
+          '<ul class="formula-list">' + items + '</ul>' +
+        '</section>'
+      );
+    }).join('');
+    wrap.innerHTML = html;
+    updateCount(allItems.length, allItems.length);
+  }
+
+  function bindFilter() {
+    var input = document.getElementById('formula-search');
+    var sel = document.getElementById('formula-section');
+    function apply() {
+      var q = (input.value || '').toLowerCase().trim();
+      var sectionFilter = sel.value;
+      var visible = 0;
+      document.querySelectorAll('.formula-group').forEach(function (g) {
+        if (sectionFilter && g.getAttribute('data-section') !== sectionFilter) {
+          g.hidden = true;
+          return;
+        }
+        var anyVisible = false;
+        g.querySelectorAll('.formula-item').forEach(function (li) {
+          var hit = !q || (li.getAttribute('data-tokens') || '').indexOf(q) !== -1;
+          li.hidden = !hit;
+          if (hit) { anyVisible = true; visible++; }
+        });
+        g.hidden = !anyVisible;
+      });
+      updateCount(visible, allItems.length);
+    }
+    input.addEventListener('input', apply);
+    sel.addEventListener('change', apply);
+  }
+
+  function updateCount(shown, total) {
+    var el = document.getElementById('formula-count');
+    if (!el) return;
+    el.textContent = shown === total
+      ? total + ' formula' + (total === 1 ? '' : 's')
+      : shown + ' / ' + total;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+
+</body>
+</html>

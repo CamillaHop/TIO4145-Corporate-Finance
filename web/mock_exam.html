@@ -28,6 +28,7 @@
       <a href="mindmap.html">Mindmap</a>
       <a href="flashcards.html">Flashcards</a>
       <a href="exam.html" aria-current="page">Exam prep</a>
+      <a href="formulas.html">Formulas</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
         <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -51,6 +52,12 @@
   </div>
 
   <div class="mock-bottom" id="mock-bottom" hidden>
+    <div class="mock-timer" id="mock-timer" hidden>
+      <span class="mock-timer-clock" id="mock-timer-clock">--:--</span>
+      <button type="button" class="mock-btn" id="mock-timer-start">Start timed</button>
+      <button type="button" class="mock-btn" id="mock-timer-untimed">Untimed review</button>
+      <button type="button" class="mock-btn" id="mock-timer-reset" hidden>Reset timer</button>
+    </div>
     <button type="button" class="mock-btn mock-btn-primary" id="reveal-btn">Reveal solutions</button>
     <button type="button" class="mock-btn" id="download-btn" disabled>Download my answers (.md)</button>
     <a class="mock-btn" id="tex-btn" href="#" download title="LaTeX project zip — upload to Overleaf">Overleaf zip</a>
@@ -143,6 +150,197 @@
     document.getElementById('mock-bottom').hidden = false;
     wireInputs();
     wireBottom();
+    wireTimer();
+  }
+
+  // ─── Timer ──────────────────────────────────────────────────────────
+  //
+  // Per-mock state lives in StudySite.store.mock[<id>] so a refresh / new
+  // tab can pick up the same countdown:
+  //
+  //   { start: <epoch ms>, dur_min: <int>, untimed: <bool>, submitted: <bool> }
+  //
+  // States the UI cycles through:
+  //   idle      → no entry yet, show "Start timed" + "Untimed review"
+  //   running   → entry with start/dur_min, untimed false, submitted false
+  //   expired   → running but Date.now() - start ≥ dur_min*60_000
+  //               (auto-submit fires on first crossover)
+  //   submitted → answers locked, reveal applied (post-expiry or manual)
+  //   untimed   → entry with untimed: true; clock shows "untimed"
+  var tickHandle = null;
+  function timerKey() { return examData && examData.id; }
+  function timerState() {
+    var key = timerKey();
+    if (!key) return null;
+    return StudySite.store.path('mock.' + key) || null;
+  }
+  function writeTimer(patch) {
+    var key = timerKey();
+    if (!key) return;
+    var cur = timerState() || {};
+    for (var k in patch) cur[k] = patch[k];
+    StudySite.store.path('mock.' + key, cur);
+  }
+  function clearTimer() {
+    var key = timerKey();
+    if (!key) return;
+    var s = StudySite.store.read();
+    if (s.mock && s.mock[key]) {
+      delete s.mock[key];
+      StudySite.store.write({ mock: s.mock });
+    }
+  }
+  function formatRemaining(ms) {
+    if (ms <= 0) return '00:00';
+    var total = Math.ceil(ms / 1000);
+    var h = Math.floor(total / 3600);
+    var m = Math.floor((total % 3600) / 60);
+    var s = total % 60;
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    return h > 0 ? (h + ':' + pad(m) + ':' + pad(s)) : (pad(m) + ':' + pad(s));
+  }
+  function setClockText(text) {
+    var el = document.getElementById('mock-timer-clock');
+    if (el) el.textContent = text;
+  }
+  function setTimerClass(name) {
+    var wrap = document.getElementById('mock-timer');
+    if (!wrap) return;
+    wrap.classList.remove('is-warning', 'is-expired', 'is-untimed', 'is-submitted');
+    if (name) wrap.classList.add(name);
+  }
+  function showTimerButtons(stage) {
+    // stage: 'idle' | 'running' | 'untimed' | 'submitted'
+    var start = document.getElementById('mock-timer-start');
+    var unt   = document.getElementById('mock-timer-untimed');
+    var rst   = document.getElementById('mock-timer-reset');
+    if (!start || !unt || !rst) return;
+    start.hidden = !(stage === 'idle');
+    unt.hidden   = !(stage === 'idle');
+    rst.hidden   = !(stage === 'running' || stage === 'untimed' || stage === 'submitted');
+  }
+  function tickTimer() {
+    var t = timerState();
+    if (!t || t.untimed || !t.start || !t.dur_min) return;
+    var deadline = t.start + t.dur_min * 60000;
+    var remaining = deadline - Date.now();
+    setClockText(formatRemaining(remaining));
+    if (remaining <= 0) {
+      setTimerClass('is-expired');
+      stopTickInterval();
+      autoSubmit();
+    } else if (remaining <= 5 * 60000) {
+      setTimerClass('is-warning');
+    } else {
+      setTimerClass('');
+    }
+  }
+  function startTickInterval() {
+    stopTickInterval();
+    tickTimer();
+    tickHandle = setInterval(tickTimer, 1000);
+  }
+  function stopTickInterval() {
+    if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+  }
+  function lockInputs() {
+    document.body.classList.add('mock-locked');
+    document.querySelectorAll('.q[data-type="mcq"] input[type="radio"]').forEach(function (i) { i.disabled = true; });
+    document.querySelectorAll('.short-answer').forEach(function (ta) { ta.disabled = true; });
+  }
+  function unlockInputs() {
+    document.body.classList.remove('mock-locked');
+    document.querySelectorAll('.q[data-type="mcq"] input[type="radio"]').forEach(function (i) { i.disabled = false; });
+    document.querySelectorAll('.short-answer').forEach(function (ta) { ta.disabled = false; });
+  }
+  function autoSubmit() {
+    if (timerState() && timerState().submitted) return;
+    writeTimer({ submitted: true });
+    lockInputs();
+    if (!revealed) applyReveal(true);
+    showTimerButtons('submitted');
+    setTimerClass('is-expired');
+    setClockText('00:00');
+  }
+  function startTimer() {
+    if (!examData || !examData.duration_minutes) return;
+    writeTimer({
+      start: Date.now(),
+      dur_min: examData.duration_minutes,
+      untimed: false,
+      submitted: false
+    });
+    showTimerButtons('running');
+    startTickInterval();
+  }
+  function startUntimed() {
+    writeTimer({ untimed: true, submitted: false, start: null, dur_min: null });
+    stopTickInterval();
+    setTimerClass('is-untimed');
+    setClockText('untimed');
+    showTimerButtons('untimed');
+  }
+  function resetTimer() {
+    stopTickInterval();
+    unlockInputs();
+    clearTimer();
+    setTimerClass('');
+    setClockText('--:--');
+    showTimerButtons('idle');
+    // Don't toggle revealed automatically — user may want to keep answers
+    // visible while restarting.
+  }
+  function resumeIfRunning() {
+    var t = timerState();
+    if (!t) { showTimerButtons('idle'); return; }
+    if (t.untimed) {
+      setTimerClass('is-untimed');
+      setClockText('untimed');
+      showTimerButtons('untimed');
+      return;
+    }
+    if (t.submitted) {
+      // Already finished — lock + reveal.
+      lockInputs();
+      if (!revealed) applyReveal(true);
+      setTimerClass('is-expired');
+      setClockText('00:00');
+      showTimerButtons('submitted');
+      return;
+    }
+    if (t.start && t.dur_min) {
+      var remaining = (t.start + t.dur_min * 60000) - Date.now();
+      if (remaining <= 0) {
+        autoSubmit();
+      } else {
+        showTimerButtons('running');
+        startTickInterval();
+      }
+    }
+  }
+  function wireTimer() {
+    if (!examData || !examData.duration_minutes) {
+      // No duration on this mock → hide the whole cluster.
+      var wrap = document.getElementById('mock-timer');
+      if (wrap) wrap.hidden = true;
+      return;
+    }
+    document.getElementById('mock-timer').hidden = false;
+    document.getElementById('mock-timer-start').addEventListener('click', startTimer);
+    document.getElementById('mock-timer-untimed').addEventListener('click', startUntimed);
+    document.getElementById('mock-timer-reset').addEventListener('click', resetTimer);
+    resumeIfRunning();
+  }
+
+  // Some generated MCQ decks include the option letter inside the option
+  // text itself ("A: …", "(B) …", "C. …"). The renderer also prepends an
+  // .mcq-letter box, so the prefix would render twice. Strip a leading
+  // prefix that matches *this* option's position; leaves clean options
+  // untouched.
+  function stripOptLetter(opt, i) {
+    var letter = String.fromCharCode(65 + i);
+    var re = new RegExp('^\\s*[\\(\\[]?\\s*' + letter + '\\s*[\\)\\]\\.\\:,\\-–—]\\s+', 'i');
+    return String(opt || '').replace(re, '');
   }
 
   function renderQuestion(q) {
@@ -163,7 +361,7 @@
           '<label class="mcq-opt" data-qid="' + StudySite.escapeHtml(qid) + '" data-idx="' + i + '">' +
             '<input type="radio" name="' + StudySite.escapeHtml(qid) + '" value="' + i + '" />' +
             '<span class="mcq-letter">' + letter + '</span>' +
-            '<span class="mcq-label">' + StudySite.renderInline(opt) + '</span>' +
+            '<span class="mcq-label">' + StudySite.renderInline(stripOptLetter(opt, i)) + '</span>' +
           '</label>'
         );
       }).join('');
@@ -233,31 +431,35 @@
     });
   }
 
+  // Apply (or undo) the revealed state to the DOM. Extracted out of the
+  // reveal-btn click handler so the timer's auto-submit can call it.
+  function applyReveal(next) {
+    revealed = !!next;
+    document.body.classList.toggle('mock-revealed', revealed);
+    var btn = document.getElementById('reveal-btn');
+    if (btn) btn.textContent = revealed ? 'Hide solutions' : 'Reveal solutions';
+    document.querySelectorAll('.q[data-type="mcq"]').forEach(function (qEl) {
+      var qid = qEl.dataset.qid;
+      var sec = findSection(qid);
+      var q = sec ? sec.q : null;
+      if (!q) return;
+      var ans = q.answer_index;
+      qEl.querySelectorAll('.mcq-opt').forEach(function (lbl, i) {
+        lbl.classList.toggle('is-correct',   revealed && i === ans);
+        lbl.classList.toggle('is-incorrect', revealed && answers[qid] && answers[qid].value === i && i !== ans);
+      });
+      var sol = qEl.querySelector('.q-solution');
+      if (sol) sol.hidden = !revealed;
+    });
+    document.querySelectorAll('.q[data-type="short"] .q-solution').forEach(function (sol) {
+      sol.hidden = !revealed;
+    });
+    if (revealed) StudySite.renderMath(document.getElementById('mock-root'));
+  }
+
   function wireBottom() {
     document.getElementById('reveal-btn').addEventListener('click', function () {
-      revealed = !revealed;
-      document.body.classList.toggle('mock-revealed', revealed);
-      this.textContent = revealed ? 'Hide solutions' : 'Reveal solutions';
-      // Mark MCQ correctness
-      document.querySelectorAll('.q[data-type="mcq"]').forEach(function (qEl) {
-        var qid = qEl.dataset.qid;
-        var sec = findSection(qid);
-        var q = sec ? sec.q : null;
-        if (!q) return;
-        var ans = q.answer_index;
-        qEl.querySelectorAll('.mcq-opt').forEach(function (lbl, i) {
-          lbl.classList.toggle('is-correct',   revealed && i === ans);
-          lbl.classList.toggle('is-incorrect', revealed && answers[qid] && answers[qid].value === i && i !== ans);
-        });
-        var sol = qEl.querySelector('.q-solution');
-        if (sol) sol.hidden = !revealed;
-      });
-      document.querySelectorAll('.q[data-type="short"] .q-solution').forEach(function (sol) {
-        sol.hidden = !revealed;
-      });
-      if (revealed) {
-        StudySite.renderMath(document.getElementById('mock-root'));
-      }
+      applyReveal(!revealed);
     });
 
     document.getElementById('download-btn').addEventListener('click', function () {
@@ -305,7 +507,7 @@
           (q.options || []).forEach(function (opt, i) {
             var letter = String.fromCharCode(65 + i);
             var picked = a && typeof a.value === 'number' && a.value === i ? ' ← my answer' : '';
-            lines.push('- **' + letter + '.** ' + opt + picked);
+            lines.push('- **' + letter + '.** ' + stripOptLetter(opt, i) + picked);
           });
           if (!a || typeof a.value !== 'number') {
             lines.push('', '_My answer: (unanswered)_');

@@ -2265,6 +2265,100 @@ a.cov-item:hover {
   text-align: right;
 }
 
+/* Rate strip rendered below the card when the answer is visible.
+   Three tinted pills (Again / Good / Easy) write into StudySite.store.sr
+   and bias the next-card draw toward weaker cards. */
+.fc-rate {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.85rem 0 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.fc-rate-btn {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1rem;
+  background: var(--surface);
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: background .12s ease, color .12s ease, border-color .12s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.fc-rate-btn:hover { transform: translateY(-1px); }
+.fc-rate-btn[data-rate="again"]:hover {
+  color: var(--bg);
+  background: var(--warm);
+  border-color: var(--warm);
+}
+.fc-rate-btn[data-rate="good"]:hover {
+  color: var(--bg);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.fc-rate-btn[data-rate="easy"]:hover {
+  color: var(--bg);
+  background: var(--ok);
+  border-color: var(--ok);
+}
+.fc-rate-key {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  padding: 1px 5px;
+  border: 1px solid var(--border-soft);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--ink-faded);
+}
+.fc-rate-btn:hover .fc-rate-key {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  border-color: currentColor;
+  color: inherit;
+}
+
+/* Bucket pill (most recent SR rating on the current card), shown next
+   to the static difficulty chip on the card's front. */
+.fc-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.fc-pill-row .fc-diff { margin-bottom: 0; }
+.fc-bucket {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  color: var(--ink-faded);
+  border: 1px solid var(--border-soft);
+}
+.fc-bucket[data-b="again"] {
+  color: var(--warm-deep, var(--warm));
+  background: var(--warm-pale);
+  border-color: color-mix(in srgb, var(--warm) 40%, transparent);
+}
+.fc-bucket[data-b="good"] {
+  color: var(--primary);
+  background: var(--primary-mist);
+  border-color: var(--primary-light);
+}
+.fc-bucket[data-b="easy"] {
+  color: var(--ok);
+  background: var(--ok-pale);
+  border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+}
+
 .flashcard-hint {
   display: block;
   margin: 0.7rem 0 0;
@@ -3076,6 +3170,57 @@ a.cov-item:hover {
   bottom: 12px;
   z-index: 5;
 }
+
+/* Timer cluster pinned to the left of the sticky bottom bar. The clock
+   text shifts to --warm under 5 minutes and --warm-deep when expired.
+   When `body.mock-locked` is set (auto-submit fired or untimed → never)
+   answer inputs become disabled — see the .mock-locked block below. */
+.mock-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: auto;
+  flex-wrap: wrap;
+}
+.mock-timer-clock {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  min-width: 5.5ch;
+  text-align: center;
+  padding: 4px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.mock-timer.is-warning .mock-timer-clock {
+  color: var(--bg);
+  background: var(--warm);
+  border-color: var(--warm);
+}
+.mock-timer.is-expired .mock-timer-clock {
+  color: var(--bg);
+  background: var(--warm-deep);
+  border-color: var(--warm-deep);
+}
+.mock-timer.is-untimed .mock-timer-clock {
+  color: var(--ink-faded);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+body.mock-locked .mcq-opt {
+  pointer-events: none;
+  opacity: 0.85;
+}
+body.mock-locked .short-answer {
+  background: var(--surface);
+  cursor: not-allowed;
+}
 .mock-btn {
   font-family: var(--mono);
   font-size: 0.74rem;
@@ -3503,6 +3648,320 @@ a.cov-item:hover {
   .mm-panel { width: calc(100% - 28px); }
   .mm-legend { grid-template-columns: 1fr; }
 }
+
+/* ─────────── Formula sheet (formulas.html) ─────────── */
+.formula-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.5rem 0 1.4rem;
+}
+.formula-search {
+  flex: 1 1 240px;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.94rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.formula-search:focus {
+  border-color: var(--primary-mid);
+  background: var(--bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-mid) 16%, transparent);
+}
+#formula-section {
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+.formula-count {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-left: auto;
+}
+.formula-group { margin: 0 0 2.2rem; }
+.formula-group[hidden] { display: none; }
+.formula-group-head {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.7rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.formula-group-head a {
+  color: inherit;
+  text-decoration: none !important;
+  border: none;
+}
+.formula-group-head a:hover { color: var(--primary-deep); }
+.formula-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+.formula-item {
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  transition: border-color .12s ease, background .12s ease;
+}
+.formula-item:hover { border-color: var(--primary-light); }
+.formula-item[hidden] { display: none; }
+.formula-item .formula-concept {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 0.35rem;
+}
+.formula-item .formula-latex { overflow-x: auto; }
+.formula-item .katex-display { margin: 0.2rem 0; padding: 0; border: none; }
+
+/* ─────────── Section view switch + cheatsheet mode ─────────── */
+/* Small toggle link in the section hero that flips between full reading
+   view and a condensed, print-friendly cheatsheet (formulas + key
+   concepts + pitfalls only). Activated by `?view=cheatsheet`. */
+.view-switch {
+  margin: 0.7rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.view-switch a {
+  color: var(--primary);
+  text-decoration: none !important;
+  border: none;
+}
+.view-switch a:hover { color: var(--primary-deep); }
+
+/* When cheatsheet mode is on, hide the heavy reading surfaces so only
+   the condensed cheatsheet renders. The view-switch + section nav stay
+   visible so users can flip back. */
+body.cheatsheet-mode .source-pdfs,
+body.cheatsheet-mode .coverage,
+body.cheatsheet-mode .notes,
+body.cheatsheet-mode .figures,
+body.cheatsheet-mode .glossary,
+body.cheatsheet-mode .mistakes,
+body.cheatsheet-mode .toc-rail,
+body.cheatsheet-mode #section-toc { display: none !important; }
+
+.cheatsheet { margin: 0 0 3rem; }
+.cheatsheet > h2 {
+  font-family: var(--display-sans);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 2.2rem 0 0.8rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+}
+.cheatsheet > h2:first-child { margin-top: 0.5rem; }
+.cheatsheet .cs-empty {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--ink-faded);
+}
+.cs-formula-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+.cs-formula {
+  padding: 0.45rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-left: 2px solid var(--primary-light);
+  border-radius: 4px;
+  overflow-x: auto;
+  break-inside: avoid;
+}
+.cs-formula .katex-display { margin: 0.2rem 0; padding: 0; border: none; }
+.cs-kc-list { display: grid; grid-template-columns: 1fr; gap: 0.7rem; }
+.cs-kc {
+  padding: 0.7rem 1rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--primary);
+  border-radius: 4px;
+  break-inside: avoid;
+}
+.cs-kc h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.cs-kc p { margin: 0 0 0.5rem; font-size: 0.94rem; line-height: 1.55; }
+.cs-kc p:last-child { margin-bottom: 0; }
+.cs-mistake-list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0;
+}
+.cs-mistake-list li {
+  margin-bottom: 0.4rem;
+  line-height: 1.55;
+  break-inside: avoid;
+}
+
+/* Print: a clean cheatsheet (or full-view) printout. Strips chrome,
+   forces black-on-white, prevents formula / key-concept cards from
+   breaking across pages. */
+@media print {
+  .site-nav,
+  footer,
+  .toc-rail,
+  .mock-bottom,
+  .fc-rate,
+  .fc-toolbar,
+  .flashcard-hint,
+  .view-switch,
+  .section-nav,
+  #continue-row,
+  .feature-grid,
+  .source-pdfs,
+  .figures { display: none !important; }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .container { max-width: 100% !important; padding: 0 !important; }
+  .cs-formula,
+  .cs-kc,
+  .kc-card,
+  .callout,
+  .mistakes li,
+  .cs-mistake-list li { break-inside: avoid; page-break-inside: avoid; }
+  a { color: inherit !important; text-decoration: none !important; }
+  @page { margin: 14mm; }
+}
+
+/* ─────────── "Continue where you left off" chip (index hero) ─────────── */
+/* Single rounded pill rendered under the lede when state.last_section or
+   state.last_flashcard is non-empty. Picks the most recent of the two. */
+.continue-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1.3rem 0 0;
+}
+.continue-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.95rem 0.55rem 0.95rem;
+  background: var(--primary-mist);
+  color: var(--primary-deep);
+  border: 1px solid var(--primary-light);
+  border-radius: 999px;
+  text-decoration: none !important;
+  transition: background .15s ease, border-color .15s ease, transform .18s cubic-bezier(.4,0,.2,1);
+}
+.continue-chip:hover {
+  background: var(--primary-pale);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+.continue-chip-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.continue-chip-title {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+.continue-chip-arrow {
+  font-family: var(--mono);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ─────────── Section prev / next nav ─────────── */
+/* Sits above the "← Back to all sections" line. Two text links with a
+   small uppercase eyebrow label + the section title, flanked by an
+   arrow in the accent colour. Renders out of view when the section
+   isn't in course_config.json; hidden entirely in cheatsheet mode. */
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border-soft);
+}
+.section-nav-prev,
+.section-nav-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--ink-soft);
+  text-decoration: none !important;
+  border: none;
+  max-width: 48%;
+  transition: color .12s ease;
+}
+.section-nav-next { margin-left: auto; text-align: right; }
+.section-nav-prev:hover,
+.section-nav-next:hover { color: var(--primary); }
+.section-nav-arrow {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.section-nav-text { display: flex; flex-direction: column; min-width: 0; }
+.section-nav-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  line-height: 1.2;
+}
+.section-nav-title {
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.section-nav-prev:hover .section-nav-title,
+.section-nav-next:hover .section-nav-title { color: var(--primary); }
+body.cheatsheet-mode .section-nav { display: none; }
 
 /* ─────────── Footer ─────────── */
 

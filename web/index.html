@@ -28,6 +28,7 @@
       <a href="mindmap.html">Mindmap</a>
       <a href="flashcards.html">Flashcards</a>
       <a href="exam.html">Exam prep</a>
+      <a href="formulas.html">Formulas</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle colour theme" aria-pressed="false">
         <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -47,6 +48,7 @@
       textbook and past exams — organised so you can <em>read,
       recall</em> and <em>review</em> in one place.
     </p>
+    <div class="continue-row" id="continue-row" hidden></div>
     <div class="stat-strip" id="stat-strip" aria-label="At a glance">
       <div class="stat"><span class="stat-num" id="stat-sections">—</span><span class="stat-label">Sections</span></div>
       <div class="stat"><span class="stat-num" id="stat-cards">—</span><span class="stat-label">Flashcards</span></div>
@@ -110,6 +112,17 @@
         <h3>Open the mindmap</h3>
         <p>See how every concept connects — sections, key terms, and the dotted threads between them. Search a topic, filter to priority items, drill into any node.</p>
         <span class="feature-cta">Explore the map →</span>
+      </div>
+    </a>
+
+    <a class="feature-card" href="formulas.html">
+      <div class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h13l-6 8 6 8H5l5-8z"/></svg>
+      </div>
+      <div class="feature-body">
+        <h3>Formula sheet</h3>
+        <p>Every display-mode formula extracted from the section notes and key concepts — searchable, grouped by section. Perfect for the night before.</p>
+        <span class="feature-cta">Open the sheet →</span>
       </div>
     </a>
   </section>
@@ -179,6 +192,7 @@
       StudySite.applyCourseChrome(cfg);
       renderSections(cfg);
       renderStats(cfg);
+      renderContinue(cfg);
       loadAbout();
       countExams();
       StudySite.maybeLoadChat(cfg);
@@ -228,6 +242,46 @@
     var cleaned = desc.slice(0, m.index).replace(/[\s,;]+$/, '').trim();
     if (cleaned && !/[.!?]$/.test(cleaned)) cleaned += '.';
     return { desc: cleaned, chapters: raw };
+  }
+
+  // Show a single chip linking to whichever activity (last section read or
+  // last flashcard deck opened) was touched most recently. State is written
+  // by section.html and flashcards.html via StudySite.store.
+  function renderContinue(cfg) {
+    var s = StudySite.store.read();
+    var sec = s.last_section, fc = s.last_flashcard;
+    var pick = null;
+    if (sec && fc) pick = (sec.t || 0) >= (fc.t || 0) ? 'sec' : 'fc';
+    else if (sec) pick = 'sec';
+    else if (fc)  pick = 'fc';
+    if (!pick) return;
+    var sections = (cfg.sections || []);
+    function titleOf(id) {
+      var found = null;
+      sections.some(function (x) { if (x.id === id) { found = x; return true; } });
+      return found ? (found.title || found.id) : id;
+    }
+    var html = '';
+    if (pick === 'sec') {
+      var label = titleOf(sec.id);
+      html =
+        '<a class="continue-chip" href="section.html?id=' + encodeURIComponent(sec.id) + '">' +
+          '<span class="continue-chip-eyebrow">Continue</span>' +
+          '<span class="continue-chip-title">' + StudySite.escapeHtml(label) + '</span>' +
+          '<span class="continue-chip-arrow" aria-hidden="true">→</span>' +
+        '</a>';
+    } else {
+      var lbl2 = titleOf(fc.section);
+      html =
+        '<a class="continue-chip" href="flashcards.html#sec=' + encodeURIComponent(fc.section) + '">' +
+          '<span class="continue-chip-eyebrow">Resume flashcards</span>' +
+          '<span class="continue-chip-title">' + StudySite.escapeHtml(lbl2) + '</span>' +
+          '<span class="continue-chip-arrow" aria-hidden="true">→</span>' +
+        '</a>';
+    }
+    var row = document.getElementById('continue-row');
+    row.innerHTML = html;
+    row.hidden = false;
   }
 
   // Stats strip — section count is sync; flashcards loaded async via fetch.

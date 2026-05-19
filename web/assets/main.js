@@ -331,6 +331,136 @@
     return new URLSearchParams(location.search).get(name);
   }
 
+  // Single namespaced wrapper around localStorage["studysite"]. All feature
+  // state lives in one JSON object so it can be inspected or cleared as a
+  // unit (separate from the legacy `theme` key and chat-widget preset).
+  var STORE_KEY = 'studysite';
+  var storeCache = null;
+  function storeRead() {
+    if (storeCache) return storeCache;
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      storeCache = raw ? JSON.parse(raw) : {};
+    } catch (e) { storeCache = {}; }
+    if (!storeCache || typeof storeCache !== 'object') storeCache = {};
+    return storeCache;
+  }
+  function storePersist() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(storeCache)); }
+    catch (e) { /* quota or disabled — silently ignore */ }
+  }
+  function storeWrite(patch) {
+    var s = storeRead();
+    for (var k in patch) if (Object.prototype.hasOwnProperty.call(patch, k)) s[k] = patch[k];
+    storePersist();
+    return s;
+  }
+  // Dotted-path get/set. set when `val` is provided, else get.
+  function storePath(p, val) {
+    var s = storeRead();
+    var parts = String(p).split('.');
+    if (arguments.length < 2) {
+      var cur = s;
+      for (var i = 0; i < parts.length; i++) {
+        if (cur == null) return undefined;
+        cur = cur[parts[i]];
+      }
+      return cur;
+    }
+    var ref = s;
+    for (var j = 0; j < parts.length - 1; j++) {
+      var key = parts[j];
+      if (typeof ref[key] !== 'object' || ref[key] === null) ref[key] = {};
+      ref = ref[key];
+    }
+    ref[parts[parts.length - 1]] = val;
+    storePersist();
+    return val;
+  }
+
+  // Stable card identity for SR. Cards have no `id` field, so hash
+  // front + back via djb2 → base36. ~6 chars; collisions are fine for a
+  // single-section deck of ~50 cards.
+  function cardHash(card) {
+    var s = (card && card.front || '') + '' + (card && card.back || '');
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36);
+  }
+
+  // Pull display-mode LaTeX out of a markdown string. Used by the cheatsheet
+  // view and the aggregated formula sheet. Inline ($…$) math is intentionally
+  // excluded — only the "real" formulas the LLM wrapped in $$…$$.
+  function extractDisplayMath(md) {
+    var out = [];
+    var re = /\$\$([\s\S]+?)\$\$/g;
+    var m;
+    while ((m = re.exec(String(md || ''))) !== null) out.push(m[1].trim());
+    return out;
+  }
+
+  // Like extractDisplayMath, but filters out formulas that read as
+  // task-specific computations rather than general reusable formulas.
+  // Two filters:
+  //
+  //   1. Skip blocks that live inside a "**Worked Example:**" /
+  //      "**Example:**" / "**Proof:**" / "**Exercise:**" /
+  //      "**Computation:**" / "**Calculation:**" callout. A callout opens
+  //      on its `**Label:**` paragraph and closes at the next heading,
+  //      horizontal rule (`---`), or another callout opener.
+  //
+  //   2. Skip standalone instances that end in a literal numeric result
+  //      (e.g. `= 4.13`, `= \$863.84`, `\approx 7.02\%`) — these are
+  //      worked-out calculations that escaped the callout net.
+  var EXAMPLE_CALLOUT_LABELS = {
+    'worked example': true, 'example': true, 'proof': true,
+    'exercise': true, 'computation': true, 'calculation': true
+  };
+  var CALLOUT_LABEL_RE = /^\s*\*\*([^:*(]+?)(\s*\([^)]*\))?:\*\*/;
+  function isHeadingLine(line) { return /^#+\s/.test(line); }
+  function isHrLine(line)      { return /^\s*---+\s*$/.test(line); }
+  function isNumericInstance(latex) {
+    var s = String(latex || '').trim();
+    if (/=\s*\\?\$?\s*-?\d+(?:[.,]\d+)?\s*(?:\\?%|\\text\{[^}]*\})?\s*$/.test(s)) return true;
+    if (/\\approx\s*\\?\$?\s*-?\d+(?:[.,]\d+)?/.test(s)) return true;
+    return false;
+  }
+  function extractGeneralFormulas(md) {
+    var src = String(md || '');
+    if (!src) return [];
+    var lines = src.split('\n');
+    var offsets = new Array(lines.length);
+    var off = 0;
+    for (var i = 0; i < lines.length; i++) { offsets[i] = off; off += lines[i].length + 1; }
+    // Per-line "is an example callout currently open?" map.
+    var inExample = false;
+    var lineCtx = new Array(lines.length);
+    for (var j = 0; j < lines.length; j++) {
+      var line = lines[j];
+      if (isHeadingLine(line) || isHrLine(line)) inExample = false;
+      var lm = CALLOUT_LABEL_RE.exec(line);
+      if (lm) {
+        inExample = !!EXAMPLE_CALLOUT_LABELS[lm[1].trim().toLowerCase()];
+      }
+      lineCtx[j] = inExample;
+    }
+    var out = [];
+    var re = /\$\$([\s\S]+?)\$\$/g;
+    var m;
+    while ((m = re.exec(src)) !== null) {
+      var lineIdx = 0;
+      for (var k = 0; k < offsets.length; k++) {
+        if (offsets[k] > m.index) break;
+        lineIdx = k;
+      }
+      if (lineCtx[lineIdx]) continue;
+      var latex = m[1].trim();
+      if (isNumericInstance(latex)) continue;
+      out.push(latex);
+    }
+    return out;
+  }
+
   function applyCourseChrome(cfg) {
     document.querySelectorAll('[data-course-name]').forEach(function (el) {
       el.textContent = cfg.course_name || '';
@@ -375,6 +505,14 @@
     getParam:       getParam,
     applyCourseChrome: applyCourseChrome,
     maybeLoadChat:  maybeLoadChat,
+    store: {
+      read:  storeRead,
+      write: storeWrite,
+      path:  storePath
+    },
+    cardHash:          cardHash,
+    extractDisplayMath: extractDisplayMath,
+    extractGeneralFormulas: extractGeneralFormulas,
   };
 
   // Kick off markdown + KaTeX loading early so pages don't have to wait.
