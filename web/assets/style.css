@@ -2358,6 +2358,71 @@ a.cov-item:hover {
   background: var(--ok-pale);
   border-color: color-mix(in srgb, var(--ok) 40%, transparent);
 }
+.fc-bucket[data-b="discard"] {
+  color: var(--ink-faded);
+  background: var(--surface-alt);
+  border-color: var(--border);
+  text-decoration: line-through;
+}
+.fc-rate-btn[data-rate="discard"]:hover {
+  color: var(--bg);
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
+}
+
+.fc-discarded {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.fc-discarded-heading {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin: 0 0 0.75rem;
+}
+.fc-discarded-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.fc-discarded-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.fc-discarded-q {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.fc-undiscard-btn {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.28rem 0.6rem;
+  background: transparent;
+  color: var(--ink-faded);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.fc-undiscard-btn:hover {
+  color: var(--ink);
+  border-color: var(--border);
+  background: var(--surface-alt);
+}
 
 .flashcard-hint {
   display: block;

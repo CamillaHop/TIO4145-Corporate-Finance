@@ -78,15 +78,18 @@
   </div>
 
   <div class="fc-rate" id="fc-rate" hidden role="group" aria-label="Rate this card">
-    <button class="fc-rate-btn" data-rate="again" type="button"><span class="fc-rate-key">1</span> Again</button>
-    <button class="fc-rate-btn" data-rate="good"  type="button"><span class="fc-rate-key">2</span> Good</button>
-    <button class="fc-rate-btn" data-rate="easy"  type="button"><span class="fc-rate-key">3</span> Easy</button>
+    <button class="fc-rate-btn" data-rate="again"   type="button"><span class="fc-rate-key">1</span> Again</button>
+    <button class="fc-rate-btn" data-rate="good"    type="button"><span class="fc-rate-key">2</span> Good</button>
+    <button class="fc-rate-btn" data-rate="easy"    type="button"><span class="fc-rate-key">3</span> Easy</button>
+    <button class="fc-rate-btn" data-rate="discard" type="button"><span class="fc-rate-key">4</span> Discard</button>
   </div>
 
   <p class="flashcard-hint">
     Keys: <kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>Enter</kbd>/<kbd>Space</kbd> flip ·
-    <kbd>S</kbd> shuffle · <kbd>R</kbd> reset · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> rate (when flipped)
+    <kbd>S</kbd> shuffle · <kbd>R</kbd> reset · <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> rate (when flipped)
   </p>
+
+  <div class="fc-discarded" id="fc-discarded" hidden></div>
 </main>
 
 <footer>
@@ -154,12 +157,55 @@
     var card = state.cards[state.current];
     var hash = StudySite.cardHash(card);
     StudySite.store.path('sr.' + state.sectionId + '.' + hash, { b: rating, t: Date.now() });
+    if (rating === 'discard') {
+      state.cards.splice(state.current, 1);
+      state.weights.splice(state.current, 1);
+      if (state.cards.length) state.current = state.current % state.cards.length;
+      unflip();
+      show();
+      renderDiscarded();
+      return;
+    }
     state.weights[state.current] = WEIGHTS[rating] != null ? WEIGHTS[rating] : 3;
     // Advance via weighted random so the next card is biased toward the
     // ones the user hasn't mastered yet.
     state.current = pickWeighted(state.current);
     unflip();
     show();
+  }
+
+  function renderDiscarded() {
+    var el = document.getElementById('fc-discarded');
+    if (!el || !state.sectionId) return;
+    var s = StudySite.store.read();
+    var srSection = (s.sr || {})[state.sectionId] || {};
+    var discarded = state.rawCards.filter(function (c) {
+      var entry = srSection[StudySite.cardHash(c)];
+      return entry && entry.b === 'discard';
+    });
+    if (!discarded.length) { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<h2 class="fc-discarded-heading">Discarded</h2><ul class="fc-discarded-list">' +
+      discarded.map(function (c) {
+        var hash = StudySite.cardHash(c);
+        return '<li class="fc-discarded-item">' +
+          '<span class="fc-discarded-q">' + StudySite.renderInline(c.front || '') + '</span>' +
+          '<button class="fc-undiscard-btn" data-hash="' + StudySite.escapeHtml(hash) + '" type="button">Restore</button>' +
+          '</li>';
+      }).join('') +
+      '</ul>';
+    el.querySelectorAll('.fc-undiscard-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { undiscard(btn.getAttribute('data-hash')); });
+    });
+  }
+
+  function undiscard(hash) {
+    var s = StudySite.store.read();
+    if (s.sr && s.sr[state.sectionId] && s.sr[state.sectionId][hash]) {
+      delete s.sr[state.sectionId][hash];
+      StudySite.store.write({ sr: s.sr });
+    }
+    applyFilter();
   }
 
   function init() {
@@ -210,13 +256,18 @@
     document.querySelectorAll('#filters input').forEach(function (cb) {
       if (cb.checked) allowed.push(cb.dataset.d);
     });
+    var s = StudySite.store.read();
+    var srSection = (s.sr || {})[state.sectionId] || {};
     state.cards = state.rawCards.filter(function (c) {
-      return allowed.indexOf(c.difficulty) !== -1;
+      if (allowed.indexOf(c.difficulty) === -1) return false;
+      var entry = srSection[StudySite.cardHash(c)];
+      return !(entry && entry.b === 'discard');
     });
     rebuildWeights();
     state.current = 0;
     unflip();
     show();
+    renderDiscarded();
   }
 
   function show() {
@@ -327,10 +378,10 @@
       else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
       else if (e.key === 's' || e.key === 'S') { e.preventDefault(); shuffle(); }
       else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reset(); }
-      // 1/2/3 = again/good/easy, only when the answer is visible.
-      else if (isFlipped() && (e.key === '1' || e.key === '2' || e.key === '3')) {
+      // 1/2/3/4 = again/good/easy/discard, only when the answer is visible.
+      else if (isFlipped() && (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4')) {
         e.preventDefault();
-        rateCurrent({ '1': 'again', '2': 'good', '3': 'easy' }[e.key]);
+        rateCurrent({ '1': 'again', '2': 'good', '3': 'easy', '4': 'discard' }[e.key]);
       }
     });
   }
