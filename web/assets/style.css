@@ -4257,33 +4257,31 @@ footer {
 .fs-cols {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.2rem;
+  align-items: start;          /* don't stretch the shorter column to match */
+  gap: 1.6rem 2.4rem;
 }
 @media (min-width: 720px) {
   .fs-cols { grid-template-columns: 1fr 1fr; }
 }
 .fs-col {
-  background: var(--surface, #fff);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1.1rem 1.3rem 1.2rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--border);
 }
-.fs-col-sheet { border-left: 4px solid var(--ok); }
-.fs-col-mem   { border-left: 4px solid var(--warm); }
+.fs-col-sheet { border-left-color: var(--ok); }
+.fs-col-mem   { border-left-color: var(--warm); }
 .fs-col h3 {
-  margin: 0 0 0.8rem;
-  font-size: 0.95rem;
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 .fs-col-sheet h3 { color: var(--ok); }
 .fs-col-mem h3   { color: var(--warm); }
-.fs-ic { font-size: 1rem; }
 .fs-list { list-style: none; margin: 0; padding: 0; }
-.fs-item { padding: 0.5rem 0; border-top: 1px solid var(--border-soft); }
-.fs-item:first-child { border-top: none; }
+.fs-item { padding: 0.45rem 0; border-top: 1px solid var(--border-soft); }
+.fs-item:first-child { border-top: none; padding-top: 0; }
 .fs-name {
   display: block;
   font-size: 0.9rem;

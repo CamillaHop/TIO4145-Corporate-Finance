@@ -53,8 +53,8 @@
     </select>
     <div class="formula-filter" role="group" aria-label="Filter by memorisation">
       <button type="button" class="ff-btn is-active" data-filter="all">All</button>
-      <button type="button" class="ff-btn" data-filter="memorize">✍️ Memorize</button>
-      <button type="button" class="ff-btn" data-filter="sheet">📄 On sheet</button>
+      <button type="button" class="ff-btn" data-filter="memorize">Memorize</button>
+      <button type="button" class="ff-btn" data-filter="sheet">On sheet</button>
     </div>
     <span class="formula-count" id="formula-count">—</span>
   </div>
@@ -199,7 +199,7 @@
           ? '<span class="formula-concept">' + StudySite.escapeHtml(it.concept) + '</span>'
           : '';
         var badge = it.onSheet
-          ? '<span class="fs-badge" title="Provided on the official formula sheet">📄 sheet</span>'
+          ? '<span class="fs-badge" title="Provided on the official formula sheet">On sheet</span>'
           : '';
         return (
           '<li class="formula-item" data-section="' + StudySite.escapeHtml(it.section) +
