@@ -98,21 +98,6 @@
     <ul id="mistakes-list"></ul>
   </section>
 
-  <section class="formula-sheet-split" id="formula-sheet-wrap" hidden>
-    <h2>Formula sheet vs. memorize</h2>
-    <p class="fs-sub">Which of this section's formulas the official exam formula sheet gives you — and which you have to know cold.</p>
-    <div class="fs-cols">
-      <div class="fs-col fs-col-sheet">
-        <h3>On the formula sheet</h3>
-        <ul class="fs-list" id="fs-sheet"></ul>
-      </div>
-      <div class="fs-col fs-col-mem">
-        <h3>Memorize these</h3>
-        <ul class="fs-list" id="fs-mem"></ul>
-      </div>
-    </div>
-  </section>
-
   <section class="exercises" id="exercises-wrap" hidden>
     <h2>What the exercises ask</h2>
     <p class="exercises-sub" id="exercises-sub"></p>
@@ -363,7 +348,7 @@
           renderBookCoverage(data.book_coverage);
           renderSourcePdfs(id);
           renderFigures(id);
-          renderFormulaSheet(id);
+          renderFormulaSheet(id, data);
           renderExercises(id, cfg);
         }
         StudySite.ensureKatex().then(function () {
@@ -692,35 +677,35 @@
     wrap.hidden = false;
   }
 
-  // ── Formula sheet vs. memorize panel ──
-  // Reads generated/formula_sheet/<id>.json. Each list is {name, latex}; the
-  // latex is rendered as a display formula. Hidden if the file is missing or
-  // both lists are empty.
-  function renderFormulaSheet(id) {
-    StudySite.loadFormulaSheet(id).then(function (data) {
-      if (!data) return;
-      var onSheet = Array.isArray(data.on_sheet) ? data.on_sheet : [];
-      var mem     = Array.isArray(data.memorize) ? data.memorize : [];
-      if (!onSheet.length && !mem.length) return;
-
-      function items(list) {
-        if (!list.length) return '<li class="fs-empty">—</li>';
-        return list.map(function (f) {
-          var name = f && f.name
-            ? '<span class="fs-name">' + StudySite.renderInline(f.name) + '</span>'
-            : '';
-          var tex = f && f.latex ? '<div class="fs-latex">$$' + f.latex + '$$</div>' : '';
-          return '<li class="fs-item">' + name + tex + '</li>';
-        }).join('');
-      }
-
-      document.getElementById('fs-sheet').innerHTML = items(onSheet);
-      document.getElementById('fs-mem').innerHTML   = items(mem);
-      document.getElementById('formula-sheet-wrap').hidden = false;
-      StudySite.ensureKatex().then(function () {
-        StudySite.renderMath(document.getElementById('formula-sheet-wrap'));
+  // ── Formula-sheet tags on key-concept cards ──
+  // Reads generated/formula_sheet/<id>.json, builds a set of the formulas that
+  // appear on the official exam sheet, then drops a small tag on each key
+  // concept card that has a formula — "On formula sheet" (lean on it) or
+  // "Memorize" (not provided). Cards with no formula get no tag.
+  function renderFormulaSheet(id, data) {
+    StudySite.loadFormulaSheet(id).then(function (fs) {
+      if (!fs) return;
+      var onSet = {};
+      (Array.isArray(fs.on_sheet) ? fs.on_sheet : []).forEach(function (f) {
+        if (f && f.latex) onSet[StudySite.normalizeLatex(f.latex)] = true;
       });
-    }).catch(function () { /* not generated yet — stay hidden */ });
+
+      var kcs = Array.isArray(data.key_concepts) ? data.key_concepts : [];
+      var cards = document.querySelectorAll('#kc-grid .kc-card');
+      kcs.forEach(function (k, i) {
+        var card = cards[i];
+        if (!card || !k || typeof k !== 'object') return;
+        var formulas = StudySite.extractGeneralFormulas(k.explanation || '');
+        if (!formulas.length) return;   // no formula on this card → no tag
+        var onSheet = formulas.some(function (tex) {
+          return onSet[StudySite.normalizeLatex(tex)];
+        });
+        var tag = document.createElement('span');
+        tag.className = 'kc-sheet-tag ' + (onSheet ? 'is-sheet' : 'is-mem');
+        tag.textContent = onSheet ? 'On formula sheet' : 'Memorize';
+        card.insertBefore(tag, card.firstChild);
+      });
+    }).catch(function () { /* not generated yet — no tags */ });
   }
 
   // ── "What the exercises ask" panel ──

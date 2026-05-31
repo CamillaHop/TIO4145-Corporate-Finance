@@ -4238,60 +4238,22 @@ footer {
   .footer-btn { padding: 7px 11px; }
 }
 
-/* ─────────── Formula sheet vs. memorize panel (section page) ─────────── */
-.formula-sheet-split { margin: 3rem 0 2rem; }
-.formula-sheet-split > h2 {
+/* ─────────── Formula-sheet tag on key-concept cards ─────────── */
+/* A small pill at the top of a key-concept card, flagging whether that
+   card's formula is provided on the official exam sheet. */
+.kc-sheet-tag {
+  display: inline-block;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--ink-soft);
-  margin: 0 0 0.3rem;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  margin-bottom: 0.55rem;
 }
-.formula-sheet-split .fs-sub {
-  margin: 0 0 1.2rem;
-  font-size: 0.92rem;
-  color: var(--ink-faded);
-}
-.fs-cols {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: start;          /* don't stretch the shorter column to match */
-  gap: 1.6rem 2.4rem;
-}
-@media (min-width: 720px) {
-  .fs-cols { grid-template-columns: 1fr 1fr; }
-}
-.fs-col {
-  padding-left: 0.9rem;
-  border-left: 2px solid var(--border);
-}
-.fs-col-sheet { border-left-color: var(--ok); }
-.fs-col-mem   { border-left-color: var(--warm); }
-.fs-col h3 {
-  margin: 0 0 0.6rem;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.fs-col-sheet h3 { color: var(--ok); }
-.fs-col-mem h3   { color: var(--warm); }
-.fs-list { list-style: none; margin: 0; padding: 0; }
-.fs-item { padding: 0.45rem 0; border-top: 1px solid var(--border-soft); }
-.fs-item:first-child { border-top: none; padding-top: 0; }
-.fs-name {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 0.1rem;
-}
-.fs-item .fs-latex { overflow-x: auto; }
-.fs-item .fs-latex .katex-display { margin: 0.25rem 0; }
-.fs-empty { color: var(--ink-faded); padding: 0.4rem 0; }
+.kc-sheet-tag.is-sheet { color: var(--ok);   background: var(--ok-pale); }
+.kc-sheet-tag.is-mem   { color: var(--warm); background: var(--warm-pale); }
 
 /* ─────────── "What the exercises ask" panel (section page) ─────────── */
 .exercises { margin: 3rem 0 2rem; }
