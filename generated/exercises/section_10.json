@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise drills the fundamentals of financial options, covering payoff profiles for long and short positions, put-call parity and arbitrage, option strategies, corporate finance applications of options, and option pricing via the Binomial Model and Black-Scholes formula.",
+  "question_types": [
+    {
+      "topic": "Call and put option payoffs",
+      "type": "Diagram",
+      "description": "Students calculate the payoff of long and short call (and put) positions at expiration for given stock prices and draw payoff diagrams, testing understanding of the asymmetric payoff structure of options."
+    },
+    {
+      "topic": "Put-call parity and arbitrage",
+      "type": "Conceptual",
+      "description": "Students identify a violation of put-call parity using observed market prices and explain the trades required to exploit the resulting arbitrage opportunity."
+    },
+    {
+      "topic": "Option combination strategies",
+      "type": "Diagram",
+      "description": "Students combine multiple calls with different strike prices (e.g. a butterfly spread, straddle) to plot the net payoff diagram and identify or explain the nature of the strategy and its bet on volatility."
+    },
+    {
+      "topic": "Options in corporate finance (equity and debt as options)",
+      "type": "Conceptual",
+      "description": "Students reinterpret a firm's equity as a call option and its debt using both call and put option frameworks, identifying the underlying asset, strike price, and maturity in each case."
+    },
+    {
+      "topic": "Binomial option pricing",
+      "type": "Computation",
+      "description": "Students apply the Binomial Model over one or two periods to price European call and put options, including risk-neutral probability calculation and backward induction through the binomial tree."
+    },
+    {
+      "topic": "American vs. European put option valuation",
+      "type": "Computation",
+      "description": "Students compare the value of European puts to their American counterparts by checking whether early exercise is optimal, testing understanding of the early-exercise premium for puts."
+    },
+    {
+      "topic": "Black-Scholes option pricing",
+      "type": "Computation",
+      "description": "Students use the Black-Scholes formula to price a European call given stock price, volatility, risk-free rate, and time to expiration, then derive the corresponding put price via put-call parity."
+    },
+    {
+      "topic": "Binomial risk-free hedge and call pricing",
+      "type": "Derivation",
+      "description": "Students construct a risk-free hedge portfolio from a stock and a call option using the delta-hedging approach, then solve for the call price, and analyse how the result changes when the option is out of the money."
+    }
+  ]
+}

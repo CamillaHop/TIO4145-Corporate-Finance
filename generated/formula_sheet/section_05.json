@@ -1,0 +1,38 @@
+{
+  "on_sheet": [
+    {
+      "name": "CAPM",
+      "latex": "r_i = r_f + \\beta_i \\times (E[R_{Mkt}] - r_f) \\tag{12.1}"
+    },
+    {
+      "name": "WACC (with tax shield)",
+      "latex": "r_{wacc} = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D(1 - \\tau_C) \\tag{12.12}"
+    },
+    {
+      "name": "CAPM",
+      "latex": "r_i = r_f + \\beta_i(E[R_{Mkt}] - r_f)"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Expected Return with Alpha",
+      "latex": "E[R_i] = r_f + \\beta_i(E[R_{Mkt}] - r_f) + \\alpha_i \\tag{12.6}"
+    },
+    {
+      "name": "Cost of Debt via YTM and Default Loss",
+      "latex": "r_D = \\text{YTM} - \\Pr(\\text{default}) \\times \\text{Expected Loss Rate}"
+    },
+    {
+      "name": "Unlevered Cost of Capital (Pretax WACC)",
+      "latex": "r_U = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D \\tag{12.8}"
+    },
+    {
+      "name": "Unlevered Beta (Asset Beta)",
+      "latex": "\\beta_U = \\frac{E}{E+D}\\,\\beta_E + \\frac{D}{E+D}\\,\\beta_D \\tag{12.9}"
+    },
+    {
+      "name": "Carhart Four-Factor Model (no subscript on s)",
+      "latex": "E[R_s] = r_f + \\beta^{Mkt}(E[R_{Mkt}]-r_f) + \\beta^{SMB}E[R_{SMB}] + \\beta^{HML}E[R_{HML}] + \\beta^{PR1YR}E[R_{PR1YR}]"
+    }
+  ]
+}

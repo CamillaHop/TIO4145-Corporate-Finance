@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise set drills the Modigliani–Miller framework under both perfect capital markets (Chapter 14) and with corporate taxes (Chapter 15), requiring students to compute how leverage affects equity beta, expected returns, EPS, P/E ratios, firm value, and the tax shield of debt.",
+  "question_types": [
+    {
+      "topic": "Leverage and equity beta / expected return (MM perfect markets)",
+      "type": "Computation",
+      "description": "Students compute the new equity beta and expected return after a firm issues risk-free debt and repurchases stock, applying the MM relationship between asset, debt, and equity betas in a perfect-market setting."
+    },
+    {
+      "topic": "EPS and P/E ratio under capital structure changes",
+      "type": "Computation",
+      "description": "Students calculate how a leveraged recapitalisation alters earnings per share and the forward P/E ratio, then assess whether these mechanical changes represent a real benefit to shareholders."
+    },
+    {
+      "topic": "Conceptual evaluation of capital structure arguments",
+      "type": "Conceptual",
+      "description": "Students critique the managerial claim that the capital structure maximising expected equity return is optimal, testing understanding of the MM risk–return trade-off and the irrelevance proposition."
+    },
+    {
+      "topic": "Equity vs. debt financing and EPS / P/E comparison",
+      "type": "Computation",
+      "description": "Students compute forecast EPS and forward P/E ratios under two alternative financing methods (share issuance vs. debt issuance) and explain any observed difference in valuation multiples."
+    },
+    {
+      "topic": "Share repurchase mechanics and stock price",
+      "type": "Computation",
+      "description": "Students determine the current stock price, the post-repurchase stock price, and the remaining share count after a firm distributes cash via a buyback, applying balance-sheet reasoning under perfect markets."
+    },
+    {
+      "topic": "Tax shield of debt and firm value (MM with taxes)",
+      "type": "Computation",
+      "description": "Students value an unlevered and a levered firm using after-tax cash flows, compute the present value of the interest tax shield, and verify that the gain from leverage equals $\\tau_c \\times D$."
+    },
+    {
+      "topic": "Effective tax advantage of debt with personal taxes and uncertain EBIT",
+      "type": "Computation",
+      "description": "Students calculate the effective tax advantage of debt at different interest-expense levels when EBIT is stochastic and both corporate and personal taxes apply, identifying the interest level that maximises expected tax benefit."
+    },
+    {
+      "topic": "WACC, unlevered firm value, and interest tax shield valuation",
+      "type": "Computation",
+      "description": "Students compute the WACC for a firm with a constant debt-to-equity ratio, derive the unlevered firm value, and then isolate the value of the interest tax shield as the difference between levered and unlevered firm values."
+    }
+  ]
+}

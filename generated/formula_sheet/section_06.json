@@ -1,0 +1,17 @@
+{
+  "on_sheet": [],
+  "memorize": [
+    {
+      "name": "Environmental Value Flow",
+      "latex": "\\text{Environmental Value Flow}_t = Q_t^E \\times SP^E"
+    },
+    {
+      "name": "Ramsey Rule (Social Discount Rate)",
+      "latex": "\\boxed{r_s = \\delta + \\eta \\cdot g} \\tag{Ramsey}"
+    },
+    {
+      "name": "Integrated Present Value (IPV)",
+      "latex": "IPV = FV + b \\cdot SV + c \\cdot EV"
+    }
+  ]
+}

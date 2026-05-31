@@ -14,43 +14,50 @@
       "id": "section_02",
       "title": "Valuing Bonds and Capital Budgeting",
       "description": "Bond pricing, yield to maturity, the term structure of interest rates, and the fundamentals of investment decision rules (ch. 6 and 8).",
-      "resource_folder": "resources/section_02"
+      "resource_folder": "resources/section_02",
+      "exercises": ["resources/_exercises/Exercise 1.pdf"]
     },
     {
       "id": "section_03",
       "title": "Valuing Stocks, CAPM and the Pricing of Risk",
       "description": "Equity valuation models, capital markets, the historical risk–return trade-off, and the foundations of the Capital Asset Pricing Model (ch. 9–10).",
-      "resource_folder": "resources/section_03"
+      "resource_folder": "resources/section_03",
+      "exercises": ["resources/_exercises/Exercise 2.pdf"]
     },
     {
       "id": "section_04",
       "title": "Optimal Portfolio Choice and the CAPM",
       "description": "Portfolio theory, diversification, the efficient frontier, and the derivation and application of the CAPM (ch. 11).",
-      "resource_folder": "resources/section_04"
+      "resource_folder": "resources/section_04",
+      "exercises": ["resources/_exercises/Exercise 3.pdf"]
     },
     {
       "id": "section_05",
       "title": "Cost of Capital and Market Efficiency",
       "description": "Estimating the cost of equity and the weighted average cost of capital, plus the efficient markets hypothesis and its implications (ch. 12–13).",
-      "resource_folder": "resources/section_05"
+      "resource_folder": "resources/section_05",
+      "exercises": ["resources/_exercises/Exercise 4.pdf"]
     },
     {
       "id": "section_06",
       "title": "Sustainable Finance",
       "description": "ESG considerations in corporate finance, sustainability-linked investing and financing, and the role of climate and social risk in valuation.",
-      "resource_folder": "resources/section_06"
+      "resource_folder": "resources/section_06",
+      "exercises": ["resources/_exercises/Exercise 5.pdf"]
     },
     {
       "id": "section_07",
       "title": "Capital Structure: Debt and Taxes",
       "description": "The Modigliani–Miller propositions, the tax shield of debt, costs of financial distress, and how firms choose their financing mix (ch. 14–15).",
-      "resource_folder": "resources/section_07"
+      "resource_folder": "resources/section_07",
+      "exercises": ["resources/_exercises/Exercise 6.pdf"]
     },
     {
       "id": "section_08",
       "title": "Payout Policy",
       "description": "Dividends versus share repurchases, the payout policy irrelevance result, and the role of taxes, signalling and agency costs in payout decisions (ch. 17).",
-      "resource_folder": "resources/section_08"
+      "resource_folder": "resources/section_08",
+      "exercises": ["resources/_exercises/Exercise 7.pdf"]
     },
     {
       "id": "section_09",
@@ -62,13 +69,15 @@
       "id": "section_10",
       "title": "Options",
       "description": "Financial options, put–call parity, binomial and Black–Scholes pricing, and the role of options in corporate finance (ch. 20–22).",
-      "resource_folder": "resources/section_10"
+      "resource_folder": "resources/section_10",
+      "exercises": ["resources/_exercises/Exercise 9.pdf"]
     },
     {
       "id": "section_11",
       "title": "Real Options",
       "description": "Applying option-pricing logic to real investment decisions: timing, growth, abandonment and flexibility under uncertainty.",
-      "resource_folder": "resources/section_11"
+      "resource_folder": "resources/section_11",
+      "exercises": ["resources/_exercises/Exercise 10.pdf"]
     }
   ],
   "exam": {

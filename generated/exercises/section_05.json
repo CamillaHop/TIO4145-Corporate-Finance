@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise drills the estimation of equity cost of capital, bond default probabilities, unlevered cost of capital, and WACC using CAPM and market data, alongside testing understanding of capital market efficiency and investor behavior in mutual fund markets.",
+  "question_types": [
+    {
+      "topic": "Historical return analysis and beta estimation",
+      "type": "Computation",
+      "description": "Students compute average historical returns, excess returns, and estimate a stock's beta and alpha from a small return dataset using regression logic (SLOPE/INTERCEPT), testing the skill of extracting CAPM parameters from historical data."
+    },
+    {
+      "topic": "CAPM expected return and cost of equity",
+      "type": "Computation",
+      "description": "Students apply the CAPM formula to estimate an expected return given a current risk-free rate and market return forecast, and must judge whether historical averages or CAPM estimates are more appropriate as a cost-of-equity input."
+    },
+    {
+      "topic": "Bond default probability estimation",
+      "type": "Computation",
+      "description": "Students back out the implied annual probability of default from a bond's yield to maturity, credit spread, and expected loss rate, testing the ability to link bond pricing to default risk under the CAPM framework."
+    },
+    {
+      "topic": "Unlevered cost of capital and WACC",
+      "type": "Computation",
+      "description": "Students compute the unlevered cost of capital, after-tax debt cost of capital, and WACC for levered firms given equity value, debt value, costs of capital, and the corporate tax rate, testing the mechanics of capital structure weighting."
+    },
+    {
+      "topic": "Mutual fund alpha, capital flows, and manager compensation",
+      "type": "Computation",
+      "description": "Students calculate net-of-fee alphas for two fund managers, determine which fund attracts new capital, find the equilibrium fund size once alpha is competed away, and compare manager compensation, testing understanding of how competition erodes active management returns."
+    },
+    {
+      "topic": "Conditions for market portfolio efficiency",
+      "type": "Conceptual",
+      "description": "Students identify the only circumstances under which the market portfolio would fail to be mean-variance efficient, testing conceptual understanding of the efficient markets hypothesis and its connection to investor rationality."
+    },
+    {
+      "topic": "CAPM predictions versus actual returns and regression analysis",
+      "type": "Interpretation",
+      "description": "Students compute actual and CAPM-predicted expected returns for several stocks, regress actual on predicted returns to find intercept and slope, examine residuals, and check for patterns with market capitalisation, testing the ability to detect systematic pricing anomalies (size effect) not captured by CAPM."
+    },
+    {
+      "topic": "Completing a CAPM table with missing variables",
+      "type": "Computation",
+      "description": "Given partial information on risk-free rate, market return, beta, current price, and expected price for three stocks, students fill in missing values such as expected return, beta, or price using CAPM relationships, testing flexible application of the model across different unknown quantities."
+    }
+  ]
+}

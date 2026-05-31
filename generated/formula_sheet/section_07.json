@@ -1,0 +1,42 @@
+{
+  "on_sheet": [
+    {
+      "name": "WACC equals unlevered cost of capital (no taxes)",
+      "latex": "r_{wacc} = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D = r_U = r_A \\tag{14.6/14.7}"
+    },
+    {
+      "name": "Beta of levered equity",
+      "latex": "\\beta_E = \\beta_U + \\frac{D}{E}(\\beta_U - \\beta_D) \\tag{14.9}"
+    },
+    {
+      "name": "WACC with taxes",
+      "latex": "r_{wacc} = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D(1-\\tau_c) \\tag{15.5}"
+    },
+    {
+      "name": "Cost of levered equity with taxes (constant debt)",
+      "latex": "\\boxed{r_E = r_U + \\frac{D}{E}(r_U - r_D)(1 - \\tau_c)} \\tag{constant D}"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "MM Proposition I (no taxes)",
+      "latex": "V_L = V_U \\tag{MM I}"
+    },
+    {
+      "name": "MM Proposition II (no taxes) – cost of levered equity",
+      "latex": "\\boxed{r_E = r_U + \\frac{D}{E}(r_U - r_D)} \\tag{MM II, no taxes}"
+    },
+    {
+      "name": "Interest Tax Shield",
+      "latex": "\\text{Interest Tax Shield} = \\tau_c \\times \\text{Interest Payments} \\tag{15.1}"
+    },
+    {
+      "name": "MM Proposition I with taxes (levered firm value)",
+      "latex": "\\boxed{V_L = V_U + PV(\\text{Interest Tax Shield})} \\tag{15.2}"
+    },
+    {
+      "name": "Effective tax advantage of debt (tau-star)",
+      "latex": "\\boxed{\\tau^* = 1 - \\frac{(1-\\tau_c)(1-\\tau_e)}{1-\\tau_i}} \\tag{15.7}"
+    }
+  ]
+}

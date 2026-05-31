@@ -51,6 +51,11 @@
     <select id="formula-section" aria-label="Filter by section">
       <option value="">All sections</option>
     </select>
+    <div class="formula-filter" role="group" aria-label="Filter by memorisation">
+      <button type="button" class="ff-btn is-active" data-filter="all">All</button>
+      <button type="button" class="ff-btn" data-filter="memorize">✍️ Memorize</button>
+      <button type="button" class="ff-btn" data-filter="sheet">📄 On sheet</button>
+    </div>
     <span class="formula-count" id="formula-count">—</span>
   </div>
   <div id="formula-groups">
@@ -81,15 +86,22 @@
       populateSectionFilter(sections);
 
       // Fetch every section's JSON in parallel; 404s just skip silently.
+      // Also fetch the formula-sheet classification so we can badge each
+      // formula as "on the sheet" vs "must memorize".
       return Promise.all(sections.map(function (s) {
-        return StudySite.loadSection(s.id).catch(function () { return null; });
-      })).then(function (datas) {
+        return Promise.all([
+          StudySite.loadSection(s.id).catch(function () { return null; }),
+          StudySite.loadFormulaSheet(s.id).catch(function () { return null; })
+        ]);
+      })).then(function (pairs) {
         return StudySite.ensureKatex().then(function () {
           var groups = [];
-          datas.forEach(function (data, i) {
+          pairs.forEach(function (pair, i) {
+            var data = pair[0];
             if (!data) return;
             var section = sections[i];
-            var items = collectFormulas(section, data);
+            var sheetSet = buildSheetSet(pair[1]);
+            var items = collectFormulas(section, data, sheetSet);
             if (items.length) groups.push({ section: section, items: items });
           });
           renderGroups(groups);
@@ -122,7 +134,18 @@
   // it came from, and builds a lowercase token blob for client-side
   // filtering (KaTeX-rendered DOM is hard to grep, so we derive search
   // tokens from the raw LaTeX).
-  function collectFormulas(section, data) {
+  // Build a Set of normalized on-sheet LaTeX strings from a section's
+  // formula_sheet JSON, so we can test each rendered formula for membership.
+  function buildSheetSet(sheetData) {
+    var set = Object.create(null);
+    var list = sheetData && Array.isArray(sheetData.on_sheet) ? sheetData.on_sheet : [];
+    list.forEach(function (f) {
+      if (f && f.latex) set[StudySite.normalizeLatex(f.latex)] = true;
+    });
+    return set;
+  }
+
+  function collectFormulas(section, data, sheetSet) {
     var items = [];
 
     StudySite.extractGeneralFormulas(data.detailed_notes || '').forEach(function (tex) {
@@ -131,7 +154,8 @@
         sectionTitle: section.title || section.id,
         source: 'notes',
         concept: '',
-        latex: tex
+        latex: tex,
+        onSheet: !!sheetSet[StudySite.normalizeLatex(tex)]
       });
     });
 
@@ -143,7 +167,8 @@
           sectionTitle: section.title || section.id,
           source: 'concept',
           concept: k.concept || '',
-          latex: tex
+          latex: tex,
+          onSheet: !!sheetSet[StudySite.normalizeLatex(tex)]
         });
       });
     });
@@ -173,10 +198,14 @@
         var concept = it.concept
           ? '<span class="formula-concept">' + StudySite.escapeHtml(it.concept) + '</span>'
           : '';
+        var badge = it.onSheet
+          ? '<span class="fs-badge" title="Provided on the official formula sheet">📄 sheet</span>'
+          : '';
         return (
           '<li class="formula-item" data-section="' + StudySite.escapeHtml(it.section) +
+            '" data-onsheet="' + (it.onSheet ? '1' : '0') +
             '" data-tokens="' + StudySite.escapeHtml(it.tokens) + '">' +
-            concept +
+            concept + badge +
             '<div class="formula-latex">$$' + it.latex + '$$</div>' +
           '</li>'
         );
@@ -199,6 +228,8 @@
   function bindFilter() {
     var input = document.getElementById('formula-search');
     var sel = document.getElementById('formula-section');
+    var ffButtons = document.querySelectorAll('.formula-filter .ff-btn');
+    var mode = 'all';   // 'all' | 'memorize' | 'sheet'
     function apply() {
       var q = (input.value || '').toLowerCase().trim();
       var sectionFilter = sel.value;
@@ -210,7 +241,11 @@
         }
         var anyVisible = false;
         g.querySelectorAll('.formula-item').forEach(function (li) {
-          var hit = !q || (li.getAttribute('data-tokens') || '').indexOf(q) !== -1;
+          var onSheet = li.getAttribute('data-onsheet') === '1';
+          var modeHit = mode === 'all' ||
+            (mode === 'sheet' && onSheet) ||
+            (mode === 'memorize' && !onSheet);
+          var hit = modeHit && (!q || (li.getAttribute('data-tokens') || '').indexOf(q) !== -1);
           li.hidden = !hit;
           if (hit) { anyVisible = true; visible++; }
         });
@@ -220,6 +255,13 @@
     }
     input.addEventListener('input', apply);
     sel.addEventListener('change', apply);
+    ffButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        mode = btn.getAttribute('data-filter') || 'all';
+        ffButtons.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        apply();
+      });
+    });
   }
 
   function updateCount(shown, total) {

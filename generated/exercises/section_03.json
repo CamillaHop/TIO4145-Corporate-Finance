@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise drills equity valuation techniques (dividend discount models, discounted free cash flow, and comparables) alongside the statistical foundations of risk and return that underpin the CAPM, requiring both numerical computation and conceptual interpretation.",
+  "question_types": [
+    {
+      "topic": "Dividend Discount Model (DDM) and growth rates",
+      "type": "Computation",
+      "description": "Students must apply the constant-growth DDM to forecast earnings growth from retention and ROI, price a stock using the equity cost of capital, and evaluate how changing the payout ratio affects value — testing whether students understand the trade-off between dividends and reinvestment."
+    },
+    {
+      "topic": "Discounted Free Cash Flow (DCF) valuation",
+      "type": "Computation",
+      "description": "Students discount projected free cash flows over a finite horizon, attach a terminal value using a perpetuity growth rate, and back out share price from enterprise value — testing the multi-stage DCF model and the bridge from firm value to equity value."
+    },
+    {
+      "topic": "Valuation by comparables (multiples)",
+      "type": "Computation",
+      "description": "Students use P/E, EV/Sales, and EV/EBITDA multiples from peer firms to estimate a target company's share price and a range of values — testing the ability to apply market-based benchmarks and interpret the spread between high and low multiples."
+    },
+    {
+      "topic": "Comparing stock values under different dividend growth patterns",
+      "type": "Computation",
+      "description": "Students price two stocks with different multi-stage dividend growth profiles using the DDM and compare their intrinsic values — testing the ability to handle non-constant growth and apply the present value of a growing annuity followed by a perpetuity."
+    },
+    {
+      "topic": "Return distributions: expected return and standard deviation",
+      "type": "Computation",
+      "description": "Students compute the expected return and standard deviation from a discrete return distribution or a historical return series — testing the mechanics of probability-weighted moments and sample variance."
+    },
+    {
+      "topic": "CAGR vs. arithmetic average return",
+      "type": "Conceptual",
+      "description": "Students calculate both the compound annual growth rate and the arithmetic mean return, then judge which is more appropriate for summarising past performance versus forecasting future single-period returns — testing conceptual understanding of the two return measures."
+    },
+    {
+      "topic": "Diversification and portfolio risk",
+      "type": "Computation",
+      "description": "Students compare the risk (standard deviation of payoff or portfolio return) of concentrated versus diversified positions — including correlated (systematic) and independent (idiosyncratic) assets — testing the principle that diversification eliminates only non-systematic risk."
+    },
+    {
+      "topic": "Beta estimation and CAPM cost of capital",
+      "type": "Computation",
+      "description": "Students infer a stock's beta from its average up/down returns relative to the market, then apply the Security Market Line to estimate the cost of equity and compare it to the stock's expected return — testing CAPM mechanics and the interpretation of beta as systematic risk."
+    }
+  ]
+}

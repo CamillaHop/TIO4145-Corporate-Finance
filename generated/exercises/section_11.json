@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise set develops students' ability to apply option-pricing logic to real investment decisions, covering decision trees, Black-Scholes valuation of entry options, abandonment options, staged investment sequencing, and the trade-off between investing now versus waiting.",
+  "question_types": [
+    {
+      "topic": "Decision tree construction for investment timing",
+      "type": "Diagram",
+      "description": "Students must build a decision tree that maps out the choice of investing today versus waiting one year, incorporating uncertainty in both market size and cost of capital across multiple scenarios."
+    },
+    {
+      "topic": "Black-Scholes valuation of a market-entry option",
+      "type": "Computation",
+      "description": "Students apply the Black-Scholes formula to value the option to enter a new market at two possible points in time, accounting for dividends (cash flows lost while waiting), and then analyse how the decision and option value change with the underlying asset value."
+    },
+    {
+      "topic": "Plotting option value and option beta vs. underlying value",
+      "type": "Diagram",
+      "description": "Students plot the value and the beta of a real option as functions of the current value of the comparable firm, testing understanding of how option sensitivity and risk change with moneyness."
+    },
+    {
+      "topic": "Abandonment option and firm valuation",
+      "type": "Computation",
+      "description": "Students value a business that has the option to shut down and sell assets when revenues fall, requiring them to compare continuation value against liquidation value in each state and compute the overall firm value today."
+    },
+    {
+      "topic": "Benefits and costs of delaying investment",
+      "type": "Conceptual",
+      "description": "Students articulate the qualitative trade-offs of deferring an investment opportunity, including the value of information gained by waiting versus the opportunity cost of foregone cash flows."
+    },
+    {
+      "topic": "Staged (sequential) R&D investment and optimal ordering",
+      "type": "Computation",
+      "description": "Students compute the NPV of launching research efforts simultaneously versus sequentially, determine the optimal staging order to minimise expected expenditure, and quantify the NPV improvement from optimal staging."
+    },
+    {
+      "topic": "Invest-now versus wait-and-learn using risk-neutral probabilities",
+      "type": "Computation",
+      "description": "Students use risk-neutral probabilities and a one-period binomial framework to compare the value of investing immediately against waiting one year, and find the investment cost threshold at which the two strategies are equivalent, linking it to a profitability index."
+    },
+    {
+      "topic": "Value of information in staged R&D (exam question)",
+      "type": "Computation",
+      "description": "Students compute the NPV of an R&D project conditional on prototype success, evaluate the unconditional NPV at $t=0$, and determine the maximum willingness to pay for a consultant who resolves uncertainty about success probability before investment begins."
+    }
+  ]
+}

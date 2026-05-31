@@ -1,0 +1,34 @@
+{
+  "on_sheet": [
+    {
+      "name": "Present Value of Perpetuity",
+      "latex": "PV(\\text{perpetuity}) = \\frac{C}{r} \\tag{4.7}"
+    },
+    {
+      "name": "Present Value of Annuity",
+      "latex": "PV(\\text{annuity}) = C \\times \\frac{1}{r}\\left(1 - \\frac{1}{(1+r)^N}\\right) \\tag{4.9}"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Net Present Value (sum of cash flows)",
+      "latex": "NPV = \\sum_{n=0}^{N} \\frac{C_n}{(1+r)^n} \\tag{3.2}"
+    },
+    {
+      "name": "Profitability Index",
+      "latex": "PI = \\frac{NPV}{\\text{Resource Consumed}} \\tag{7.2}"
+    },
+    {
+      "name": "Enterprise Value (alternate form)",
+      "latex": "EV = \\text{Market Cap} + \\text{Debt} - \\text{Cash}"
+    },
+    {
+      "name": "DuPont ROE Decomposition (alternate)",
+      "latex": "ROE = \\underbrace{\\frac{\\text{Net Income}}{\\text{Sales}}}_{\\text{Profit Margin}} \\times \\underbrace{\\frac{\\text{Sales}}{\\text{Assets}}}_{\\text{Asset Turnover}} \\times \\underbrace{\\frac{\\text{Assets}}{\\text{Book Equity}}}_{\\text{Equity Multiplier}}"
+    },
+    {
+      "name": "Real Interest Rate",
+      "latex": "r_r = \\frac{1+r}{1+i} - 1 \\approx r - i"
+    }
+  ]
+}

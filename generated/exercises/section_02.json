@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise set drills bond valuation (pricing, yield to maturity, coupon rates, credit spreads, and the term structure) alongside capital budgeting fundamentals (free cash flow estimation, NPV, and sensitivity analysis), drawing on Chapters 6 and 8 of Berk & DeMarzo.",
+  "question_types": [
+    {
+      "topic": "Bond coupon rate and pricing",
+      "type": "Computation",
+      "description": "Given a bond's price and yield to maturity, students must back out the coupon rate or identify basic bond characteristics (maturity, coupon rate, face value) from a cash-flow timeline, testing fluency with the bond pricing formula."
+    },
+    {
+      "topic": "Zero-coupon bond pricing and risk-free rates",
+      "type": "Computation",
+      "description": "Using a provided spot (zero-coupon) yield curve, students price zero-coupon bonds of different maturities and identify the corresponding risk-free rates, testing understanding of how spot rates discount single future cash flows."
+    },
+    {
+      "topic": "Holding-period return on a zero-coupon bond",
+      "type": "Computation",
+      "description": "Students compute the internal rate of return of a bond investment held for a sub-period under different yield-to-maturity scenarios at the sale date, testing how price changes driven by yield movements affect realised returns."
+    },
+    {
+      "topic": "Credit spreads and bond ratings",
+      "type": "Interpretation",
+      "description": "Students calculate credit spreads for corporate bonds of varying credit quality and explain why spreads widen as ratings deteriorate, linking default risk to required yield premiums."
+    },
+    {
+      "topic": "Coupon bond pricing with a non-flat yield curve",
+      "type": "Computation",
+      "description": "Using holding-period rates of different maturities (a non-flat term structure), students price a multi-year coupon bond by discounting each cash flow at the appropriate spot rate, testing correct application of the term structure."
+    },
+    {
+      "topic": "After-tax incremental cash flows and NPV for equipment decisions",
+      "type": "Computation",
+      "description": "Students compare renting versus two purchase alternatives by computing after-tax incremental free cash flows (incorporating depreciation tax shields, maintenance costs, and training costs) and discounting them to find the NPV of each option."
+    },
+    {
+      "topic": "Project free cash flow estimation with working capital and salvage value",
+      "type": "Computation",
+      "description": "Students build a full free cash flow model for a new product project, correctly treating sunk costs, opportunity costs, depreciation, net working capital changes, and after-tax salvage value, then compute NPV at a given cost of capital."
+    },
+    {
+      "topic": "NPV sensitivity analysis and discount-rate break-even",
+      "type": "Interpretation",
+      "description": "Students assess how NPV changes with alternative revenue growth assumptions and varying discount rates, including constructing an NPV-vs-discount-rate graph and identifying the range of discount rates for which the project is viable, testing sensitivity and scenario analysis skills."
+    }
+  ]
+}

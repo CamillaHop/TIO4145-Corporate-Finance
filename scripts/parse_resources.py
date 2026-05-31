@@ -132,7 +132,7 @@ def main() -> None:
     # Always also scan the non-section folders that hold past exams and the
     # full textbook. They aren't listed in course_config but the curriculum
     # page links to them, so their PDFs need parsed sidecars too.
-    extras: list[str] = [] if args.section else ["_exams", "_course"]
+    extras: list[str] = [] if args.section else ["_exams", "_course", "_exercises"]
 
     total_parsed = 0
     total_skipped = 0

@@ -1,0 +1,66 @@
+{
+  "on_sheet": [
+    {
+      "name": "Expected return of a portfolio",
+      "latex": "E[R_p] = E\\!\\left[\\sum_i x_i R_i\\right] = \\sum_i x_i E[R_i] \\tag{11.3}"
+    },
+    {
+      "name": "Covariance estimate of returns",
+      "latex": "\\widehat{\\text{Cov}}(R_i, R_j) = \\frac{1}{T-1} \\sum_t (R_{i,t} - \\bar{R}_i)(R_{j,t} - \\bar{R}_j) \\tag{11.5}"
+    },
+    {
+      "name": "Correlation estimate of returns",
+      "latex": "\\text{Corr}(R_i, R_j) = \\frac{\\text{Cov}(R_i, R_j)}{SD(R_i) \\cdot SD(R_j)} \\tag{11.6}"
+    },
+    {
+      "name": "Portfolio variance (general double sum)",
+      "latex": "\\text{Var}(R_p) = \\sum_i \\sum_j x_i x_j \\text{Cov}(R_i, R_j) \\tag{11.11}"
+    },
+    {
+      "name": "CAPM",
+      "latex": "E[R_i] = r_f + \\beta_i \\times \\bigl(E[R_{Mkt}] - r_f\\bigr) \\tag{11.22}"
+    },
+    {
+      "name": "Beta (market beta definition)",
+      "latex": "\\beta_i = \\frac{SD(R_i) \\cdot \\text{Corr}(R_i, R_{Mkt})}{SD(R_{Mkt})} = \\frac{\\text{Cov}(R_i, R_{Mkt})}{\\text{Var}(R_{Mkt})} \\tag{11.23}"
+    },
+    {
+      "name": "Portfolio beta (weighted sum of betas)",
+      "latex": "\\beta_P = \\frac{\\text{Cov}(R_P, R_{Mkt})}{\\text{Var}(R_{Mkt})} = \\frac{\\text{Cov}\\!\\left(\\sum_i x_i R_i,\\, R_{Mkt}\\right)}{\\text{Var}(R_{Mkt})} = \\sum_i x_i \\beta_i \\tag{11.24}"
+    },
+    {
+      "name": "Correlation of returns i and j",
+      "latex": "\\text{Corr}(R_i, R_j) = \\frac{\\text{Cov}(R_i, R_j)}{SD(R_i)\\, SD(R_j)}"
+    },
+    {
+      "name": "Beta (market beta, both forms)",
+      "latex": "\\beta_i = \\frac{\\text{Cov}(R_i, R_{Mkt})}{\\text{Var}(R_{Mkt})} = \\frac{SD(R_i)\\cdot\\text{Corr}(R_i, R_{Mkt})}{SD(R_{Mkt})}"
+    },
+    {
+      "name": "CAPM (expected return form)",
+      "latex": "E[R_i] = r_f + \\beta_i \\times (E[R_{Mkt}] - r_f)"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Covariance (population definition)",
+      "latex": "\\text{Cov}(R_i, R_j) = E\\!\\left[(R_i - E[R_i])(R_j - E[R_j])\\right] \\tag{11.4}"
+    },
+    {
+      "name": "Portfolio variance (two-asset, variance terms)",
+      "latex": "\\text{Var}(R_p) = x_1^2 \\text{Var}(R_1) + x_2^2 \\text{Var}(R_2) + 2x_1 x_2 \\text{Cov}(R_1, R_2) \\tag{11.8}"
+    },
+    {
+      "name": "Sharpe Ratio",
+      "latex": "\\text{Sharpe Ratio} = \\frac{E[R_P] - r_f}{SD(R_P)} \\tag{11.17}"
+    },
+    {
+      "name": "Required return given beta relative to portfolio P",
+      "latex": "r_i = r_f + \\beta_i^P \\times (E[R_P] - r_f) \\tag{11.20}"
+    },
+    {
+      "name": "CML expected return and SD (combined statement)",
+      "latex": "E[R_{xCML}] = r_f + x\\,(E[R_{Mkt}] - r_f), \\quad SD(R_{xCML}) = x\\, SD(R_{Mkt})"
+    }
+  ]
+}

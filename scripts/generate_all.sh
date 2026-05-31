@@ -15,6 +15,14 @@ echo "▶ Generating sections…"
 python scripts/generate_sections.py
 
 echo
+echo "▶ Generating exercise question-type summaries…"
+python scripts/generate_exercises.py
+
+echo
+echo "▶ Classifying section formulas against the official formula sheet…"
+python scripts/generate_formula_sheet.py
+
+echo
 echo "▶ Generating flashcards…"
 python scripts/generate_flashcards.py
 

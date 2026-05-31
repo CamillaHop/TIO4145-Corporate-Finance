@@ -1,0 +1,26 @@
+{
+  "on_sheet": [
+    {
+      "name": "Black-Scholes d1",
+      "latex": "d_1 = \\frac{\\ln\\!\\left[\\dfrac{S^*}{PV(K)}\\right]}{\\sigma\\sqrt{T}} + \\frac{\\sigma\\sqrt{T}}{2} = \\frac{\\ln(579.5/577)}{0.30} + \\frac{0.30}{2}"
+    },
+    {
+      "name": "Black-Scholes d2",
+      "latex": "d_2 = d_1 - \\sigma\\sqrt{T}"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Project Value with Real Options",
+      "latex": "\\text{Project Value} = \\text{Static NPV} + \\text{Option Value of Flexibility}"
+    },
+    {
+      "name": "Invest-Now vs Wait Condition",
+      "latex": "NPV_\\text{today} > C_\\text{wait}"
+    },
+    {
+      "name": "Firm Value Decomposition (Assets, Growth, Abandonment)",
+      "latex": "V_\\text{firm} = V_\\text{assets in place} + V_\\text{growth options} + V_\\text{abandonment options}"
+    }
+  ]
+}

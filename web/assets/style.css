@@ -4237,3 +4237,153 @@ footer {
   .howto-list li { padding: 0.85rem 0.95rem; }
   .footer-btn { padding: 7px 11px; }
 }
+
+/* ─────────── Formula sheet vs. memorize panel (section page) ─────────── */
+.formula-sheet-split { margin: 3rem 0 2rem; }
+.formula-sheet-split > h2 {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin: 0 0 0.3rem;
+}
+.formula-sheet-split .fs-sub {
+  margin: 0 0 1.2rem;
+  font-size: 0.92rem;
+  color: var(--ink-faded);
+}
+.fs-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+}
+@media (min-width: 720px) {
+  .fs-cols { grid-template-columns: 1fr 1fr; }
+}
+.fs-col {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.1rem 1.3rem 1.2rem;
+}
+.fs-col-sheet { border-left: 4px solid var(--ok); }
+.fs-col-mem   { border-left: 4px solid var(--warm); }
+.fs-col h3 {
+  margin: 0 0 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.fs-col-sheet h3 { color: var(--ok); }
+.fs-col-mem h3   { color: var(--warm); }
+.fs-ic { font-size: 1rem; }
+.fs-list { list-style: none; margin: 0; padding: 0; }
+.fs-item { padding: 0.5rem 0; border-top: 1px solid var(--border-soft); }
+.fs-item:first-child { border-top: none; }
+.fs-name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.1rem;
+}
+.fs-item .fs-latex { overflow-x: auto; }
+.fs-item .fs-latex .katex-display { margin: 0.25rem 0; }
+.fs-empty { color: var(--ink-faded); padding: 0.4rem 0; }
+
+/* ─────────── "What the exercises ask" panel (section page) ─────────── */
+.exercises { margin: 3rem 0 2rem; }
+.exercises > h2 {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin: 0 0 0.3rem;
+}
+.exercises .exercises-sub {
+  margin: 0 0 1.2rem;
+  font-size: 0.96rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.exercise-types { list-style: none; margin: 0; padding: 0; }
+.exercise-type {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-soft);
+}
+.exercise-type:first-child { border-top: none; }
+.exercise-type .ex-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+.exercise-type .ex-topic { font-weight: 600; color: var(--ink); }
+.exercise-type .ex-type-chip {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  background: var(--primary-faint);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+}
+.exercise-type .ex-desc {
+  display: block;
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.exercise-links {
+  margin: 1.2rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-faded);
+}
+.exercise-links a { font-weight: 600; }
+
+/* ─────────── Formulas page: filter + on-sheet badge ─────────── */
+.formula-filter {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.formula-filter .ff-btn {
+  font: inherit;
+  font-size: 0.85rem;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-left: 1px solid var(--border);
+}
+.formula-filter .ff-btn:first-child { border-left: none; }
+.formula-filter .ff-btn:hover { background: var(--primary-mist); }
+.formula-filter .ff-btn.is-active {
+  background: var(--primary);
+  color: #fff;
+}
+.fs-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ok);
+  background: var(--ok-pale);
+  border-radius: 999px;
+  padding: 0.08rem 0.5rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}

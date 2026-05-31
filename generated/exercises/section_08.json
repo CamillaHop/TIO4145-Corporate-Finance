@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise set drills capital structure trade-offs (financial distress, agency costs, and signalling) alongside payout policy mechanics, requiring students to compute firm and share values under various financing and distribution scenarios and to reason conceptually about managerial incentives and market reactions.",
+  "question_types": [
+    {
+      "topic": "NPV and share price with taxes and financial distress costs",
+      "type": "Computation",
+      "description": "Students compute the NPV of a new investment and the resulting share price under equity financing, then repeat the analysis under debt financing incorporating the corporate tax shield and expected financial distress costs that reduce free cash flows."
+    },
+    {
+      "topic": "Equity issuance to retire debt",
+      "type": "Computation",
+      "description": "Students determine the current share price of a levered firm, calculate how many new shares must be issued to raise enough cash to repay an outstanding debt obligation, and find the post-repayment share price — testing understanding of dilution in perfect capital markets."
+    },
+    {
+      "topic": "Signalling, the lemons problem, and financing choice",
+      "type": "Conceptual",
+      "description": "Students analyse how asymmetric information about true share value affects the choice between equity issuance and debt, identifying the separating equilibrium that emerges and predicting how the market price reacts to each financing announcement."
+    },
+    {
+      "topic": "Agency costs and bankruptcy incentives",
+      "type": "Computation",
+      "description": "Given a probability distribution of future asset values, students calculate how a value-reducing managerial decision changes the probability of bankruptcy at different debt levels, identifying the debt level that maximises the CEO's incentive to avoid the decision."
+    },
+    {
+      "topic": "Share repurchase timing and signalling",
+      "type": "Computation",
+      "description": "Students compute share prices before and after a buyback executed either before or after the release of value-relevant news, then reason about how management's private information about future news determines optimal repurchase timing and what a repurchase announcement signals to the market."
+    },
+    {
+      "topic": "Stock dividends, stock splits, and reverse splits",
+      "type": "Computation",
+      "description": "Students calculate the adjusted share price following a percentage stock dividend, a forward stock split, and a reverse stock split, testing mechanical understanding of how these events affect price per share without changing total firm value."
+    },
+    {
+      "topic": "Dividends versus open-market repurchases in perfect markets",
+      "type": "Computation",
+      "description": "Students compute share prices and market debt-equity ratios before and after a firm distributes cash via a dividend and alternatively via an open-market share repurchase, illustrating the payout-policy irrelevance result and the mechanics of each distribution method."
+    },
+    {
+      "topic": "Bankruptcy and financial distress — conceptual (guest lecture)",
+      "type": "Conceptual",
+      "description": "Students discuss the operational and strategic challenges a firm faces heading into bankruptcy, contrast the positions of equity holders and debt holders, and evaluate alternatives to formal bankruptcy proceedings — testing qualitative understanding of financial distress resolution."
+    }
+  ]
+}

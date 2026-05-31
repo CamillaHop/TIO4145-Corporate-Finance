@@ -1,0 +1,33 @@
+{
+  "on_sheet": [],
+  "memorize": [
+    {
+      "name": "Yield to Maturity of Zero-Coupon Bond",
+      "latex": "YTM_n = \\left(\\frac{FV}{P}\\right)^{1/n} - 1 \\tag{6.3}"
+    },
+    {
+      "name": "Credit Spread",
+      "latex": "\\text{Credit spread} = YTM_{\\text{corporate}} - YTM_{\\text{Treasury}}"
+    },
+    {
+      "name": "Net Working Capital",
+      "latex": "NWC = \\text{Cash} + \\text{Inventory} + \\text{Receivables} - \\text{Payables} \\tag{8.3}"
+    },
+    {
+      "name": "Unlevered Net Income",
+      "latex": "\\text{Unlevered Net Income} = (\\text{Revenues} - \\text{Costs} - \\text{Depreciation}) \\times (1 - \\tau_c)"
+    },
+    {
+      "name": "Free Cash Flow",
+      "latex": "FCF = (\\text{Rev} - \\text{Costs} - \\text{Dep}) \\times (1-\\tau_c) + \\text{Dep} - CapEx - \\Delta NWC"
+    },
+    {
+      "name": "Depreciation Tax Shield",
+      "latex": "\\text{Depreciation tax shield} = \\tau_c \\times \\text{Depreciation}"
+    },
+    {
+      "name": "Continuation Value",
+      "latex": "CV_T = \\frac{FCF_{T+1}}{r - g} = \\frac{FCF_T \\times (1+g)}{r - g}"
+    }
+  ]
+}

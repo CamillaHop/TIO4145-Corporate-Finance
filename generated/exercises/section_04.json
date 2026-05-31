@@ -1,0 +1,45 @@
+{
+  "summary": "This exercise set drills the core mechanics of portfolio theory and the CAPM, requiring students to compute portfolio weights and expected returns, quantify diversification benefits, apply the Capital Market Line, evaluate new asset additions using required return, and use CAPM to identify efficient investment alternatives.",
+  "question_types": [
+    {
+      "topic": "Portfolio weights and expected return",
+      "type": "Computation",
+      "description": "Students calculate value-based portfolio weights and the weighted-average expected return for a multi-stock portfolio, then recompute both after stock price changes to see how weights shift without trading."
+    },
+    {
+      "topic": "Portfolio volatility and diversification",
+      "type": "Computation",
+      "description": "Students apply the two-asset portfolio variance formula across a range of correlations to compute portfolio volatility and identify when diversification actually reduces risk below that of the individual assets."
+    },
+    {
+      "topic": "Large-portfolio diversification limit",
+      "type": "Computation",
+      "description": "Students derive the volatility of an equally weighted portfolio as the number of stocks grows arbitrarily large and determine the average correlation of a single stock with the resulting large portfolio, testing understanding of systematic versus idiosyncratic risk."
+    },
+    {
+      "topic": "Leveraged portfolio on the Capital Market Line",
+      "type": "Computation",
+      "description": "Students compute the expected return and volatility of a leveraged position (borrowing to invest more than 100% in the market), applying the CML relationships between the risk-free rate, market portfolio, and portfolio weights."
+    },
+    {
+      "topic": "Adding a new asset: required return and Sharpe ratio improvement",
+      "type": "Computation",
+      "description": "Students calculate the required return for a new fund given its correlation with the existing portfolio and the current Sharpe ratio, then judge whether adding it improves the risk-return trade-off."
+    },
+    {
+      "topic": "CAPM: efficient alternatives to a single-stock portfolio",
+      "type": "Computation",
+      "description": "Students use CAPM to find the minimum-volatility portfolio with the same expected return as a single stock and the maximum-return portfolio with the same volatility, testing application of the Security Market Line and the efficiency of the market portfolio."
+    },
+    {
+      "topic": "Scenario-based return analysis and portfolio selection",
+      "type": "Computation",
+      "description": "Students compute expected returns, variances, and pairwise covariances from equally probable economic scenarios, select the best two-stock combination for risk reduction, evaluate a specific portfolio's risk-return trade-off, assess adding a third stock, and find the tangent portfolio weights and Sharpe ratio with a risk-free asset."
+    },
+    {
+      "topic": "Mean–standard deviation frontier and diversification",
+      "type": "Diagram",
+      "description": "Students plot the portfolio frontier for two stocks under multiple correlation assumptions and interpret how the shape of the feasible set — and thus diversification benefits — varies with covariance."
+    }
+  ]
+}

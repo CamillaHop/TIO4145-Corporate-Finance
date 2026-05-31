@@ -98,6 +98,28 @@
     <ul id="mistakes-list"></ul>
   </section>
 
+  <section class="formula-sheet-split" id="formula-sheet-wrap" hidden>
+    <h2>Formula sheet vs. memorize</h2>
+    <p class="fs-sub">Which of this section's formulas the official exam formula sheet gives you — and which you have to know cold.</p>
+    <div class="fs-cols">
+      <div class="fs-col fs-col-sheet">
+        <h3><span class="fs-ic" aria-hidden="true">📄</span> On the formula sheet</h3>
+        <ul class="fs-list" id="fs-sheet"></ul>
+      </div>
+      <div class="fs-col fs-col-mem">
+        <h3><span class="fs-ic" aria-hidden="true">✍️</span> Memorize these</h3>
+        <ul class="fs-list" id="fs-mem"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="exercises" id="exercises-wrap" hidden>
+    <h2>What the exercises ask</h2>
+    <p class="exercises-sub" id="exercises-sub"></p>
+    <ul class="exercise-types" id="exercise-types"></ul>
+    <p class="exercise-links" id="exercise-links" hidden></p>
+  </section>
+
   <section class="cheatsheet" id="cheatsheet-wrap" hidden></section>
 
   <nav class="section-nav" id="section-nav" hidden aria-label="Section navigation">
@@ -341,6 +363,8 @@
           renderBookCoverage(data.book_coverage);
           renderSourcePdfs(id);
           renderFigures(id);
+          renderFormulaSheet(id);
+          renderExercises(id, cfg);
         }
         StudySite.ensureKatex().then(function () {
           StudySite.renderMath(document.body);
@@ -666,6 +690,79 @@
       );
     }).join('');
     wrap.hidden = false;
+  }
+
+  // ── Formula sheet vs. memorize panel ──
+  // Reads generated/formula_sheet/<id>.json. Each list is {name, latex}; the
+  // latex is rendered as a display formula. Hidden if the file is missing or
+  // both lists are empty.
+  function renderFormulaSheet(id) {
+    StudySite.loadFormulaSheet(id).then(function (data) {
+      if (!data) return;
+      var onSheet = Array.isArray(data.on_sheet) ? data.on_sheet : [];
+      var mem     = Array.isArray(data.memorize) ? data.memorize : [];
+      if (!onSheet.length && !mem.length) return;
+
+      function items(list) {
+        if (!list.length) return '<li class="fs-empty">—</li>';
+        return list.map(function (f) {
+          var name = f && f.name
+            ? '<span class="fs-name">' + StudySite.renderInline(f.name) + '</span>'
+            : '';
+          var tex = f && f.latex ? '<div class="fs-latex">$$' + f.latex + '$$</div>' : '';
+          return '<li class="fs-item">' + name + tex + '</li>';
+        }).join('');
+      }
+
+      document.getElementById('fs-sheet').innerHTML = items(onSheet);
+      document.getElementById('fs-mem').innerHTML   = items(mem);
+      document.getElementById('formula-sheet-wrap').hidden = false;
+      StudySite.ensureKatex().then(function () {
+        StudySite.renderMath(document.getElementById('formula-sheet-wrap'));
+      });
+    }).catch(function () { /* not generated yet — stay hidden */ });
+  }
+
+  // ── "What the exercises ask" panel ──
+  // Reads generated/exercises/<id>.json and links the source PDFs from the
+  // section's config entry. Hidden if the file is missing.
+  function renderExercises(id, cfg) {
+    StudySite.loadExercises(id).then(function (data) {
+      if (!data) return;
+      var types = Array.isArray(data.question_types) ? data.question_types : [];
+      if (!data.summary && !types.length) return;
+
+      if (data.summary) {
+        document.getElementById('exercises-sub').innerHTML = StudySite.renderInline(data.summary);
+      }
+      document.getElementById('exercise-types').innerHTML = types.map(function (q) {
+        var typeChip = q && q.type
+          ? '<span class="ex-type-chip">' + StudySite.escapeHtml(q.type) + '</span>' : '';
+        var topic = q && q.topic
+          ? '<span class="ex-topic">' + StudySite.renderInline(q.topic) + '</span>' : '';
+        var desc = q && q.description
+          ? '<span class="ex-desc">' + StudySite.renderInline(q.description) + '</span>' : '';
+        return '<li class="exercise-type"><span class="ex-head">' + topic + typeChip + '</span>' + desc + '</li>';
+      }).join('');
+
+      // Link the actual exercise PDFs (shipped by the Vercel build).
+      var section = ((cfg && cfg.sections) || []).filter(function (s) { return s.id === id; })[0];
+      var paths = (section && section.exercises) || [];
+      if (paths.length) {
+        var links = document.getElementById('exercise-links');
+        links.innerHTML = 'Practice set: ' + paths.map(function (p) {
+          var name = p.split('/').pop().replace(/\.pdf$/i, '');
+          return '<a href="../' + StudySite.escapeHtml(p) + '" target="_blank" rel="noopener">' +
+                 StudySite.escapeHtml(name) + ' (PDF) ↗</a>';
+        }).join(' · ');
+        links.hidden = false;
+      }
+
+      document.getElementById('exercises-wrap').hidden = false;
+      StudySite.ensureKatex().then(function () {
+        StudySite.renderMath(document.getElementById('exercises-wrap'));
+      });
+    }).catch(function () { /* not generated yet — stay hidden */ });
   }
 
   function showError(html) {

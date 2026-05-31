@@ -1,0 +1,50 @@
+{
+  "on_sheet": [
+    {
+      "name": "Mean return (sample estimate)",
+      "latex": "\\bar{R} = \\frac{1}{T}\\sum_{t=1}^{T} R_t \\tag{10.6}"
+    },
+    {
+      "name": "Variance of return (sample estimate)",
+      "latex": "\\text{Var}(R) = \\frac{1}{T-1}\\sum_{t=1}^{T}(R_t - \\bar{R})^2 \\tag{10.7}"
+    },
+    {
+      "name": "Beta",
+      "latex": "\\beta_i = \\frac{\\text{Cov}(R_i, R_{Mkt})}{\\text{Var}(R_{Mkt})}"
+    },
+    {
+      "name": "CAPM",
+      "latex": "\\boxed{E[R_i] = r_f + \\beta_i \\times (E[R_{Mkt}] - r_f)} \\tag{10.11}"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Gordon Growth Model (stock price)",
+      "latex": "\\boxed{P_0 = \\frac{Div_1}{r_E - g}} \\tag{9.6}"
+    },
+    {
+      "name": "Sustainable growth rate g",
+      "latex": "g = \\text{Retention Rate} \\times \\text{Return on New Investment} \\tag{9.12}"
+    },
+    {
+      "name": "Standard error of mean return",
+      "latex": "SE = \\frac{SD(\\text{Individual Returns})}{\\sqrt{T}} \\tag{10.8}"
+    },
+    {
+      "name": "Market risk premium",
+      "latex": "\\text{Market Risk Premium} = E[R_{Mkt}] - r_f \\tag{10.10}"
+    },
+    {
+      "name": "Equity return decomposition",
+      "latex": "r_E = \\frac{Div_1}{P_0} + \\frac{P_1 - P_0}{P_0} = \\text{Dividend Yield} + \\text{Capital Gain Rate}"
+    },
+    {
+      "name": "Multi-period DDM with terminal price",
+      "latex": "P_0 = \\sum_{t=1}^{N}\\frac{Div_t}{(1+r_E)^t} + \\frac{P_N}{(1+r_E)^N}"
+    },
+    {
+      "name": "DCF firm valuation with terminal value",
+      "latex": "V_0 = \\sum_{t=1}^{N}\\frac{FCF_t}{(1+r_{wacc})^t} + \\frac{V_N}{(1+r_{wacc})^N}"
+    }
+  ]
+}

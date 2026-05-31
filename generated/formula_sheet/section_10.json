@@ -1,0 +1,38 @@
+{
+  "on_sheet": [
+    {
+      "name": "Binomial option pricing (Delta and B)",
+      "latex": "\\Delta = \\frac{C_u - C_d}{S_u - S_d} \\qquad B = \\frac{C_d - S_d \\Delta}{1 + r_f} \\tag{21.5}"
+    },
+    {
+      "name": "Black-Scholes call price",
+      "latex": "C = S \\times N(d_1) - PV(K) \\times N(d_2) \\tag{21.7}"
+    },
+    {
+      "name": "Black-Scholes d1 and d2",
+      "latex": "d_1 = \\frac{\\ln[S/PV(K)]}{\\sigma\\sqrt{T}} + \\frac{\\sigma\\sqrt{T}}{2}, \\qquad d_2 = d_1 - \\sigma\\sqrt{T} \\tag{21.8}"
+    },
+    {
+      "name": "Binomial option pricing (Delta and B) – repeat",
+      "latex": "\\Delta = \\frac{C_u - C_d}{S_u - S_d}, \\qquad B = \\frac{C_d - S_d\\Delta}{1+r_f}"
+    },
+    {
+      "name": "Black-Scholes call price – repeat",
+      "latex": "C = S \\cdot N(d_1) - PV(K) \\cdot N(d_2)"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Put-call parity (call isolated)",
+      "latex": "\\boxed{C = P + S - PV(K)} \\tag{20.3}"
+    },
+    {
+      "name": "Risk-neutral probability p",
+      "latex": "p = \\frac{(1+r_f)S - S_d}{S_u - S_d} \\tag{21.16}"
+    },
+    {
+      "name": "Failure Cost Index",
+      "latex": "\\text{Failure Cost Index} = \\frac{1 - PV(\\text{success})}{PV(\\text{investment})} \\tag{22.3}"
+    }
+  ]
+}

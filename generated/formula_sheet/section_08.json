@@ -1,0 +1,17 @@
+{
+  "on_sheet": [],
+  "memorize": [
+    {
+      "name": "Effective dividend tax rate (17.3)",
+      "latex": "\\tau_d^* = \\frac{\\tau_d - \\tau_g}{1 - \\tau_g} \\tag{17.3}"
+    },
+    {
+      "name": "Tax cost of retained earnings (17.7)",
+      "latex": "\\tau_{\\text{retain}}^* = 1 - \\frac{(1 - \\tau_c)(1 - \\tau_g)}{1 - \\tau_i} \\tag{17.7}"
+    },
+    {
+      "name": "Ex-dividend price (no taxes)",
+      "latex": "P_{\\text{ex}} = P_{\\text{cum}} - Div"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "on_sheet": [
+    {
+      "name": "WACC with taxes",
+      "latex": "r_{wacc} = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D(1-\\tau_c) \\tag{18.1}"
+    },
+    {
+      "name": "Pre-Tax WACC (Unlevered cost of capital)",
+      "latex": "r_U = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D \\quad \\text{(Pre-Tax WACC)} \\tag{18.6}"
+    },
+    {
+      "name": "Pre-Tax WACC of comparable firm (unlevered cost of capital)",
+      "latex": "r_U^{\\text{comp}} = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D \\quad \\text{(pre-tax WACC of comparable firm)}"
+    },
+    {
+      "name": "Cost of levered equity",
+      "latex": "r_E = r_U + \\frac{D}{E}(r_U - r_D) \\tag{18.10}"
+    },
+    {
+      "name": "Unlevered cost of capital (Pre-Tax WACC)",
+      "latex": "r_U = \\frac{E}{E+D}\\,r_E + \\frac{D}{E+D}\\,r_D"
+    }
+  ],
+  "memorize": [
+    {
+      "name": "Debt as fraction of levered value",
+      "latex": "D_t = d \\times V^L_t \\tag{18.3}"
+    },
+    {
+      "name": "APV: Levered value equals unlevered plus tax shield",
+      "latex": "V^L = V^U + PV(\\text{Interest Tax Shield}) \\tag{18.5}"
+    },
+    {
+      "name": "WACC with constant debt ratio and taxes",
+      "latex": "r_{wacc} = r_U - d\\,\\tau_c\\,r_D \\tag{18.11}"
+    },
+    {
+      "name": "Cash multiple (investment return metric)",
+      "latex": "\\text{Cash Multiple} = \\frac{\\text{Total Cash Received}}{\\text{Total Cash Invested}} \\tag{19.20}"
+    },
+    {
+      "name": "Free Cash Flow to Equity (FCFE) definition",
+      "latex": "FCFE = FCF - (1-\\tau_c)\\times\\text{Interest} + \\text{Net Borrowing}"
+    },
+    {
+      "name": "Interest tax shield in year t",
+      "latex": "\\text{Tax Shield}_t = \\tau_c \\times r_D \\times D_{t-1}"
+    }
+  ]
+}
