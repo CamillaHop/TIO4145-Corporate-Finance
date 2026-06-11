@@ -1,70 +1,173 @@
-# Course Study Site — Skeleton
+# TIØ4145 — Corporate Finance Study Site
 
-A reusable static-site skeleton for building exam-study websites for
-university courses. Edit `course_config.json`, drop your course materials
-into `resources/`, run one shell script, open `web/index.html`.
+A self-contained study companion for **TIØ4145 Corporate Finance** at **NTNU**
+(Department of Industrial Economics and Technology Management). It turns the
+lecture slides, the *Berk & DeMarzo* textbook and eight years of past exams
+into one searchable site: structured section notes with typeset math,
+active-recall flashcards, a weighted exam-prep plan, four full Inspera-format
+mock papers, a concept mindmap, a formula sheet, and a chat assistant grounded
+in the course materials.
 
-What you get: per-section study notes, flashcards with active-recall
-flipping, and an exam-prep page with priority topics, practice questions,
-key definitions, and a suggested study schedule. Optionally a floating
-chat widget that grounds answers in your course materials.
+🔗 **Live site: [corpfinance.vercel.app](https://corpfinance.vercel.app)**
 
-## Quick start
+<p align="center">
+  <img src="docs/screenshots/landing.png" alt="TIØ4145 Corporate Finance — landing page" width="900">
+</p>
 
-1. **Install Python deps.**
-   ```bash
-   pip install requests pdfplumber python-pptx
-   # If you set llm.provider = "anthropic" later, also install:
-   # pip install anthropic
-   # If you enable the optional chat widget, also install:
-   # pip install openai
-   ```
+---
 
-2. **Set your API key.** Default provider is OpenRouter (free tier):
-   ```bash
-   export OPENROUTER_API_KEY=sk-or-...
-   ```
-   To use Anthropic instead, set `llm.provider` to `"anthropic"` in
-   `course_config.json` and export `ANTHROPIC_API_KEY=sk-ant-...`. The
-   optional chat widget always uses `OPENROUTER_API_KEY`.
+## About the course
 
-3. **Edit `course_config.json`.** Set `course_code`, `course_name`,
-   `university`, and the `sections` array. Each section needs an
-   `id` (e.g. `section_01`), a `title`, and a short `description`.
+TIØ4145 is a master's-level course taught by **Maria Lavrutich**. It develops
+the modern theory of corporate financial decision-making and applies it to
+real-world valuation, financing and investment problems, following the chapter
+structure of Berk & DeMarzo, *Corporate Finance*. The exam is a 4-hour digital
+**Inspera** paper in four sections — one multiple-choice (with negative
+marking) and three written — using a basic calculator and a provided formula
+sheet.
 
-4. **Fill in the three `context/` files.**
-   - `context/course_description.md` — goals, scope, prior knowledge.
-   - `context/exam_info.txt` — format, duration, aids, question types.
-   - `context/MAL.md` — learning outcomes.
+This site distills all of that into a study workflow built around three moves:
+**read** the notes → **recall** with flashcards → **review** against past
+papers.
 
-5. **Add course materials.** For each section, drop PDFs / PPTX into
-   `resources/section_NN/`. If you have a Reducto-parsed JSON, drop it
-   as `resources/section_NN/parsed.json` and the pipeline will prefer it
-   over re-extracting.
+| | |
+|---|---|
+| **11** lecture sections | mirroring the syllabus & Berk-DeMarzo chapters |
+| **~190** flashcards | tagged easy / medium / hard, with active-recall rating |
+| **8** past exams indexed | 2017–2025, including the Inspera 4-section format |
+| **4** mock exam papers | full Inspera-style, timed, with Overleaf export |
 
-6. **Run the generator.**
-   ```bash
-   bash scripts/generate_all.sh
-   ```
-   This runs four stages: parse → sections → flashcards → exam. Each
-   stage is idempotent — re-running overwrites outputs cleanly.
+<details>
+<summary><strong>Course outline (11 sections)</strong></summary>
 
-7. **View the site locally.** See [Running locally](#running-locally) below.
-   Deploy `/` to Vercel (or any static host) for a public version — the
-   included `vercel.json` is preconfigured.
+| # | Section | Berk & DeMarzo |
+|---|---------|----------------|
+| 01 | Introduction and Background | ch. 1–5, 7 |
+| 02 | Valuing Bonds and Capital Budgeting | ch. 6, 8 |
+| 03 | Valuing Stocks, CAPM and the Pricing of Risk | ch. 9–10 |
+| 04 | Optimal Portfolio Choice and the CAPM | ch. 11 |
+| 05 | Cost of Capital and Market Efficiency | ch. 12–13 |
+| 06 | Sustainable Finance | — |
+| 07 | Capital Structure: Debt and Taxes | ch. 14–15 |
+| 08 | Payout Policy | ch. 17 |
+| 09 | Advanced Valuation | ch. 18–19 |
+| 10 | Options | ch. 20–22 |
+| 11 | Real Options | — |
+
+</details>
+
+---
+
+## What's inside
+
+### 📖 Section notes
+Each lecture week distilled into an overview, key concepts, detailed notes,
+worked numerical examples and common mistakes — math typeset cleanly with
+KaTeX, figures inline, and a contents rail to jump around. Source slides and
+textbook chapters are linked at the top of every section.
+
+<p align="center">
+  <img src="docs/screenshots/section.png" alt="Section page — notes with typeset math and a contents rail" width="900">
+</p>
+
+### 🃏 Flashcards
+Active recall over every section. Flip, shuffle, filter by difficulty, and rate
+each card (Again / Good / Easy / Discard) — the deck reorders to surface what
+you find hard. Fully keyboard-driven.
+
+<p align="center">
+  <img src="docs/screenshots/flashcards.png" alt="Flashcards — active recall with difficulty filter and rating" width="900">
+</p>
+
+### 🎯 Exam prep
+The highest-yield topics, weighted by their historical share of marks across
+the 2017–2025 papers, plus a filterable key-definitions glossary and the
+common question patterns from past exams.
+
+<p align="center">
+  <img src="docs/screenshots/exam.png" alt="Exam prep — priority topics weighted by past papers" width="900">
+</p>
+
+### 📝 Mock exams
+Four full Inspera-format papers — section weighting, marks, MCQ negative
+marking and all. Sit them timed or as untimed review, reveal worked solutions,
+download your answers, or grab the Overleaf `.zip` to write them up in LaTeX.
+
+<p align="center">
+  <img src="docs/screenshots/mockexam.png" alt="Mock exam — full Inspera-format paper" width="900">
+</p>
+
+### 🕸️ Mindmap
+Every section and its key concepts on one canvas, with dotted bridges showing
+where ideas reappear across the course. Search a topic, switch between graph and
+tree views, filter to priority items, and click any node to dive into the
+section.
+
+<p align="center">
+  <img src="docs/screenshots/mindmap.png" alt="Course-wide concept mindmap" width="900">
+</p>
+
+### 📚 Curriculum
+Every PDF the site was built from — lecture slides, the matching textbook
+chapters, the full Berk & DeMarzo book and the past-exam archive — one click
+away, organised by week.
+
+<p align="center">
+  <img src="docs/screenshots/curriculum.png" alt="Curriculum — course materials by week" width="900">
+</p>
+
+### Plus
+A **formula sheet** (every display-mode formula, searchable and grouped by
+section), course-wide **search** (press <kbd>/</kbd>), light/dark **theme**, a
+**“continue where you left off”** chip, and an optional floating **chat
+assistant** that answers questions grounded in the page and the course
+materials.
+
+---
+
+## How it's built
+
+The site is **static** — HTML/CSS/JS that `fetch()` JSON at runtime — and the
+content is generated from the raw course materials by a small Python pipeline.
+`course_config.json` is the single source of truth for course metadata and the
+section list.
+
+```
+resources/section_NN/   raw PDFs / PPTX (slides, textbook chapters, exams)
+        │  scripts/parse_resources.py      → *.parsed.json next to each source
+        ▼
+generated/sections/<id>.json               scripts/generate_sections.py
+generated/flashcards/<id>_flashcards.json  scripts/generate_flashcards.py
+generated/exam/exam_prep.json + mock_*.json scripts/generate_exam.py
+        │
+        ▼
+web/*.html   →  fetch the JSON and render the site
+```
+
+See [`CLAUDE.md`](CLAUDE.md) for the full architecture, directory roles and
+conventions.
+
+### Project layout
+
+```
+course_config.json     # course metadata + section list (source of truth)
+context/               # course description, exam info, learning outcomes
+resources/             # raw PDFs/PPTX, organised by section (+ _exams, _course)
+prompts/               # LLM prompt templates ({{var}} substitution)
+scripts/               # generation pipeline (Python) + Vercel build
+generated/             # script output: the JSON the site fetches
+web/                   # the static site
+docs/screenshots/      # README screenshots
+api/chat.js            # Vercel serverless function for the chat widget
+```
+
+---
 
 ## Running locally
 
-**You need an HTTP server.** Opening `web/index.html` via `file://`
-will *not* work — the pages use `fetch()` to load JSON, which browsers
-block on the `file://` protocol for security reasons.
-
-**Serve from the REPO ROOT, not from `web/`.** The pages reference
-`../course_config.json` and `../generated/…`, so the server's root has
-to be the directory that contains both `web/` and `course_config.json`
-as siblings.
-
-### One-line server (recommended)
+The pages load JSON via `fetch()`, so you need an HTTP server — opening
+`web/index.html` over `file://` will **not** work. Serve from the **repository
+root** (the pages reference `../course_config.json` and `../generated/…`):
 
 ```bash
 # from the repository root:
@@ -75,118 +178,85 @@ Then open:
 
 | Page | URL |
 |------|-----|
-| Course landing page | <http://localhost:8000/web/> |
-| A section | <http://localhost:8000/web/section.html?id=section_01> |
-| Flashcards | <http://localhost:8000/web/flashcards.html?id=section_01> |
+| Landing | <http://localhost:8000/web/> |
+| A section | <http://localhost:8000/web/section.html?id=section_10> |
+| Flashcards | <http://localhost:8000/web/flashcards.html> |
 | Exam prep | <http://localhost:8000/web/exam.html> |
+| Mock exam | <http://localhost:8000/web/mock_exam.html?id=mock_01> |
+| Mindmap | <http://localhost:8000/web/mindmap.html> |
+| Curriculum | <http://localhost:8000/web/curriculum.html> |
 
-Stop the server with `Ctrl+C`.
+> **Tip:** hard-refresh (`Cmd/Ctrl-Shift-R`) after regenerating content — the
+> pages cache JSON aggressively.
 
-### Alternatives
+---
 
-```bash
-# Any of these also work, from the repo root:
-npx serve .                 # Node — auto-picks a port
-php -S localhost:8000       # if PHP is installed
-ruby -run -e httpd . -p 8000
-```
+## Regenerating content
 
-If you use **VS Code Live Server**, set the project root to this
-repository (not `web/`), then right-click `web/index.html` → *Open with
-Live Server*.
-
-### Dev workflow tips
-
-- **Hard-refresh** after generating new content: `Cmd-Shift-R` (macOS)
-  or `Ctrl-Shift-R` (Linux / Windows). The pages cache JSON aggressively.
-- **Keep DevTools open with "Disable cache" checked** while iterating on
-  HTML/CSS/JS — otherwise stale `main.js` will silently break things.
-- Sanity-check that JSON is reachable from the server:
-  ```bash
-  curl -I http://localhost:8000/course_config.json
-  curl -I http://localhost:8000/generated/sections/section_01.json
-  ```
-  Both should return `HTTP/1.0 200 OK`. If they don't, your server is
-  rooted in the wrong directory.
-
-## Regenerating individual pieces
+Generation calls an LLM. The provider is set by `course_config.json → llm.provider`
+(currently `anthropic`); export the matching key first
+(`ANTHROPIC_API_KEY`, or `OPENROUTER_API_KEY` for the free-tier default). The
+chat widget always uses `OPENROUTER_API_KEY`.
 
 ```bash
-python scripts/parse_resources.py --section section_03
-python scripts/generate_sections.py --section section_03
+# Full pipeline: parse → sections → flashcards → exam (+ chat embeddings)
+bash scripts/generate_all.sh
+
+# Regenerate one piece
+python scripts/parse_resources.py    --section section_03
+python scripts/generate_sections.py  --section section_03
 python scripts/generate_flashcards.py --section section_03
 python scripts/generate_exam.py
 ```
 
-## High-quality parsing via Reducto (optional)
+`generated/` is fully reproducible from `resources/` + the scripts. For
+higher-quality parsing of the textbook and exam PDFs (tables, equations), see
+the optional [Reducto](https://reducto.ai) path documented in `CLAUDE.md`.
 
-`parse_resources.py` uses `pdfplumber`, which is free but loses tables and
-equations. For textbooks and exam PDFs, [Reducto](https://reducto.ai)
-produces much better structured output. Costs money per page; opt-in.
-
-```bash
-pip install reducto python-dotenv requests
-export REDUCTO_API_KEY=…
-
-# Parse the docs you listed in course_config.json -> reducto.documents
-python scripts/parse_with_reducto.py
-
-# One-off: parse a specific PDF
-python scripts/parse_with_reducto.py --doc resources/_course/book.pdf
-
-# Walk every PDF under resources/ (ignores the config list)
-python scripts/parse_with_reducto.py --all
-```
-
-Per source PDF, two files are written next to it:
-`<basename>.reducto.json` (Reducto's metafile — small, holds the parse
-URL) and `<basename>.parsed.json` (the actual parsed content that the
-rest of the pipeline reads). Two-step caching means a re-run after a
-network blip can fetch the parsed content without paying for another
-parse. Idempotent: skips up-to-date sources; `--force` to re-parse.
-
-**Tuning for math-heavy textbooks** — open `scripts/parse_with_reducto.py`
-and look at the `CONFIG` block at the top. The defaults are tuned for
-information preservation:
-- `REDUCTO_CHUNK_MODE = "variable"` — layout-aware chunk boundaries
-- `REDUCTO_CHUNK_SIZE = 1500`, `REDUCTO_CHUNK_OVERLAP = 200` — generous,
-  keeps proofs in one chunk
-- `REDUCTO_EXTRACTION_MODE = "hybrid"` — combines OCR with the PDF's
-  embedded text. **The key knob for equations**: LaTeX-rendered formulas
-  survive verbatim instead of being re-OCR'd from glyphs.
-- `REDUCTO_SUMMARIZE_FIGURES = True` — text descriptions of diagrams so
-  visual content lands in the chunk text.
-
-## Optional chat widget
-
-Set `features.chat.enabled` to `true` in `course_config.json`. Then run
-`bash scripts/generate_all.sh` again — it will additionally embed your
-parsed resources into `generated/chat/chunks.json`. Deploy to Vercel and
-the floating "?" button appears on every page, calling `/api/chat` to
-stream answers grounded in the page and your course materials.
-
-The chat widget needs `OPENROUTER_API_KEY` set in Vercel's environment.
-
-## What's in each generated file
+### What each generated file holds
 
 | Path | Shape |
 |------|-------|
 | `generated/sections/<id>.json` | `{ title, summary, key_concepts[], detailed_notes, common_mistakes[] }` |
 | `generated/flashcards/<id>_flashcards.json` | `[ { front, back, difficulty: easy\|medium\|hard }, … ]` |
 | `generated/exam/exam_prep.json` | `{ priority_topics[], practice_questions[], key_definitions[], study_schedule[] }` |
-| `generated/chat/chunks.json` (optional) | Embedding index for the chat widget |
+| `generated/exam/mock_*.json` | A full mock paper (sections, questions, solutions) |
+| `generated/chat/chunks.json` | Embedding index for the chat widget |
 
-## Project layout
+---
 
+## Deploying
+
+The repo is wired for **Vercel**. `npm run build` (`scripts/vercel_build.mjs`)
+assembles `dist/` — the static site plus the committed `generated/` JSON and the
+resource PDFs — and `api/chat.js` runs as a serverless function. Set
+`OPENROUTER_API_KEY` in the Vercel project environment for the chat widget.
+
+```bash
+npm run build      # → dist/   (or just push; Vercel builds on deploy)
 ```
-course_config.json     # the single source of truth — edit this first
-context/               # 3 short text files you fill in
-resources/             # your PDFs/PPTX go here, organized by section
-prompts/               # LLM prompt templates ({{var}} substitution)
-scripts/               # generation pipeline (Python)
-generated/             # script output (not committed)
-web/                   # the static site
-api/chat.js            # optional Vercel function for the chat widget
+
+---
+
+## Updating the screenshots
+
+The README screenshots live in `docs/screenshots/` — one PNG per page
+(`landing.png`, `section.png`, `flashcards.png`, `exam.png`, `mockexam.png`,
+`mindmap.png`, `curriculum.png`), light theme. To refresh one, retake it from
+the live site (or a local server) and overwrite the file — e.g. a headless
+capture with the Playwright CLI:
+
+```bash
+npx playwright screenshot --color-scheme light --viewport-size "1440,900" \
+  --wait-for-timeout 4500 \
+  "https://corpfinance.vercel.app/web/index.html" docs/screenshots/landing.png
 ```
 
-See `CLAUDE.md` for more detail on architecture and conventions.
+---
+
+## Credits
+
+Course: **TIØ4145 Corporate Finance**, NTNU — Department of Industrial Economics
+and Technology Management, lecturer **Maria Lavrutich**. Textbook: Berk &
+DeMarzo, *Corporate Finance*. Site built and maintained by **Camilla**.
+Spot a mistake? Get in touch.
