@@ -14,6 +14,73 @@
 </head>
 <body>
 
+<div id="disclaimer-popup" class="disclaimer-overlay" hidden>
+  <div class="disclaimer-box" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+    <p id="disclaimer-title">Siden det har plutselig blitt jævlig mye aktivitet på denne nettsiden så vil jeg bare påpeke at alt er chatta, så ta ting med en klype salt.. Sikkert mye som er irrelevant, enkelte feil her og der, litt problemer med visning av formler osv..</p>
+    <button id="disclaimer-close" type="button">Skjønner, lukk</button>
+  </div>
+</div>
+<style>
+  .disclaimer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 1rem;
+  }
+  .disclaimer-box {
+    max-width: 32rem;
+    background: var(--bg, #fff);
+    color: inherit;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  .disclaimer-box p {
+    margin: 0 0 1rem;
+    line-height: 1.5;
+  }
+  .disclaimer-box button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #2563eb;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+</style>
+<script>
+(function () {
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+  function setCookie(name, value, days) {
+    var expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+  }
+  function init() {
+    if (getCookie('disclaimer_dismissed')) return;
+    var popup = document.getElementById('disclaimer-popup');
+    var closeBtn = document.getElementById('disclaimer-close');
+    if (!popup || !closeBtn) return;
+    popup.hidden = false;
+    closeBtn.addEventListener('click', function () {
+      popup.hidden = true;
+      setCookie('disclaimer_dismissed', '1', 365);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+
 <nav class="site-nav">
   <div class="container">
     <a href="index.html" class="brand" data-course-code>—</a>
